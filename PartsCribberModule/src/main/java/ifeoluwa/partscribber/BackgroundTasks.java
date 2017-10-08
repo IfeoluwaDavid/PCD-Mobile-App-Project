@@ -6,7 +6,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,6 +35,7 @@ public class BackgroundTasks extends AsyncTask<String, Void, String>
     Context ctx;
     AlertDialog.Builder builder;
     private Activity activity;
+    private AlertDialog loginDialog;
     public BackgroundTasks(Context ctx)
     {
         this.ctx = ctx;
@@ -41,6 +46,9 @@ public class BackgroundTasks extends AsyncTask<String, Void, String>
     protected void onPreExecute()
     {
         builder = new AlertDialog.Builder(activity);
+        View dialogView = LayoutInflater.from(this.ctx).inflate(R.layout.progress_dialog, null);
+        ((TextView)dialogView.findViewById(R.id.tv_progress_dialog)).setText("Connecting to Server");
+        loginDialog = builder.setView(dialogView).setCancelable(false).setTitle("Please Wait").show();
         // activity = (Activity)ctx;
     }
 
@@ -165,18 +173,31 @@ public class BackgroundTasks extends AsyncTask<String, Void, String>
     @Override
     protected void onPostExecute(String result)
     {
+        loginDialog.dismiss();
+        String code = "";
+        String message = "";
+        String username = "";
+        String firstname = "";
+        String lastname = "";
+        String email = "";
+
         try
         {
             JSONObject jsonObject = new JSONObject(result);
             JSONArray jsonArray = jsonObject.getJSONArray("server_response");
             JSONObject JO = jsonArray.getJSONObject(0);
 
-            String code = JO.getString("code");
-            String message = JO.getString("message");
-            String username = JO.getString("username");
-            String firstname = JO.getString("firstname");
-            String lastname = JO.getString("lastname");
-            String email = JO.getString("email");
+            // Server always responds with this values
+            message = JO.getString("message");
+            code = JO.getString("code");
+            try {
+                username = JO.getString("username");
+                firstname = JO.getString("firstname");
+                lastname = JO.getString("lastname");
+                email = JO.getString("email");
+            } catch (Exception e) {
+                // Server did not respond  with this values
+            }
 
             if (code.equals("reg_true"))
             {
@@ -201,16 +222,23 @@ public class BackgroundTasks extends AsyncTask<String, Void, String>
             {
                 showDialog("Login Failed", message, code);
             }
+            else
+            {
+                showDialog("Unknown Error Occured", "Unkown Error", "Unkown Error");
+            }
         }
         catch (JSONException e)
         {
+            showDialog("Unknown Error Occured", message, code);
             e.printStackTrace();
         }
     }
 
     public void showDialog(String title, String message, String code)
     {
+        builder = new AlertDialog.Builder(activity);
         builder.setTitle(title);
+        Log.d("Login BG Task", "Server message - " + message + " | Server code - " + code + " | Server title" + title);
         if (code.equals("reg_true"))
         {
             builder.setMessage(message);
@@ -223,8 +251,7 @@ public class BackgroundTasks extends AsyncTask<String, Void, String>
                     activity.finish();
                 }
             });
-            AlertDialog alertDialog = builder.create();
-            alertDialog.show();
+            builder.show();
         }
         else if (code.equals("reg_false"))
         {
@@ -237,8 +264,7 @@ public class BackgroundTasks extends AsyncTask<String, Void, String>
                     dialog.dismiss();
                 }
             });
-            AlertDialog alertDialog = builder.create();
-            alertDialog.show();
+            builder.show();
         }
         else if (code.equals("login_false"))
         {
@@ -251,8 +277,20 @@ public class BackgroundTasks extends AsyncTask<String, Void, String>
                     dialog.dismiss();
                 }
             });
-            AlertDialog alertDialog = builder.create();
-            alertDialog.show();
+            builder.show();
+        }
+        else
+        {
+            builder.setMessage(message);
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+            {
+                @Override
+                public void onClick(DialogInterface dialog, int which)
+                {
+                    dialog.dismiss();
+                }
+            });
+            builder.show();
         }
     }
 }
