@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">PartsCribber</string>
+
+    <string name="login_header">LOGIN</string>
+    <string name="login_username">Username (ID)</string>
+    <string name="login_password">Password</string>
+    <string name="login_button">LOGIN</string>
+    <string name="open_registerpage_button">REGISTER</string>
+    <string name="forgot_password">Forgot Password?</string>
+
+    <string name="register_singlestudent_header">REGISTER STUDENT</string>
+    <string name="register_username_hint">Username</string>
+    <string name="register_firstname_hint">First Name </string>
+    <string name="register_lastname_hint">Last Name</string>
+    <string name="register_email_hint">Email Address</string>
+    <string name="register_password_hint">Password</string>
+    <string name="register_confirmpassword_hint">Confirm Password</string>
+    <string name="register_singlestudent_button">REGISTER STUDENT</string>
+
+    <string name="myUsername">My Username (ID)</string>
+    <string name="myFirstname">My First Name</string>
+    <string name="myLastname">My Last Name</string>
+    <string name="myEmail">My Email</string>
+    <string name="myUsertype">My User Type</string>
+    <string name="logout_button">Log Out</string>
+
+</resources>

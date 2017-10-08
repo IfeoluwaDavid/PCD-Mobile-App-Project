@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F2EAE6"
+    tools:context="ifeoluwa.partscribber.PartsCribberLogin">
+
+    <TextView
+        android:id="@+id/login_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/login_header"
+        android:typeface="serif"
+        android:textColor="#000088"
+        android:textSize="25sp"
+        tools:layout_editor_absoluteX="152dp"
+        tools:layout_editor_absoluteY="86dp"
+        android:layout_above="@+id/login_username"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="45dp" />
+
+    <EditText
+        android:id="@+id/login_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:text="n01033333"
+        android:inputType="textPersonName"
+        android:hint="@string/login_username"
+        tools:layout_editor_absoluteX="85dp"
+        tools:layout_editor_absoluteY="143dp"
+        android:layout_above="@+id/login_password"
+        android:layout_alignStart="@+id/login_password" />
+
+    <EditText
+        android:id="@+id/login_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/login_password"
+        android:text="n01033334"
+        android:inputType="textPassword"
+        tools:layout_editor_absoluteX="85dp"
+        tools:layout_editor_absoluteY="186dp"
+        android:layout_marginBottom="26dp"
+        android:layout_above="@+id/login_button"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/forgot_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/forgot_password"
+        android:textColor="#000088"
+        tools:layout_editor_absoluteX="139dp"
+        tools:layout_editor_absoluteY="327dp"
+        android:layout_marginBottom="87dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/login_button"
+        android:layout_width="213dp"
+        android:layout_height="50dp"
+        android:text="@string/login_button"
+        android:onClick="afterLogin"
+        tools:layout_editor_absoluteX="86dp"
+        tools:layout_editor_absoluteY="250dp"
+        android:layout_above="@+id/open_registerpage_button"
+        android:layout_alignEnd="@+id/login_password" />
+
+    <Button
+        android:id="@+id/open_registerpage_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="23dp"
+        android:text="@string/open_registerpage_button"
+        android:layout_above="@+id/forgot_password"
+        android:layout_alignStart="@+id/login_button"
+        android:layout_alignEnd="@+id/login_button"
+        android:onClick="openRegister"/>
+</RelativeLayout>
