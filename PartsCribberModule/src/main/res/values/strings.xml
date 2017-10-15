@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">PartsCribber</string>
 
+    <!-- LOGIN ACTIVITY -->
     <string name="login_header">LOGIN</string>
     <string name="login_username">Username (ID)</string>
     <string name="login_password">Password</string>
@@ -8,6 +9,7 @@
     <string name="open_registerpage_button">REGISTER</string>
     <string name="forgot_password">Forgot Password?</string>
 
+    <!-- REGISTER NEW STUDENT ACTIVITY -->
     <string name="register_singlestudent_header">REGISTER STUDENT</string>
     <string name="register_username_hint">Username</string>
     <string name="register_firstname_hint">First Name </string>
@@ -17,11 +19,54 @@
     <string name="register_confirmpassword_hint">Confirm Password</string>
     <string name="register_singlestudent_button">REGISTER STUDENT</string>
 
+    <!-- USER PROFILE ACTIVITY -->
     <string name="myUsername">My Username (ID)</string>
     <string name="myFirstname">My First Name</string>
     <string name="myLastname">My Last Name</string>
     <string name="myEmail">My Email</string>
     <string name="myUsertype">My User Type</string>
     <string name="logout_button">Log Out</string>
+
+    <!-- ADMIN MENU ACTIVITY -->
+    <string name="adminmenuparenttext">Admin Menu Parent Text</string>
+    <string name="adminmenuchildtext">Admin Menu Child Text</string>
+
+    <!-- STUDENT MENU ACTIVITY -->
+    <string name="studentmenutext">Student Menu Text</string>
+    <string name="welcomeusername">Firstname Lastname</string>
+    <string name="studentprofileinfoheader2">Profile Settings</string>
+
+    <!-- REGISTER NEW ADMIN ACTIVITY -->
+    <string name="register_newadmin_header">REGISTER ADMIN</string>
+    <string name="newadmin_username">Admin Username</string>
+    <string name="newadmin_password">Password</string>
+    <string name="newadmin_confirmpassword">Confirm Password</string>
+    <string name="newadmin_firstname">First Name</string>
+    <string name="newadmin_lastname">Last Name</string>
+    <string name="newadmin_email">Email Address</string>
+    <string name="register_newadmin_button">REGISTER ADMIN</string>
+
+    <!-- VIEW/EDIT PROFILE ACTIVITY -->
+    <string name="edit_profile_header">Profile Information</string>
+    <string name="edit_profile_username">Edit Username</string>
+    <string name="edit_profile_firstname">Edit Firstname</string>
+    <string name="edit_profile_lastname">Edit Lastname</string>
+    <string name="edit_profile_email">Edit Email</string>
+    <string name="user_status">Admin/Student</string>
+    <string name="edit_button">EDIT INFORMATION</string>
+    <string name="save_button">SAVE INFORMATION</string>
+
+    <!-- CHANGE PASSWORD ACTIVITY -->
+    <string name="change_password_header">Change Password</string>
+    <string name="current_password">Current Password</string>
+    <string name="confirm_current_password">Confirm Current Password</string>
+    <string name="new_password">New Password</string>
+    <string name="confirm_new_password">Confirm New Password</string>
+    <string name="save_password_button">SAVE PASSWORD CHANGES</string>
+    <string name="forgot_password_button">FORGOT CURRENT PASSWORD</string>
+
+    <!-- VIEW TOOLS ACTIVITY -->
+    <string name="viewtools_itemnametext">Item Name</string>
+    <string name="viewtools_itemqtytext">0</string>
 
 </resources>

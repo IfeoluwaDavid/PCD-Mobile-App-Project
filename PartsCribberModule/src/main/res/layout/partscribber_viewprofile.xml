@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mainBackgroundcolor"
+    tools:context="ifeoluwa.partscribber.PartsCribberViewProfile">
+
+    <Button
+        android:id="@+id/edit_button"
+        android:layout_width="330dp"
+        android:layout_height="wrap_content"
+        android:text="@string/edit_button"
+        tools:layout_editor_absoluteX="148dp"
+        tools:layout_editor_absoluteY="352dp"
+        android:onClick="editProfileInfo"
+        android:layout_marginTop="11dp"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:background="#80D8FF"
+        android:layout_below="@+id/user_status"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/save_button"
+        android:layout_width="330dp"
+        android:layout_height="wrap_content"
+        android:text="@string/save_button"
+        tools:layout_editor_absoluteX="148dp"
+        tools:layout_editor_absoluteY="352dp"
+        android:onClick="saveProfileInfo"
+        android:textSize="16sp"
+        android:layout_marginTop="5dp"
+        android:textStyle="bold"
+        android:background="#80D8FF"
+        android:layout_below="@+id/edit_button"
+        android:layout_alignStart="@+id/edit_button" />
+
+    <Button
+        android:id="@+id/logout_button"
+        android:layout_width="330dp"
+        android:layout_height="wrap_content"
+        android:text="@string/logout_button"
+        tools:layout_editor_absoluteX="148dp"
+        tools:layout_editor_absoluteY="352dp"
+        android:onClick="logout"
+        android:layout_marginTop="5dp"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:background="#80D8FF"
+        android:layout_below="@+id/save_button"
+        android:layout_alignStart="@+id/save_button" />
+
+    <TextView
+        android:id="@+id/edit_profile_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/edit_profile_header"
+        android:textStyle="bold"
+        android:typeface="serif"
+        android:textColor="#E1F5FE"
+        android:textSize="25sp"
+        tools:layout_editor_absoluteX="152dp"
+        tools:layout_editor_absoluteY="86dp"
+        android:layout_marginTop="39dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:id="@+id/edit_profile_username"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:ems="10"
+        android:focusable="false"
+        android:clickable="false"
+        android:text="@string/edit_profile_username"
+        android:textStyle="bold"
+        android:textColor="#000000"
+        android:padding="9dp"
+        android:background="#E1F5FE"
+        android:hint="@string/login_username"
+        tools:layout_editor_absoluteX="85dp"
+        tools:layout_editor_absoluteY="143dp"
+        android:layout_marginTop="14dp"
+        android:layout_below="@+id/edit_profile_header"
+        android:layout_alignStart="@+id/edit_profile_firstname"
+        android:layout_alignEnd="@+id/edit_profile_firstname" />
+
+    <EditText
+        android:id="@+id/edit_profile_firstname"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:ems="10"
+        android:focusable="false"
+        android:clickable="false"
+        android:text="@string/edit_profile_firstname"
+        android:textStyle="bold"
+        android:layout_marginTop="5dp"
+        android:textColor="#000000"
+        android:padding="9dp"
+        android:background="#E1F5FE"
+        tools:layout_editor_absoluteX="85dp"
+        tools:layout_editor_absoluteY="186dp"
+        android:layout_below="@+id/edit_profile_username"
+        android:layout_alignEnd="@+id/edit_profile_lastname"
+        android:layout_alignStart="@+id/edit_profile_lastname" />
+
+    <EditText
+        android:id="@+id/edit_profile_lastname"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:ems="10"
+        android:focusable="false"
+        android:clickable="false"
+        android:text="@string/edit_profile_lastname"
+        android:textStyle="bold"
+        android:textColor="#000000"
+        android:layout_marginTop="5dp"
+        android:padding="9dp"
+        android:background="#E1F5FE"
+        tools:layout_editor_absoluteX="85dp"
+        tools:layout_editor_absoluteY="186dp"
+        android:layout_below="@+id/edit_profile_firstname"
+        android:layout_alignEnd="@+id/edit_profile_email"
+        android:layout_alignStart="@+id/edit_profile_email" />
+
+    <EditText
+        android:id="@+id/edit_profile_email"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:ems="10"
+        android:focusable="false"
+        android:clickable="false"
+        android:text="@string/edit_profile_email"
+        android:textStyle="bold"
+        android:textColor="#000000"
+        android:padding="9dp"
+        android:layout_marginTop="5dp"
+        android:background="#E1F5FE"
+        tools:layout_editor_absoluteX="85dp"
+        tools:layout_editor_absoluteY="186dp"
+        android:layout_below="@+id/edit_profile_lastname"
+        android:layout_alignStart="@+id/edit_button"
+        android:layout_alignEnd="@+id/edit_button" />
+
+    <EditText
+        android:id="@+id/user_status"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:ems="10"
+        android:focusable="false"
+        android:clickable="false"
+        android:text="@string/user_status"
+        android:textStyle="bold"
+        android:textColor="#000000"
+        android:padding="9dp"
+        android:layout_marginTop="5dp"
+        android:background="#E1F5FE"
+        tools:layout_editor_absoluteX="85dp"
+        tools:layout_editor_absoluteY="186dp"
+        android:layout_below="@+id/edit_profile_email"
+        android:layout_alignStart="@+id/edit_profile_email"
+        android:layout_alignEnd="@+id/edit_button" />
+
+
+
+</RelativeLayout>
