@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/studentmenutext"
+    android:layout_width="fill_parent"
+    android:layout_height="50dp"
+    android:typeface="serif"
+    android:textStyle="bold"
+    android:textSize="20sp"
+    android:paddingStart="25dp"
+    android:paddingTop="10dp"
+    android:textColor="#01579B"
+    android:text="@string/studentmenutext"/>

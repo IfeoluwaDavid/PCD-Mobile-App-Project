@@ -9,7 +9,6 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import org.json.JSONArray;
@@ -26,6 +25,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+
 /**
  * Created by Ifeoluwa David on 2017-10-03.
  */
@@ -36,6 +37,9 @@ public class BackgroundTasks extends AsyncTask<String, Void, String>
     AlertDialog.Builder builder;
     private Activity activity;
     private AlertDialog loginDialog;
+
+    PartsCribberViewProfile call = new PartsCribberViewProfile();
+
     public BackgroundTasks(Context ctx)
     {
         this.ctx = ctx;
@@ -56,7 +60,7 @@ public class BackgroundTasks extends AsyncTask<String, Void, String>
     protected String doInBackground(String... params)
     {
         String method = params[0];
-        if (method.equals("register"))
+        if (method.equals("register_student"))
         {
             String username = params[1];
             String password = params[2];
@@ -65,7 +69,7 @@ public class BackgroundTasks extends AsyncTask<String, Void, String>
             String email = params[5];
             try
             {
-                String add_url_info = "http://partscribdatabase.tech/androidconnect/register.php";
+                String add_url_info = "http://partscribdatabase.tech/androidconnect/registerstudent.php";
                 URL url = new URL(add_url_info);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                 httpURLConnection.setRequestMethod("POST");
@@ -79,6 +83,118 @@ public class BackgroundTasks extends AsyncTask<String, Void, String>
                         URLEncoder.encode(username, "UTF-8")+"&"+
                         URLEncoder.encode("password", "UTF-8")+"="+
                         URLEncoder.encode(password, "UTF-8") + "&" +
+                        URLEncoder.encode("first_name", "UTF-8") + "=" +
+                        URLEncoder.encode(first_name, "UTF-8") + "&" +
+                        URLEncoder.encode("last_name", "UTF-8") + "=" +
+                        URLEncoder.encode(last_name, "UTF-8") + "&" +
+                        URLEncoder.encode("email", "UTF-8") + "=" +
+                        URLEncoder.encode(email, "UTF-8");
+
+                bufferedWriter.write(data);
+                bufferedWriter.flush();
+                bufferedWriter.close();
+                os.close();
+                InputStream is = httpURLConnection.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is));
+                StringBuilder stringBuilder = new StringBuilder();
+                String line = "";
+                while((line = bufferedReader.readLine())!= null)
+                {
+                    stringBuilder.append(line+"\n");
+                }
+                bufferedReader.close();
+                is.close();
+                httpURLConnection.disconnect();
+                return stringBuilder.toString().trim();
+            }
+            catch (MalformedURLException e)
+            {
+                e.printStackTrace();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+        else if (method.equals("register_admin"))
+        {
+            String username = params[1];
+            String password = params[2];
+            String first_name = params[3];
+            String last_name = params[4];
+            String email = params[5];
+            try
+            {
+                String add_url_info = "http://partscribdatabase.tech/androidconnect/registeradmin.php";
+                URL url = new URL(add_url_info);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setDoOutput(true);
+                httpURLConnection.setDoInput(true);
+                OutputStream os = httpURLConnection.getOutputStream();
+                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+
+                String data =
+                        URLEncoder.encode("username", "UTF-8")+"="+
+                        URLEncoder.encode(username, "UTF-8")+"&"+
+                        URLEncoder.encode("password", "UTF-8")+"="+
+                        URLEncoder.encode(password, "UTF-8") + "&" +
+                        URLEncoder.encode("first_name", "UTF-8") + "=" +
+                        URLEncoder.encode(first_name, "UTF-8") + "&" +
+                        URLEncoder.encode("last_name", "UTF-8") + "=" +
+                        URLEncoder.encode(last_name, "UTF-8") + "&" +
+                        URLEncoder.encode("email", "UTF-8") + "=" +
+                        URLEncoder.encode(email, "UTF-8");
+
+                bufferedWriter.write(data);
+                bufferedWriter.flush();
+                bufferedWriter.close();
+                os.close();
+                InputStream is = httpURLConnection.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is));
+                StringBuilder stringBuilder = new StringBuilder();
+                String line = "";
+                while((line = bufferedReader.readLine())!= null)
+                {
+                    stringBuilder.append(line+"\n");
+                }
+                bufferedReader.close();
+                is.close();
+                httpURLConnection.disconnect();
+                return stringBuilder.toString().trim();
+            }
+            catch (MalformedURLException e)
+            {
+                e.printStackTrace();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+        else if (method.equals("update_user"))
+        {
+            String user_id = params[1];
+            String username = params[2];
+            String first_name = params[3];
+            String last_name = params[4];
+            String email = params[5];
+            try
+            {
+                String add_url_info = "http://partscribdatabase.tech/androidconnect/updateuser.php";
+                URL url = new URL(add_url_info);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setDoOutput(true);
+                httpURLConnection.setDoInput(true);
+                OutputStream os = httpURLConnection.getOutputStream();
+                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+
+                String data =
+                        URLEncoder.encode("user_id", "UTF-8")+"="+
+                        URLEncoder.encode(user_id, "UTF-8")+"&"+
+                        URLEncoder.encode("username", "UTF-8")+"="+
+                        URLEncoder.encode(username, "UTF-8")+"&"+
                         URLEncoder.encode("first_name", "UTF-8") + "=" +
                         URLEncoder.encode(first_name, "UTF-8") + "&" +
                         URLEncoder.encode("last_name", "UTF-8") + "=" +
@@ -176,11 +292,12 @@ public class BackgroundTasks extends AsyncTask<String, Void, String>
         loginDialog.dismiss();
         String code = "";
         String message = "";
+        String user_id = "";
         String username = "";
         String firstname = "";
         String lastname = "";
         String email = "";
-
+        String usertype = "";
         try
         {
             JSONObject jsonObject = new JSONObject(result);
@@ -190,12 +307,17 @@ public class BackgroundTasks extends AsyncTask<String, Void, String>
             // Server always responds with this values
             message = JO.getString("message");
             code = JO.getString("code");
-            try {
+            try
+            {
+                user_id = JO.getString("userid");
                 username = JO.getString("username");
                 firstname = JO.getString("firstname");
                 lastname = JO.getString("lastname");
                 email = JO.getString("email");
-            } catch (Exception e) {
+                usertype = JO.getString("usertype");
+            }
+            catch (Exception e)
+            {
                 // Server did not respond  with this values
             }
 
@@ -209,18 +331,58 @@ public class BackgroundTasks extends AsyncTask<String, Void, String>
             }
             else if (code.equals("login_true"))
             {
-                Toast.makeText(ctx, message, Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(activity, PartCribberAdminMenu.class);
+                if (usertype.equals("Admin"))
+                {
+                    Toast.makeText(ctx, message, Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(activity, PartsCribberAdminMenu.class);
 
-                User user = new User (username, firstname, lastname, email);
+                    int castedUserID = Integer.valueOf(user_id);
+                    User user = new User(castedUserID, username, firstname, lastname, email, usertype);
+                    UserSession.getInstance(ctx).userLogin(user);
 
-                PartsCribberUserSession.getInstance(ctx).userLogin(user);
-                activity.startActivity(intent);
-                activity.finish();
+                    activity.startActivity(intent);
+                    activity.finish();
+                }
+                else
+                {
+                    Toast.makeText(ctx, message, Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(activity, PartsCribberStudentMenu.class);
+
+                    int castedUserID = Integer.valueOf(user_id);
+                    User user = new User(castedUserID, username, firstname, lastname, email, usertype);
+
+                    UserSession.getInstance(ctx).userLogin(user);
+                    activity.startActivity(intent);
+                    activity.finish();
+                }
             }
             else if (code.equals("login_false"))
             {
                 showDialog("Login Failed", message, code);
+            }
+            else if (code.equals("update_true"))
+            {
+                int castedUserID = Integer.valueOf(user_id);
+                User user = new User(castedUserID, username, firstname, lastname, email, usertype);
+                UserSession.getInstance(ctx).userLogin(user);
+                //showDialog("Update Successful", message, code);
+                android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+                builder.setTitle("Successful Profile Update");
+                builder.setMessage(message);
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        dialog.dismiss();
+                        activity.finish();
+                    }
+                });
+                android.support.v7.app.AlertDialog alert = builder.create();
+                alert.show();
+            }
+            else if (code.equals("update_false"))
+            {
+                showDialog("Update Failed", message, code);
             }
             else
             {
@@ -229,7 +391,7 @@ public class BackgroundTasks extends AsyncTask<String, Void, String>
         }
         catch (JSONException e)
         {
-            showDialog("Unknown Error Occured", message, code);
+            showDialog("Unknown Error Occurred", message, code);
             e.printStackTrace();
         }
     }

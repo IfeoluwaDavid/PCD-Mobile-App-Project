@@ -1,83 +1,23 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="ifeoluwa.partscribber.PartCribberAdminMenu">
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/mainBackgroundcolor">
 
-    <Button
-        android:id="@+id/logout_button"
+    <ExpandableListView
+        android:id="@+id/exp_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/logout_button"
-        tools:layout_editor_absoluteX="148dp"
-        tools:layout_editor_absoluteY="352dp"
-        android:layout_marginTop="56dp"
-        android:onClick="logout"
-        android:layout_below="@+id/myUsertype"
-        android:layout_centerHorizontal="true" />
-
-    <TextView
-        android:id="@+id/myLastname"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:typeface="serif"
-        android:textColor="#000088"
-        android:textSize="25sp"
-        android:text="@string/myLastname"
-        tools:layout_editor_absoluteY="162dp"
-        tools:layout_editor_absoluteX="163dp"
-        android:layout_marginBottom="19dp"
-        android:layout_above="@+id/myEmail"
-        android:layout_alignEnd="@+id/myFirstname" />
-
-    <TextView
-        android:id="@+id/myUsername"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:typeface="serif"
-        android:textColor="#000088"
-        android:textSize="25sp"
-        android:text="@string/myUsername"
-        android:layout_marginBottom="17dp"
-        android:layout_above="@+id/myFirstname"
-        android:layout_centerHorizontal="true" />
-
-    <TextView
-        android:id="@+id/myFirstname"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/myFirstname"
-        android:typeface="serif"
-        android:textColor="#000088"
-        android:textSize="25sp"
-        android:layout_marginBottom="20dp"
-        android:layout_above="@+id/myLastname"
-        android:layout_centerHorizontal="true" />
-
-    <TextView
-        android:id="@+id/myEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/myEmail"
-        android:typeface="serif"
-        android:textColor="#000088"
-        android:textSize="25sp"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
-
-    <TextView
-        android:id="@+id/myUsertype"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:typeface="serif"
-        android:textColor="#000088"
-        android:textSize="25sp"
-        android:text="@string/myUsertype"
-        android:layout_marginTop="17dp"
-        android:layout_below="@+id/myEmail"
-        android:layout_alignEnd="@+id/myLastname" />
+        android:indicatorLeft="?android:attr/expandableListPreferredItemIndicatorLeft"
+        android:divider="#0277BD"
+        android:dividerHeight="3dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:layout_centerHorizontal="true">
+    </ExpandableListView>
 
 </RelativeLayout>

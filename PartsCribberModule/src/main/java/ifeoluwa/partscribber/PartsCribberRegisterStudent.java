@@ -1,24 +1,27 @@
 package ifeoluwa.partscribber;
 
-import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.View;
 import android.widget.EditText;
 
-public class PartsCribberRegister extends AppCompatActivity
+public class PartsCribberRegisterStudent extends AppCompatActivity
 {
     EditText registered_username, registered_firstname, registered_lastname;
     EditText registered_email, registered_password, registered_confirmpassword;
     String username, first_name, last_name, email, password, confirmpassword;
-    AlertDialog.Builder builder;
+    ActionBar actionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.partscribber_register);
+        setContentView(R.layout.partscribber_registerstudent);
+        actionBar = getSupportActionBar();
+        actionBar.setTitle(Html.fromHtml("<font color='#01579B'>PartsCribber</font>"));
 
         registered_username = (EditText) findViewById(R.id.register_username_hint);
         registered_firstname = (EditText) findViewById(R.id.register_firstname_hint);
@@ -173,7 +176,7 @@ public class PartsCribberRegister extends AppCompatActivity
                                     }
                                     else
                                     {
-                                        String method = "register";
+                                        String method = "register_student";
                                         BackgroundTasks backgroundTasks = new BackgroundTasks(this);
                                         backgroundTasks.execute(method,username,password,first_name,last_name,email);
                                         //finish();
@@ -187,7 +190,7 @@ public class PartsCribberRegister extends AppCompatActivity
         }
     }
 
-    public static boolean studentUserNameValidation(String x)
+    public boolean studentUserNameValidation(String x)
     {
         char[] ch = x.toCharArray();
         int letter = 0;
@@ -228,7 +231,7 @@ public class PartsCribberRegister extends AppCompatActivity
         }
     }
 
-    public static boolean passwordValidation(String x)
+    public boolean passwordValidation(String x)
     {
         char[] ch = x.toCharArray();
         int letter = 0;
@@ -266,7 +269,7 @@ public class PartsCribberRegister extends AppCompatActivity
         }
     }
 
-    public static boolean namesValidation(String x)
+    public boolean namesValidation(String x)
     {
         char[] ch = x.toCharArray();
         int letter = 0;

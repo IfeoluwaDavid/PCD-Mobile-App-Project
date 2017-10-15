@@ -1,33 +1,46 @@
 package ifeoluwa.partscribber;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.View;
 import android.widget.EditText;
-
-import java.util.ArrayList;
 
 public class PartsCribberLogin extends AppCompatActivity
 {
     EditText login_username_value, login_password_value;
     String username, password;
-
+    ActionBar actionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.partscribber_login);
+        actionBar = getSupportActionBar();
+        actionBar.setTitle(Html.fromHtml("<font color='#01579B'>PartsCribber</font>"));
 
         //if the user is already logged in we will directly start the profile activity
-        if (PartsCribberUserSession.getInstance(this).isLoggedIn())
+        User user = UserSession.getInstance(this).getUser();
+
+        if(UserSession.getInstance(this).isLoggedIn())
         {
-            finish();
-            startActivity(new Intent(this, PartCribberAdminMenu.class));
-            return;
+            if (user.getUsertype().equals("Admin"))
+            {
+                finish();
+                startActivity(new Intent(this, PartsCribberAdminMenu.class));
+                return;
+            }
+            else if(user.getUsertype().equals("Student"))
+            {
+                finish();
+                startActivity(new Intent(this, PartsCribberStudentMenu.class));
+                return;
+            }
         }
 
         login_username_value = (EditText) findViewById(R.id.login_username);
@@ -64,6 +77,34 @@ public class PartsCribberLogin extends AppCompatActivity
 
     public void openRegister(View view)
     {
-        startActivity(new Intent(this, PartsCribberRegister.class));
+        startActivity(new Intent(this, PartsCribberRegisterStudent.class));
+    }
+
+    public void onBackPressed()
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Confirm");
+        builder.setMessage("Are you sure you want to exit the application?");
+
+        builder.setPositiveButton("YES", new DialogInterface.OnClickListener()
+        {
+            public void onClick(DialogInterface dialog, int which)
+            {
+                dialog.dismiss();
+                finish();
+                int id= android.os.Process.myPid();
+                android.os.Process.killProcess(id);
+            }
+        });
+        builder.setNegativeButton("NO", new DialogInterface.OnClickListener()
+        {
+            @Override
+            public void onClick(DialogInterface dialog, int which)
+            {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 }

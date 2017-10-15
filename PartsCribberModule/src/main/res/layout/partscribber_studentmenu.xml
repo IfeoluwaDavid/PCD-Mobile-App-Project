@@ -1,0 +1,36 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/mainBackgroundcolor"
+    tools:context=".PartsCribberStudentMenu">
+
+    <ListView
+        android:id="@+id/studentmenulistview"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:divider="#0277BD"
+        android:background="#81D4FA"
+        android:dividerHeight="3dp"
+        android:typeface="serif"
+        android:textStyle="bold"
+        android:textColor="#01579B"
+        android:layout_marginLeft="13dp"
+        android:layout_marginRight="13dp"
+        android:layout_marginTop="17dp"
+        android:layout_below="@+id/welcomeusername"/>
+
+    <TextView
+        android:id="@+id/welcomeusername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:typeface="serif"
+        android:textColor="#E1F5FE"
+        android:textStyle="bold"
+        android:textSize="25sp"
+        android:layout_marginTop="18dp"
+        android:text="@string/welcomeusername"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>
