@@ -2,15 +2,26 @@ package ifeoluwa.partscribber;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
 import android.widget.Toast;
-
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,6 +33,8 @@ public class PartsCribberAdminMenu extends AppCompatActivity
     ExpandableListView exp_list;
     AdminMenuAdapter adapter;
     ActionBar actionBar;
+    String GlobalJSONParseResult;
+    String JSON_STRING;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -54,30 +67,20 @@ public class PartsCribberAdminMenu extends AppCompatActivity
                     Intent intent = new Intent(PartsCribberAdminMenu.this, PartsCribberRegisterAdmin.class);
                     startActivity(intent);
                 }
-                if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals("Rent Equipment"))
-                {
-                    Toast.makeText(getBaseContext(), Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition),Toast.LENGTH_LONG).show();
-                }
-                if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals("Return Equipment"))
-                {
-                    Toast.makeText(getBaseContext(), Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition),Toast.LENGTH_LONG).show();
-                }
                 if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals("View/Edit My Profile"))
                 {
                     Intent intent = new Intent(PartsCribberAdminMenu.this, PartsCribberViewProfile.class);
                     startActivity(intent);
                 }
-                if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals("Change Password"))
+                if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals("Change My Password"))
                 {
-                    Toast.makeText(getBaseContext(), Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition),Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(PartsCribberAdminMenu.this, PartsCribberChangePassword.class);
+                    startActivity(intent);
                 }
                 if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals("View All Equipment"))
                 {
-                    Toast.makeText(getBaseContext(), Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition),Toast.LENGTH_LONG).show();
-                }
-                if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals("View Rented Equipment"))
-                {
-                    Toast.makeText(getBaseContext(), Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition),Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(PartsCribberAdminMenu.this, PartsCribberViewAllTools.class);
+                    startActivity(intent);
                 }
                 return false;
             }
@@ -95,11 +98,9 @@ public class PartsCribberAdminMenu extends AppCompatActivity
             public void onClick(DialogInterface dialog, int which)
             {
                 dialog.dismiss();
-                /*Intent intent=new Intent(this, PartsCribberLogin.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);*/
-                int id= android.os.Process.myPid();
+                int id = android.os.Process.myPid();
                 android.os.Process.killProcess(id);
+                System.exit(0);
             }
         });
         builder.setNegativeButton("NO", new DialogInterface.OnClickListener()
@@ -113,5 +114,4 @@ public class PartsCribberAdminMenu extends AppCompatActivity
         AlertDialog alert = builder.create();
         alert.show();
     }
-
 }

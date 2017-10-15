@@ -6,7 +6,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Html;
 import android.view.View;
 import android.widget.EditText;
 
@@ -22,7 +21,9 @@ public class PartsCribberLogin extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.partscribber_login);
         actionBar = getSupportActionBar();
-        actionBar.setTitle(Html.fromHtml("<font color='#01579B'>PartsCribber</font>"));
+        actionBar.hide();
+
+        //actionBar.setTitle(Html.fromHtml("<font color='#01579B'>PartsCribber</font>"));
 
         //if the user is already logged in we will directly start the profile activity
         User user = UserSession.getInstance(this).getUser();
@@ -33,13 +34,13 @@ public class PartsCribberLogin extends AppCompatActivity
             {
                 finish();
                 startActivity(new Intent(this, PartsCribberAdminMenu.class));
-                return;
+                //return;
             }
             else if(user.getUsertype().equals("Student"))
             {
                 finish();
                 startActivity(new Intent(this, PartsCribberStudentMenu.class));
-                return;
+                //return;
             }
         }
 
@@ -70,14 +71,9 @@ public class PartsCribberLogin extends AppCompatActivity
         else
         {
             String method = "login";
-            BackgroundTasks backgroundTasks = new BackgroundTasks(this);
-            backgroundTasks.execute(method, username, password);
+            UserInfoBackgroundTasks userInfoBackgroundTasks = new UserInfoBackgroundTasks(this);
+            userInfoBackgroundTasks.execute(method, username, password);
         }
-    }
-
-    public void openRegister(View view)
-    {
-        startActivity(new Intent(this, PartsCribberRegisterStudent.class));
     }
 
     public void onBackPressed()
@@ -91,9 +87,9 @@ public class PartsCribberLogin extends AppCompatActivity
             public void onClick(DialogInterface dialog, int which)
             {
                 dialog.dismiss();
-                finish();
-                int id= android.os.Process.myPid();
+                int id = android.os.Process.myPid();
                 android.os.Process.killProcess(id);
+                System.exit(0);
             }
         });
         builder.setNegativeButton("NO", new DialogInterface.OnClickListener()

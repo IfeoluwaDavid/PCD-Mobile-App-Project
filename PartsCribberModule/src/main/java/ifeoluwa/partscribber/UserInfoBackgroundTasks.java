@@ -25,13 +25,12 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 
 /**
  * Created by Ifeoluwa David on 2017-10-03.
  */
 
-public class BackgroundTasks extends AsyncTask<String, Void, String>
+public class UserInfoBackgroundTasks extends AsyncTask<String, Void, String>
 {
     Context ctx;
     AlertDialog.Builder builder;
@@ -40,7 +39,7 @@ public class BackgroundTasks extends AsyncTask<String, Void, String>
 
     PartsCribberViewProfile call = new PartsCribberViewProfile();
 
-    public BackgroundTasks(Context ctx)
+    public UserInfoBackgroundTasks(Context ctx)
     {
         this.ctx = ctx;
         activity = (Activity)ctx;
@@ -278,6 +277,58 @@ public class BackgroundTasks extends AsyncTask<String, Void, String>
                 e.printStackTrace();
             }
         }
+        else if (method.equals("changepassword"))
+        {
+            String myuserid = params[1];
+            String oldpassword = params[2];
+            String newpassword = params[3];
+            try
+            {
+                //SENDING DATA TO SERVER STARTS HERE
+                String login_url = "http://partscribdatabase.tech/androidconnect/changepassword.php";
+                URL url = new URL(login_url);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setDoOutput(true);
+                httpURLConnection.setDoInput(true);
+                OutputStream os = httpURLConnection.getOutputStream();
+                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+
+                String data =
+                        URLEncoder.encode("user_id", "UTF-8")+"="+
+                        URLEncoder.encode(myuserid, "UTF-8")+"&"+
+                        URLEncoder.encode("password", "UTF-8")+"="+
+                        URLEncoder.encode(oldpassword, "UTF-8")+"&"+
+                        URLEncoder.encode("newpassword", "UTF-8") + "=" +
+                        URLEncoder.encode(newpassword, "UTF-8");
+
+                bufferedWriter.write(data);
+                bufferedWriter.flush();
+                bufferedWriter.close();
+                os.close();
+                //RESPONSE FROM SERVER STARTS HERE
+                InputStream is = httpURLConnection.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is));
+                StringBuilder stringBuilder = new StringBuilder();
+                String line = "";
+                while((line = bufferedReader.readLine())!= null)
+                {
+                    stringBuilder.append(line+"\n");
+                }
+                bufferedReader.close();
+                is.close();
+                httpURLConnection.disconnect();
+                return stringBuilder.toString().trim();
+            }
+            catch (MalformedURLException e)
+            {
+                e.printStackTrace();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
         return null;
     }
     @Override
@@ -384,9 +435,29 @@ public class BackgroundTasks extends AsyncTask<String, Void, String>
             {
                 showDialog("Update Failed", message, code);
             }
+            else if (code.equals("changepassword_true"))
+            {
+                android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+                builder.setTitle("Changed Password Successfully");
+                builder.setMessage(message);
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        dialog.dismiss();
+                        activity.finish();
+                    }
+                });
+                android.support.v7.app.AlertDialog alert = builder.create();
+                alert.show();
+            }
+            else if (code.equals("changepassword_false"))
+            {
+                showDialog("Sorry! Something went wrong.", message, code);
+            }
             else
             {
-                showDialog("Unknown Error Occured", "Unkown Error", "Unkown Error");
+                showDialog("Unknown Error Occured", "Unknown Error", "Unknown Error");
             }
         }
         catch (JSONException e)

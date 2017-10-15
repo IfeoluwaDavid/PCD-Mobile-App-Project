@@ -177,8 +177,8 @@ public class PartsCribberRegisterStudent extends AppCompatActivity
                                     else
                                     {
                                         String method = "register_student";
-                                        BackgroundTasks backgroundTasks = new BackgroundTasks(this);
-                                        backgroundTasks.execute(method,username,password,first_name,last_name,email);
+                                        UserInfoBackgroundTasks userInfoBackgroundTasks = new UserInfoBackgroundTasks(this);
+                                        userInfoBackgroundTasks.execute(method,username,password,first_name,last_name,email);
                                         //finish();
                                     }
                                 }
@@ -259,7 +259,7 @@ public class PartsCribberRegisterStudent extends AppCompatActivity
         }
         int sum = letter + num + other;
 
-        if(sum < 8 || space > 0)
+        if(sum < 8 || sum > 15 || space > 0)
         {
             return false;
         }

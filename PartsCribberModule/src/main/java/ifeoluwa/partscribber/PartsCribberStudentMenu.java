@@ -2,6 +2,7 @@ package ifeoluwa.partscribber;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -13,18 +14,26 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class PartsCribberStudentMenu extends AppCompatActivity
 {
     ListView listView;
+    ListView listView2;
     ArrayAdapter<String> adapter;
     Intent intent;
-    ArrayList<String> thelist = new ArrayList<String>();
     ActionBar actionBar;
     TextView username;
 
-    String[] studentmenu = {"View Available Tools", "My Current Rentals","My Rental History","View/Edit Profile Settings"};
+    String[] studentmenu = {"View Available Item", "My Current Rentals"};
+    String[] studentmenu2 = {"View/Edit Personal Info","Change My Password"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -38,20 +47,29 @@ public class PartsCribberStudentMenu extends AppCompatActivity
         User user = UserSession.getInstance(this).getUser();
         username.setText(user.getFirstname()+" "+user.getLastname());
 
-        intent = new Intent(PartsCribberStudentMenu.this, PartsCribberViewProfile.class);
-
         listView = (ListView) findViewById(R.id.studentmenulistview);
         adapter = new ArrayAdapter<String>(this, R.layout.studentmenu_parentlayout,studentmenu);
         listView.setAdapter(adapter);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        listView2 = (ListView) findViewById(R.id.studentmenulistview2);
+        adapter = new ArrayAdapter<String>(this, R.layout.studentmenu_parentlayout,studentmenu2);
+        listView2.setAdapter(adapter);
+
+        //NO LISTENER FOR LISTVIEW 1 YET.
+
+        listView2.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                if (parent.getItemAtPosition(position).equals("View/Edit Profile Settings"))
+                if (parent.getItemAtPosition(position).equals("View/Edit Personal Info"))
                 {
                     Intent intent = new Intent(PartsCribberStudentMenu.this, PartsCribberViewProfile.class);
+                    startActivity(intent);
+                }
+                if(parent.getItemAtPosition(position).equals("Change My Password"))
+                {
+                    Intent intent = new Intent(PartsCribberStudentMenu.this, PartsCribberChangePassword.class);
                     startActivity(intent);
                 }
             }
@@ -69,11 +87,9 @@ public class PartsCribberStudentMenu extends AppCompatActivity
             public void onClick(DialogInterface dialog, int which)
             {
                 dialog.dismiss();
-                /*Intent intent=new Intent(this, PartsCribberLogin.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);*/
-                int id= android.os.Process.myPid();
+                int id = android.os.Process.myPid();
                 android.os.Process.killProcess(id);
+                System.exit(0);
             }
         });
         builder.setNegativeButton("NO", new DialogInterface.OnClickListener()
@@ -87,5 +103,4 @@ public class PartsCribberStudentMenu extends AppCompatActivity
         AlertDialog alert = builder.create();
         alert.show();
     }
-
 }

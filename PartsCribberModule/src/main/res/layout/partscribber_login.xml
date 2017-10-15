@@ -19,9 +19,9 @@
     android:textSize="25sp"
     tools:layout_editor_absoluteX="152dp"
     tools:layout_editor_absoluteY="86dp"
-    android:layout_marginBottom="14dp"
-    android:layout_above="@+id/login_username"
-    android:layout_centerHorizontal="true" />
+    android:layout_marginBottom="23dp"
+        android:layout_above="@+id/login_username"
+        android:layout_centerHorizontal="true" />
 
     <EditText
         android:id="@+id/login_username"
@@ -58,20 +58,6 @@
         android:layout_above="@+id/login_button"
         android:layout_alignStart="@+id/login_username" />
 
-    <TextView
-        android:id="@+id/forgot_password"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/forgot_password"
-        android:textColor="#E1F5FE"
-        android:textStyle="bold"
-        android:textSize="15sp"
-        tools:layout_editor_absoluteX="139dp"
-        tools:layout_editor_absoluteY="327dp"
-        android:layout_marginBottom="112dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
-
     <Button
         android:id="@+id/login_button"
         android:layout_width="213dp"
@@ -83,21 +69,8 @@
         android:onClick="afterLogin"
         tools:layout_editor_absoluteX="86dp"
         tools:layout_editor_absoluteY="250dp"
-        android:layout_centerVertical="true"
+        android:layout_marginBottom="199dp"
+        android:layout_alignParentBottom="true"
         android:layout_alignEnd="@+id/login_password" />
-
-    <Button
-        android:id="@+id/open_registerpage_button"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:text="@string/open_registerpage_button"
-        android:background="#80D8FF"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:onClick="openRegister"
-        android:layout_below="@+id/login_button"
-        android:layout_alignStart="@+id/login_button"
-        android:layout_marginTop="10dp"
-        android:layout_alignEnd="@+id/login_button" />
 
 </RelativeLayout>

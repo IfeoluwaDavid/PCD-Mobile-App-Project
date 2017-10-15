@@ -1,7 +1,6 @@
 package ifeoluwa.partscribber;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -12,7 +11,6 @@ import android.text.InputType;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
-import java.util.ArrayList;
 
 public class PartsCribberViewProfile extends AppCompatActivity
 {
@@ -20,7 +18,6 @@ public class PartsCribberViewProfile extends AppCompatActivity
     String username, first_name, last_name, email;
     String previousUsername, previousFirstname, previousLastname, previousEmail;
     ActionBar actionBar;
-    ArrayList<String> newUserData = new ArrayList<String>();
     boolean editable = false;
 
     @Override
@@ -100,19 +97,43 @@ public class PartsCribberViewProfile extends AppCompatActivity
         }
         else
         {
-            if(previousUsername == my_username.getText().toString() &&
-               previousFirstname == my_firstname.getText().toString() &&
-               previousLastname == my_lastname.getText().toString() &&
-               previousEmail == my_email.getText().toString())
+            my_username.setCursorVisible(false);
+            my_username.setFocusableInTouchMode(false);
+            my_username.setInputType(InputType.TYPE_CLASS_TEXT);
+            my_username.requestFocus(); //to trigger the soft input
+            my_username.setTypeface(null, Typeface.BOLD);
+
+            my_firstname.setCursorVisible(false);
+            my_firstname.setFocusableInTouchMode(false);
+            my_firstname.setInputType(InputType.TYPE_CLASS_TEXT);
+            my_firstname.requestFocus(); //to trigger the soft input
+            my_firstname.setTypeface(null, Typeface.BOLD);
+
+            my_lastname.setCursorVisible(false);
+            my_lastname.setFocusableInTouchMode(false);
+            my_lastname.setInputType(InputType.TYPE_CLASS_TEXT);
+            my_lastname.requestFocus(); //to trigger the soft input
+            my_lastname.setTypeface(null, Typeface.BOLD);
+
+            my_email.setCursorVisible(false);
+            my_email.setFocusableInTouchMode(false);
+            my_email.setInputType(InputType.TYPE_CLASS_TEXT);
+            my_email.requestFocus(); //to trigger the soft input
+            my_email.setTypeface(null, Typeface.BOLD);
+
+            if(previousUsername.equals(my_username.getText().toString()) &&
+               previousFirstname.equals(my_firstname.getText().toString()) &&
+               previousLastname.equals(my_lastname.getText().toString()) &&
+               previousEmail.equals(my_email.getText().toString()))
             {
                 android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
-                builder.setTitle("Hmmm. Wait?");
-                builder.setMessage("No Changes Made.");
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                builder.setMessage("We noticed you haven't made any changes.");
+                builder.setPositiveButton("YES I KNOW", new DialogInterface.OnClickListener()
                 {
                     public void onClick(DialogInterface dialog, int which)
                     {
                         dialog.dismiss();
+                        finish();
                     }
                 });
                 android.support.v7.app.AlertDialog alert = builder.create();
@@ -120,30 +141,6 @@ public class PartsCribberViewProfile extends AppCompatActivity
             }
             else
             {
-                my_username.setCursorVisible(false);
-                my_username.setFocusableInTouchMode(false);
-                my_username.setInputType(InputType.TYPE_CLASS_TEXT);
-                my_username.requestFocus(); //to trigger the soft input
-                my_username.setTypeface(null, Typeface.BOLD);
-
-                my_firstname.setCursorVisible(false);
-                my_firstname.setFocusableInTouchMode(false);
-                my_firstname.setInputType(InputType.TYPE_CLASS_TEXT);
-                my_firstname.requestFocus(); //to trigger the soft input
-                my_firstname.setTypeface(null, Typeface.BOLD);
-
-                my_lastname.setCursorVisible(false);
-                my_lastname.setFocusableInTouchMode(false);
-                my_lastname.setInputType(InputType.TYPE_CLASS_TEXT);
-                my_lastname.requestFocus(); //to trigger the soft input
-                my_lastname.setTypeface(null, Typeface.BOLD);
-
-                my_email.setCursorVisible(false);
-                my_email.setFocusableInTouchMode(false);
-                my_email.setInputType(InputType.TYPE_CLASS_TEXT);
-                my_email.requestFocus(); //to trigger the soft input
-                my_email.setTypeface(null, Typeface.BOLD);
-
                 User user = UserSession.getInstance(this).getUser();
 
                 String userid = String.valueOf(user.getUserID());
@@ -155,15 +152,10 @@ public class PartsCribberViewProfile extends AppCompatActivity
                 editable = false;
 
                 String method = "update_user";
-                BackgroundTasks backgroundTasks = new BackgroundTasks(this);
-                backgroundTasks.execute(method,userid,username,first_name,last_name,email);
+                UserInfoBackgroundTasks userInfoBackgroundTasks = new UserInfoBackgroundTasks(this);
+                userInfoBackgroundTasks.execute(method,userid,username,first_name,last_name,email);
             }
         }
-    }
-
-    public ArrayList<String> getNewUserData()
-    {
-        return newUserData;
     }
 
     public void logout(View view)
@@ -174,28 +166,30 @@ public class PartsCribberViewProfile extends AppCompatActivity
 
     public void onBackPressed()
     {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Confirm");
-        builder.setMessage("Are you sure you want to exit? Unsaved changes will be lost.");
+        if(editable == true)
+        {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Confirm");
+            builder.setMessage("Are you sure you want to exit? Unsaved changes will be lost.");
 
-        builder.setPositiveButton("YES", new DialogInterface.OnClickListener()
+            builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    finish();
+                }
+            });
+            builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
+        else
         {
-            public void onClick(DialogInterface dialog, int which)
-            {
-                dialog.dismiss();
-                int id= android.os.Process.myPid();
-                android.os.Process.killProcess(id);
-            }
-        });
-        builder.setNegativeButton("NO", new DialogInterface.OnClickListener()
-        {
-            @Override
-            public void onClick(DialogInterface dialog, int which)
-            {
-                dialog.dismiss();
-            }
-        });
-        AlertDialog alert = builder.create();
-        alert.show();
+            finish();
+        }
     }
 }

@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 public class PartsCribberRegisterAdmin extends AppCompatActivity
 {
@@ -63,7 +62,7 @@ public class PartsCribberRegisterAdmin extends AppCompatActivity
             {
                 android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
                 builder.setTitle("Something went wrong");
-                builder.setMessage("Your Student ID is INVALID.");
+                builder.setMessage("Your Admin ID is INVALID.");
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
                 {
                     public void onClick(DialogInterface dialog, int which)
@@ -80,7 +79,7 @@ public class PartsCribberRegisterAdmin extends AppCompatActivity
                 {
                     android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
                     builder.setTitle("Something went wrong");
-                    builder.setMessage("Your Password must be up to 8 Characters without spaces.");
+                    builder.setMessage("Your new password should be between 8 to 15 characters long, without spaces.");
                     builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
                     {
                         public void onClick(DialogInterface dialog, int which)
@@ -108,11 +107,11 @@ public class PartsCribberRegisterAdmin extends AppCompatActivity
                     }
                     else
                     {
-                        if (!password.equals(confirmpassword))
+                        if (!namesValidation(first_name))
                         {
                             android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
                             builder.setTitle("Something went wrong");
-                            builder.setMessage("Your Passwords don't match");
+                            builder.setMessage("First name should be more than 2 characters with letters only");
                             builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
                             {
                                 public void onClick(DialogInterface dialog, int which)
@@ -125,11 +124,11 @@ public class PartsCribberRegisterAdmin extends AppCompatActivity
                         }
                         else
                         {
-                            if (!namesValidation(first_name))
+                            if (!namesValidation(last_name))
                             {
                                 android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
                                 builder.setTitle("Something went wrong");
-                                builder.setMessage("First name should be more than 2 characters with letters only");
+                                builder.setMessage("Last name should be more than 2 characters with letters only");
                                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
                                 {
                                     public void onClick(DialogInterface dialog, int which)
@@ -142,11 +141,12 @@ public class PartsCribberRegisterAdmin extends AppCompatActivity
                             }
                             else
                             {
-                                if (!namesValidation(last_name))
+                                String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+                                if (!email.matches(emailPattern))
                                 {
                                     android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
                                     builder.setTitle("Something went wrong");
-                                    builder.setMessage("Last name should be more than 2 characters with letters only");
+                                    builder.setMessage("Email Address is Invalid");
                                     builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
                                     {
                                         public void onClick(DialogInterface dialog, int which)
@@ -159,29 +159,10 @@ public class PartsCribberRegisterAdmin extends AppCompatActivity
                                 }
                                 else
                                 {
-                                    String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
-                                    if (!email.matches(emailPattern))
-                                    {
-                                        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
-                                        builder.setTitle("Something went wrong");
-                                        builder.setMessage("Email Address is Invalid");
-                                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
-                                        {
-                                            public void onClick(DialogInterface dialog, int which)
-                                            {
-                                                dialog.dismiss();
-                                            }
-                                        });
-                                        android.support.v7.app.AlertDialog alert = builder.create();
-                                        alert.show();
-                                    }
-                                    else
-                                    {
-                                        String method = "register_admin";
-                                        BackgroundTasks backgroundTasks = new BackgroundTasks(this);
-                                        backgroundTasks.execute(method,username,password,first_name,last_name,email);
-                                        //finish();
-                                    }
+                                    String method = "register_admin";
+                                    UserInfoBackgroundTasks userInfoBackgroundTasks = new UserInfoBackgroundTasks(this);
+                                    userInfoBackgroundTasks.execute(method,username,password,first_name,last_name,email);
+                                    //finish();
                                 }
                             }
                         }
@@ -258,7 +239,7 @@ public class PartsCribberRegisterAdmin extends AppCompatActivity
         }
         int sum = letter + num + other;
 
-        if(sum < 8 || space > 0)
+        if(sum < 8 || sum > 15 || space > 0)
         {
             return false;
         }

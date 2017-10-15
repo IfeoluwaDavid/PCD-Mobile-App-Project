@@ -11,19 +11,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/customStyle">
-        <activity android:name=".PartsCribberLogin">
+        <activity android:name=".PartsCribberSplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".PartsCribberLogin" />
         <activity android:name=".PartsCribberRegisterStudent" />
         <activity android:name=".PartsCribberViewProfile" />
         <activity android:name=".PartsCribberAdminMenu" />
         <activity android:name=".PartsCribberStudentMenu" />
         <activity android:name=".PartsCribberRegisterAdmin" />
-        <activity android:name=".PartsCribberChangePassword"></activity>
+        <activity android:name=".PartsCribberChangePassword" />
+        <activity android:name=".PartsCribberViewAllTools"></activity>
     </application>
 
 </manifest>

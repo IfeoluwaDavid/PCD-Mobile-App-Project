@@ -34,6 +34,7 @@
     <!-- STUDENT MENU ACTIVITY -->
     <string name="studentmenutext">Student Menu Text</string>
     <string name="welcomeusername">Firstname Lastname</string>
+    <string name="studentprofileinfoheader2">Profile Settings</string>
 
     <!-- REGISTER NEW ADMIN ACTIVITY -->
     <string name="register_newadmin_header">REGISTER ADMIN</string>
@@ -63,5 +64,9 @@
     <string name="confirm_new_password">Confirm New Password</string>
     <string name="save_password_button">SAVE PASSWORD CHANGES</string>
     <string name="forgot_password_button">FORGOT CURRENT PASSWORD</string>
+
+    <!-- VIEW TOOLS ACTIVITY -->
+    <string name="viewtools_itemnametext">Item Name</string>
+    <string name="viewtools_itemqtytext">0</string>
 
 </resources>
