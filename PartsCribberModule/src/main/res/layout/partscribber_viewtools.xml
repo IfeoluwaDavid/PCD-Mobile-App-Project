@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/mainBackgroundcolor"
-    tools:context="ifeoluwa.partscribber.PartsCribberViewAllTools">
+    tools:context="ifeoluwa.partscribber.PartsCribberViewTools">
 
     <ListView
         android:id="@+id/listview"
@@ -13,6 +13,6 @@
         android:layout_height="wrap_content"
         android:divider="#0277BD"
         android:dividerHeight="3dp"
-        android:layout_margin="10dp" />
+        android:layout_margin="10dp"/>
 
 </RelativeLayout>

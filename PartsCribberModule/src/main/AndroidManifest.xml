@@ -25,7 +25,10 @@
         <activity android:name=".PartsCribberStudentMenu" />
         <activity android:name=".PartsCribberRegisterAdmin" />
         <activity android:name=".PartsCribberChangePassword" />
-        <activity android:name=".PartsCribberViewAllTools"></activity>
+        <activity android:name=".PartsCribberViewCategory" />
+        <activity android:name=".PartsCribberUpdateInventory" />
+        <activity android:name=".PartsCribberViewTools" />
+        <activity android:name=".PartsCribberToolData"></activity>
     </application>
 
 </manifest>

@@ -36,8 +36,7 @@ public class UserInfoBackgroundTasks extends AsyncTask<String, Void, String>
     AlertDialog.Builder builder;
     private Activity activity;
     private AlertDialog loginDialog;
-
-    PartsCribberViewProfile call = new PartsCribberViewProfile();
+    ItemMenuAdapter itemMenuAdapter;
 
     public UserInfoBackgroundTasks(Context ctx)
     {
@@ -369,7 +368,7 @@ public class UserInfoBackgroundTasks extends AsyncTask<String, Void, String>
             }
             catch (Exception e)
             {
-                // Server did not respond  with this values
+                // Server did not respond  with these values
             }
 
             if (code.equals("reg_true"))
