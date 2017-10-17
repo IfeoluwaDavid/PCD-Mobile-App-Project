@@ -1,4 +1,5 @@
 package ifeoluwa.partscribber;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,18 +10,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Ifeoluwa David on 2017-10-14.
+ * Created by Ifeoluwa David on 2017-10-16.
  */
 
-public class ItemMenuAdapter extends ArrayAdapter
+public class CategoryMenuAdapter extends ArrayAdapter
 {
     private List list = new ArrayList();
-    ItemMenuAdapter(Context context, int resource)
+    CategoryMenuAdapter(Context context, int resource)
     {
         super(context, resource);
     }
 
-    public void add(Item object)
+    public void add(String object)
     {
         // super.add(object);
         list.add(object);
@@ -44,30 +45,28 @@ public class ItemMenuAdapter extends ArrayAdapter
     {
         View row;
         row = convertview;
-        ItemHolder itemHolder;
+        CategoryHolder categoryHolder;
         if(row == null)
         {
             LayoutInflater layoutInflater = LayoutInflater.from(this.getContext());
-            row = layoutInflater.inflate(R.layout.viewtools_rowlayout, parent, false);
-            itemHolder = new ItemHolder();
-            itemHolder.tx_itemname = row.findViewById(R.id.viewtools_itemnametext);
-            itemHolder.tx_qtyavailable = row.findViewById(R.id.viewtools_itemqtytext);
-            row.setTag(itemHolder);
+            row = layoutInflater.inflate(R.layout.viewcategory_rowlayout, parent, false);
+            categoryHolder = new CategoryHolder();
+            categoryHolder.tx_category = row.findViewById(R.id.viewcategory_categoryname);
+            row.setTag(categoryHolder);
         }
         else
         {
-            itemHolder = (ItemHolder) row.getTag();
+            categoryHolder = (CategoryHolder) row.getTag();
         }
 
-        Item item = (Item)list.get(position);
-        itemHolder.tx_itemname.setText(item.getItemName());
-        itemHolder.tx_qtyavailable.setText(String.valueOf(item.getQtyAvailable()));
+        String itemcategory = (String)list.get(position);
+        categoryHolder.tx_category.setText(itemcategory);
         return row;
     }
 
-    static class ItemHolder
+    static class CategoryHolder
     {
-        TextView tx_itemname, tx_qtyavailable;
+        TextView tx_category;
     }
 
 }

@@ -68,5 +68,13 @@
     <!-- VIEW TOOLS ACTIVITY -->
     <string name="viewtools_itemnametext">Item Name</string>
     <string name="viewtools_itemqtytext">0</string>
+    <string name="viewcategory_categoryname">Item Category</string>
 
+    <!-- TOOLS DATA ACTIVITY -->
+    <string name="item_name_header">Item Name</string>
+    <string name="serial_no">Serial Number</string>
+    <string name="qty_available">Qty Available</string>
+    <string name="qty_rented">Qty Rented</string>
+    <string name="qty_total">Total Qty</string>
+    <string name="item_category">Category</string>
 </resources>

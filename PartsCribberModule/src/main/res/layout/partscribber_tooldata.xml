@@ -1,0 +1,122 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rl"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    android:background="@color/mainBackgroundcolor"
+    tools:context="ifeoluwa.partscribber.PartsCribberToolData">
+
+    <ImageView
+        android:id="@+id/iv"
+        android:layout_width="250dp"
+        android:layout_height="180dp"
+        app:srcCompat="@drawable/resistor"
+        android:padding="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="11dp"
+        android:layout_below="@+id/item_name_header"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/item_name_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/item_name_header"
+        android:textStyle="bold"
+        android:typeface="serif"
+        android:textColor="#E1F5FE"
+        android:textSize="25sp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:id="@+id/serial_no"
+        android:layout_width="330dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:background="#ffffff"
+        android:focusable="false"
+        android:clickable="false"
+        android:textStyle="bold"
+        android:textColor="#000000"
+        android:padding="9dp"
+        android:layout_marginTop="11dp"
+        android:inputType="textPersonName"
+        android:text="@string/serial_no"
+        android:layout_below="@+id/iv"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:id="@+id/qty_available"
+        android:layout_width="330dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:background="#ffffff"
+        android:focusable="false"
+        android:clickable="false"
+        android:textStyle="bold"
+        android:textColor="#000000"
+        android:padding="9dp"
+        android:layout_marginTop="5dp"
+        android:inputType="textPersonName"
+        android:text="@string/qty_available"
+        android:layout_below="@+id/serial_no"
+        android:layout_alignStart="@+id/serial_no" />
+
+    <EditText
+        android:id="@+id/qty_rented"
+        android:layout_width="330dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:background="#ffffff"
+        android:focusable="false"
+        android:clickable="false"
+        android:textStyle="bold"
+        android:textColor="#000000"
+        android:padding="9dp"
+        android:layout_marginTop="5dp"
+        android:inputType="textPersonName"
+        android:text="@string/qty_rented"
+        android:layout_below="@+id/qty_available"
+        android:layout_alignStart="@+id/qty_available" />
+
+    <EditText
+        android:id="@+id/qty_total"
+        android:layout_width="330dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:background="#ffffff"
+        android:focusable="false"
+        android:clickable="false"
+        android:textStyle="bold"
+        android:textColor="#000000"
+        android:padding="9dp"
+        android:layout_marginTop="5dp"
+        android:inputType="textPersonName"
+        android:text="@string/qty_total"
+        android:layout_below="@+id/qty_rented"
+        android:layout_alignStart="@+id/qty_rented" />
+
+    <EditText
+        android:id="@+id/item_category"
+        android:layout_width="330dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:background="#ffffff"
+        android:focusable="false"
+        android:clickable="false"
+        android:textStyle="bold"
+        android:textColor="#000000"
+        android:padding="9dp"
+        android:inputType="textPersonName"
+        android:layout_marginTop="5dp"
+        android:text="@string/item_category"
+        android:layout_below="@+id/qty_total"
+        android:layout_alignStart="@+id/qty_total" />
+
+</RelativeLayout>

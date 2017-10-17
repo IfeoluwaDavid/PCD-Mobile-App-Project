@@ -2,26 +2,14 @@ package ifeoluwa.partscribber;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
-import android.util.Log;
 import android.view.View;
 import android.widget.ExpandableListView;
-import android.widget.TextView;
-import android.widget.Toast;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -79,7 +67,7 @@ public class PartsCribberAdminMenu extends AppCompatActivity
                 }
                 if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals("View All Equipment"))
                 {
-                    Intent intent = new Intent(PartsCribberAdminMenu.this, PartsCribberViewAllTools.class);
+                    Intent intent = new Intent(PartsCribberAdminMenu.this, PartsCribberViewCategory.class);
                     startActivity(intent);
                 }
                 return false;
