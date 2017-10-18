@@ -9,23 +9,11 @@
     android:background="@color/mainBackgroundcolor"
     tools:context="ifeoluwa.partscribber.PartsCribberToolData">
 
-    <ImageView
-        android:id="@+id/iv"
-        android:layout_width="250dp"
-        android:layout_height="180dp"
-        app:srcCompat="@drawable/resistor"
-        android:padding="5dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="11dp"
-        android:layout_below="@+id/item_name_header"
-        android:layout_centerHorizontal="true" />
-
     <TextView
         android:id="@+id/item_name_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="40dp"
         android:text="@string/item_name_header"
         android:textStyle="bold"
         android:typeface="serif"
@@ -45,10 +33,10 @@
         android:textStyle="bold"
         android:textColor="#000000"
         android:padding="9dp"
-        android:layout_marginTop="11dp"
         android:inputType="textPersonName"
         android:text="@string/serial_no"
-        android:layout_below="@+id/iv"
+        android:layout_marginTop="16dp"
+        android:layout_below="@+id/item_name_header"
         android:layout_centerHorizontal="true" />
 
     <EditText
@@ -118,5 +106,18 @@
         android:text="@string/item_category"
         android:layout_below="@+id/qty_total"
         android:layout_alignStart="@+id/qty_total" />
+
+    <Button
+        android:id="@+id/update_this_item_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="11dp"
+        android:text="@string/update_this_item_data"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:background="#80D8FF"
+        android:layout_below="@+id/item_category"
+        android:layout_alignStart="@+id/item_category"
+        android:layout_alignEnd="@+id/item_category" />
 
 </RelativeLayout>

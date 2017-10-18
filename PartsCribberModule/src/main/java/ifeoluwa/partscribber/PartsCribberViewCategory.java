@@ -9,9 +9,11 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,7 +33,6 @@ import java.util.HashSet;
 
 public class PartsCribberViewCategory extends AppCompatActivity
 {
-
     String jsonstring;
     JSONObject jsonObject;
     JSONArray jsonArray;
@@ -59,7 +60,7 @@ public class PartsCribberViewCategory extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                String selectedCategory = String.valueOf(parent.getItemAtPosition(position));
+                String selectedCategory = (String) parent.getItemAtPosition(position);
                 intent = new Intent(PartsCribberViewCategory.this, PartsCribberViewTools.class);
                 intent.putExtra("selectedCategory", selectedCategory);
                 startActivity(intent);

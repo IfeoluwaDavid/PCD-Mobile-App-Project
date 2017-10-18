@@ -99,6 +99,7 @@ public class PartsCribberToolData extends AppCompatActivity
                 BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
 
                 String data = URLEncoder.encode("item_name", "UTF-8") + "=" + URLEncoder.encode(selectedItem, "UTF-8");
+                //Log.d("Debug", " CastedItemID = "  + selectedItem);
 
                 bufferedWriter.write(data);
                 bufferedWriter.flush();
@@ -169,12 +170,20 @@ public class PartsCribberToolData extends AppCompatActivity
                 et_qtyTotal = (EditText) findViewById(R.id.qty_total);
                 et_category = (EditText) findViewById(R.id.item_category);
 
+                Log.d("Debug", " CastedItemID = "  + itemID);
+                Log.d("Debug", " itemName = "  + itemName);
+                Log.d("Debug", " serialNo = "  + serialNo);
+                Log.d("Debug", " CastedQtyAvailable = "  + qtyAvailable);
+                Log.d("Debug", " CastedQtyRented = "  + qtyRented);
+                Log.d("Debug", " CastedQtyTotal = "  + qtyTotal);
+                Log.d("Debug", " itemCategory = "  + itemCategory);
+
                 tv_itemName.setText(itemName);
-                et_itemSerialNo.setText(serialNo);
-                et_qtyAvailable.setText(qtyAvailable);
-                et_qtyRented.setText(qtyRented);
-                et_qtyTotal.setText(qtyTotal);
-                et_category.setText(itemCategory);
+                et_itemSerialNo.setText("Serial Number: " + serialNo);
+                et_qtyAvailable.setText("Available Quantity: " + qtyAvailable);
+                et_qtyRented.setText("Rented Quantity: " + qtyRented);
+                et_qtyTotal.setText("Total Quantity: " + qtyTotal);
+                et_category.setText("Item Category: " + itemCategory);
 
             }
             catch (JSONException e)

@@ -65,6 +65,12 @@
     <string name="save_password_button">SAVE PASSWORD CHANGES</string>
     <string name="forgot_password_button">FORGOT CURRENT PASSWORD</string>
 
+    <!-- VIEW CATEGORY ACTIVITY -->
+    <string name="select_category_header">Select Category</string>
+
+    <!-- VIEW TOOLS ACTIVITY -->
+    <string name="available_items_header">Available Items</string>
+
     <!-- VIEW TOOLS ACTIVITY -->
     <string name="viewtools_itemnametext">Item Name</string>
     <string name="viewtools_itemqtytext">0</string>
@@ -77,4 +83,5 @@
     <string name="qty_rented">Qty Rented</string>
     <string name="qty_total">Total Qty</string>
     <string name="item_category">Category</string>
+    <string name="update_this_item_data">Update Item</string>
 </resources>
