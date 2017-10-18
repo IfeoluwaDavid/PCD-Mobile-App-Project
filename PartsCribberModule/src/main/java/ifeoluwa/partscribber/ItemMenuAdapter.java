@@ -1,5 +1,7 @@
 package ifeoluwa.partscribber;
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +22,7 @@ public class ItemMenuAdapter extends ArrayAdapter
         super(context, resource);
     }
 
-    public void add(Item object)
+    public void add(String object)
     {
         // super.add(object);
         list.add(object);
@@ -51,7 +53,6 @@ public class ItemMenuAdapter extends ArrayAdapter
             row = layoutInflater.inflate(R.layout.viewtools_rowlayout, parent, false);
             itemHolder = new ItemHolder();
             itemHolder.tx_itemname = row.findViewById(R.id.viewtools_itemnametext);
-            itemHolder.tx_qtyavailable = row.findViewById(R.id.viewtools_itemqtytext);
             row.setTag(itemHolder);
         }
         else
@@ -59,15 +60,14 @@ public class ItemMenuAdapter extends ArrayAdapter
             itemHolder = (ItemHolder) row.getTag();
         }
 
-        Item item = (Item)list.get(position);
-        itemHolder.tx_itemname.setText(item.getItemName());
-        itemHolder.tx_qtyavailable.setText(String.valueOf(item.getQtyAvailable()));
+        String itemname = (String) list.get(position);
+        itemHolder.tx_itemname.setText(itemname);
         return row;
     }
 
     static class ItemHolder
     {
-        TextView tx_itemname, tx_qtyavailable;
+        TextView tx_itemname;
     }
 
 }

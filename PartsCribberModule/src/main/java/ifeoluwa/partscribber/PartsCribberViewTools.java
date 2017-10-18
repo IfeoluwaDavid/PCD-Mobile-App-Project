@@ -9,11 +9,15 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,6 +32,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 
 public class PartsCribberViewTools extends AppCompatActivity
 {
@@ -36,9 +41,11 @@ public class PartsCribberViewTools extends AppCompatActivity
     JSONArray jsonArray;
     Intent intent;
     ItemMenuAdapter itemMenuAdapter;
+    TextView availableItems;
     ListView listView;
     ActionBar actionBar;
     String selectedCategory;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -53,6 +60,9 @@ public class PartsCribberViewTools extends AppCompatActivity
 
         new ItemInfoBackgroundTasks(this).execute();
 
+        availableItems = (TextView) findViewById(R.id.available_items_header);
+        availableItems.setText(selectedCategory);
+
         listView = (ListView) findViewById(R.id.listview);
         itemMenuAdapter = new ItemMenuAdapter(this, R.layout.viewtools_rowlayout);
         listView.setAdapter(itemMenuAdapter);
@@ -62,9 +72,9 @@ public class PartsCribberViewTools extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                String selectedItem = String.valueOf(parent.getItemAtPosition(position));
+                String selectedItem = parent.getItemAtPosition(position).toString();
                 intent = new Intent(PartsCribberViewTools.this, PartsCribberToolData.class);
-                intent.putExtra("selectedItem", selectedItem);
+                intent.putExtra("selectedItem", String.valueOf(selectedItem));
                 startActivity(intent);
             }
         });
@@ -148,36 +158,22 @@ public class PartsCribberViewTools extends AppCompatActivity
         {
             loginDialog.dismiss();
             jsonstring = result;
+            ArrayList<String> arraylistofitemProperties = new ArrayList<String>();
 
             try
             {
                 jsonObject = new JSONObject(jsonstring);
                 jsonArray = jsonObject.getJSONArray("server_response");
                 int count = 0;
-                //Log.d("Debug", " jsonArray is null ? " + (jsonArray == null));
 
-                String itemID, itemName, serialNo, qtyAvailable, qtyRented, qtyTotal, itemCategory;
+                String itemName;
 
                 while(count < jsonArray.length())
                 {
                     JSONObject JO = jsonArray.getJSONObject(count);
-                    //Log.d("Debug", " jo = "  + JO.toString());
-
-                    itemID = JO.getString("item_id");
                     itemName = JO.getString("item_name");
-                    serialNo = JO.getString("serial_no");
-                    qtyAvailable = JO.getString("available_qty");
-                    qtyRented = JO.getString("rented_qty");
-                    qtyTotal = JO.getString("total_qty");
-                    itemCategory = JO.getString("category");
-
-                    int CastedItemID = Integer.parseInt(itemID);
-                    int CastedQtyAvailable = Integer.parseInt(qtyAvailable);
-                    int CastedQtyRented = Integer.parseInt(qtyRented);
-                    int CastedQtyTotal = Integer.parseInt(qtyTotal);
-
-                    Item item = new Item(CastedItemID,itemName,serialNo,CastedQtyAvailable,CastedQtyRented,CastedQtyTotal,itemCategory);
-                    itemMenuAdapter.add(item);
+                    arraylistofitemProperties.add(itemName);
+                    itemMenuAdapter.add(itemName);
                     count++;
                 }
             }

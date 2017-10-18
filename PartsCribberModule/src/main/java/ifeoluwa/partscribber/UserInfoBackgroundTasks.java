@@ -36,7 +36,6 @@ public class UserInfoBackgroundTasks extends AsyncTask<String, Void, String>
     AlertDialog.Builder builder;
     private Activity activity;
     private AlertDialog loginDialog;
-    ItemMenuAdapter itemMenuAdapter;
 
     public UserInfoBackgroundTasks(Context ctx)
     {
@@ -51,7 +50,6 @@ public class UserInfoBackgroundTasks extends AsyncTask<String, Void, String>
         View dialogView = LayoutInflater.from(this.ctx).inflate(R.layout.progress_dialog, null);
         ((TextView)dialogView.findViewById(R.id.tv_progress_dialog)).setText("Connecting to Server");
         loginDialog = builder.setView(dialogView).setCancelable(false).setTitle("Please Wait").show();
-        // activity = (Activity)ctx;
     }
 
     @Override
@@ -415,7 +413,6 @@ public class UserInfoBackgroundTasks extends AsyncTask<String, Void, String>
                 int castedUserID = Integer.valueOf(user_id);
                 User user = new User(castedUserID, username, firstname, lastname, email, usertype);
                 UserSession.getInstance(ctx).userLogin(user);
-                //showDialog("Update Successful", message, code);
                 android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
                 builder.setTitle("Successful Profile Update");
                 builder.setMessage(message);
