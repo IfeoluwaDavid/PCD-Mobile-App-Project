@@ -148,7 +148,7 @@ public class PartsCribberViewCategory extends AppCompatActivity
                 {
                     JSONObject JO = jsonArray.getJSONObject(count);
                     itemCategory = JO.getString("category");
-                    arraylistofCategoryObjects.add(itemCategory);
+                    arraylistofCategoryObjects.add(itemCategory.toUpperCase());
                     count++;
                 }
                 for (String item : arraylistofCategoryObjects)

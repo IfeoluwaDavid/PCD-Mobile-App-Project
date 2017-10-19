@@ -67,14 +67,11 @@
 
     <!-- VIEW CATEGORY ACTIVITY -->
     <string name="select_category_header">Select Category</string>
+    <string name="viewcategory_categoryname">Item Category</string>
 
     <!-- VIEW TOOLS ACTIVITY -->
     <string name="available_items_header">Available Items</string>
-
-    <!-- VIEW TOOLS ACTIVITY -->
     <string name="viewtools_itemnametext">Item Name</string>
-    <string name="viewtools_itemqtytext">0</string>
-    <string name="viewcategory_categoryname">Item Category</string>
 
     <!-- TOOLS DATA ACTIVITY -->
     <string name="item_name_header">Item Name</string>
@@ -84,4 +81,13 @@
     <string name="qty_total">Total Qty</string>
     <string name="item_category">Category</string>
     <string name="update_this_item_data">Update Item</string>
+
+    <!-- UPDATE INVENTORY ACTIVITY -->
+    <string name="update_inventory_header">Update Inventory</string>
+    <string name="item_name_value">Item Name</string>
+    <string name="serial_no_value">Serial Number</string>
+    <string name="quantity_value">Stock Quantity</string>
+    <string name="category_value">Item Category</string>
+    <string name="add_item_button">Add Item</string>
+
 </resources>

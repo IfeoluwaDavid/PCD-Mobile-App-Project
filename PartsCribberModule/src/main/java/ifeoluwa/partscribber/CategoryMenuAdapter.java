@@ -68,5 +68,4 @@ public class CategoryMenuAdapter extends ArrayAdapter
     {
         TextView tx_category;
     }
-
 }

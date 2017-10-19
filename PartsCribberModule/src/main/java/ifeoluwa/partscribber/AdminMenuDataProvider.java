@@ -23,9 +23,9 @@ public class AdminMenuDataProvider
         rentals_and_returns.add("Return Equipment");
 
         List<String> inventory = new ArrayList<String>();
+        inventory.add("Add New Equipment");
         inventory.add("View All Equipment");
-        inventory.add("View Rented Equipment");
-        inventory.add("Update Inventory Record");
+        inventory.add("View Equipment by Category");
 
         List<String> profile_settings = new ArrayList<String>();
         profile_settings.add("View/Edit My Profile");
