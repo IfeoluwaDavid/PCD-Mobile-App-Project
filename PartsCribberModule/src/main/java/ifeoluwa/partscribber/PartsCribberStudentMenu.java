@@ -28,7 +28,6 @@ public class PartsCribberStudentMenu extends AppCompatActivity
     ListView listView;
     ListView listView2;
     ArrayAdapter<String> adapter;
-    Intent intent;
     ActionBar actionBar;
     TextView username;
 

@@ -21,8 +21,6 @@ public class PartsCribberAdminMenu extends AppCompatActivity
     ExpandableListView exp_list;
     AdminMenuAdapter adapter;
     ActionBar actionBar;
-    String GlobalJSONParseResult;
-    String JSON_STRING;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -65,9 +63,14 @@ public class PartsCribberAdminMenu extends AppCompatActivity
                     Intent intent = new Intent(PartsCribberAdminMenu.this, PartsCribberChangePassword.class);
                     startActivity(intent);
                 }
-                if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals("View All Equipment"))
+                if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals("View Equipment by Category"))
                 {
                     Intent intent = new Intent(PartsCribberAdminMenu.this, PartsCribberViewCategory.class);
+                    startActivity(intent);
+                }
+                if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals("Add New Equipment"))
+                {
+                    Intent intent = new Intent(PartsCribberAdminMenu.this, PartsCribberUpdateInventory.class);
                     startActivity(intent);
                 }
                 return false;

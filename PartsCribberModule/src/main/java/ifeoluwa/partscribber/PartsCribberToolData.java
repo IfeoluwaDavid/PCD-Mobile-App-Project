@@ -146,9 +146,8 @@ public class PartsCribberToolData extends AppCompatActivity
                 jsonArray = jsonObject.getJSONArray("server_response");
                 JSONObject JO = jsonArray.getJSONObject(0);
 
-                String itemID, itemName, serialNo, qtyAvailable, qtyRented, qtyTotal, itemCategory;
+                String itemName, serialNo, qtyAvailable, qtyRented, qtyTotal, itemCategory;
 
-                itemID = JO.getString("item_id");
                 itemName = JO.getString("item_name");
                 serialNo = JO.getString("serial_no");
                 qtyAvailable = JO.getString("available_qty");
@@ -156,27 +155,12 @@ public class PartsCribberToolData extends AppCompatActivity
                 qtyTotal = JO.getString("total_qty");
                 itemCategory = JO.getString("category");
 
-                /*int CastedItemID = Integer.parseInt(itemID);
-                int CastedQtyAvailable = Integer.parseInt(qtyAvailable);
-                int CastedQtyRented = Integer.parseInt(qtyRented);
-                int CastedQtyTotal = Integer.parseInt(qtyTotal);
-
-                //itemData = new Item(CastedItemID,itemName,serialNo,CastedQtyAvailable,CastedQtyRented,CastedQtyTotal,itemCategory);*/
-
                 tv_itemName = (TextView) findViewById(R.id.item_name_header);
                 et_itemSerialNo = (EditText) findViewById(R.id.serial_no);
                 et_qtyAvailable = (EditText) findViewById(R.id.qty_available);
                 et_qtyRented = (EditText) findViewById(R.id.qty_rented);
                 et_qtyTotal = (EditText) findViewById(R.id.qty_total);
                 et_category = (EditText) findViewById(R.id.item_category);
-
-                Log.d("Debug", " CastedItemID = "  + itemID);
-                Log.d("Debug", " itemName = "  + itemName);
-                Log.d("Debug", " serialNo = "  + serialNo);
-                Log.d("Debug", " CastedQtyAvailable = "  + qtyAvailable);
-                Log.d("Debug", " CastedQtyRented = "  + qtyRented);
-                Log.d("Debug", " CastedQtyTotal = "  + qtyTotal);
-                Log.d("Debug", " itemCategory = "  + itemCategory);
 
                 tv_itemName.setText(itemName);
                 et_itemSerialNo.setText("Serial Number: " + serialNo);
