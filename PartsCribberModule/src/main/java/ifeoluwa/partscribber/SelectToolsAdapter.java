@@ -1,5 +1,4 @@
 package ifeoluwa.partscribber;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,13 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Ifeoluwa David on 2017-10-16.
+ * Created by Ifeoluwa David on 2017-10-14.
  */
 
-public class CategoryMenuAdapter extends ArrayAdapter
+public class ItemMenuAdapter extends ArrayAdapter
 {
     private List list = new ArrayList();
-    CategoryMenuAdapter(Context context, int resource)
+    ItemMenuAdapter(Context context, int resource)
     {
         super(context, resource);
     }
@@ -45,27 +44,28 @@ public class CategoryMenuAdapter extends ArrayAdapter
     {
         View row;
         row = convertview;
-        CategoryHolder categoryHolder;
+        ItemHolder itemHolder;
         if(row == null)
         {
             LayoutInflater layoutInflater = LayoutInflater.from(this.getContext());
-            row = layoutInflater.inflate(R.layout.viewcategory_rowlayout, parent, false);
-            categoryHolder = new CategoryHolder();
-            categoryHolder.tx_category = row.findViewById(R.id.viewcategory_categoryname);
-            row.setTag(categoryHolder);
+            row = layoutInflater.inflate(R.layout.selecttools_rowlayout, parent, false);
+            itemHolder = new ItemHolder();
+            itemHolder.tx_itemname = row.findViewById(R.id.viewtools_itemnametext);
+            row.setTag(itemHolder);
         }
         else
         {
-            categoryHolder = (CategoryHolder) row.getTag();
+            itemHolder = (ItemHolder) row.getTag();
         }
 
-        String itemcategory = (String)list.get(position);
-        categoryHolder.tx_category.setText(itemcategory);
+        String itemname = (String) list.get(position);
+        itemHolder.tx_itemname.setText(itemname);
         return row;
     }
 
-    static class CategoryHolder
+    static class ItemHolder
     {
-        TextView tx_category;
+        TextView tx_itemname;
     }
+
 }
