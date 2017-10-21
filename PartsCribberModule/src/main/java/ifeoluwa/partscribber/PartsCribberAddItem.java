@@ -32,7 +32,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashSet;
 
-public class PartsCribberUpdateInventory extends AppCompatActivity
+public class PartsCribberAddItem extends AppCompatActivity
 {
     ArrayAdapter<String> adapter;
     AutoCompleteTextView ac_category;

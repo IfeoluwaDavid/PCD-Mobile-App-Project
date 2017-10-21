@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:padding="10dp"
     android:background="@color/mainBackgroundcolor"
-    tools:context="ifeoluwa.partscribber.PartsCribberToolData">
+    tools:context="ifeoluwa.partscribber.PartsCribberViewToolData">
 
     <TextView
         android:id="@+id/item_name_header"
@@ -116,6 +116,7 @@
         android:textSize="16sp"
         android:textStyle="bold"
         android:background="#80D8FF"
+        android:onClick="updateItem"
         android:layout_below="@+id/item_category"
         android:layout_alignStart="@+id/item_category"
         android:layout_alignEnd="@+id/item_category" />

@@ -9,11 +9,9 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -31,9 +29,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.HashSet;
 
-public class PartsCribberToolData extends AppCompatActivity
+public class PartsCribberViewToolData extends AppCompatActivity
 {
     Intent intent;
     String selectedItem;
@@ -41,7 +38,6 @@ public class PartsCribberToolData extends AppCompatActivity
     JSONObject jsonObject;
     JSONArray jsonArray;
     ActionBar actionBar;
-    Item itemData;
 
     EditText et_itemSerialNo, et_qtyAvailable, et_qtyRented, et_qtyTotal, et_category;
     TextView tv_itemName;
@@ -50,7 +46,7 @@ public class PartsCribberToolData extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.partscribber_tooldata);
+        setContentView(R.layout.partscribber_viewtooldata);
         actionBar = getSupportActionBar();
         actionBar.setTitle(Html.fromHtml("<font color='#01579B'>PartsCribber</font>"));
 
@@ -58,6 +54,22 @@ public class PartsCribberToolData extends AppCompatActivity
         selectedItem = intent.getStringExtra("selectedItem");
 
         new ToolDataBackgroundTasks(this).execute();
+    }
+
+    public void updateItem (View view)
+    {
+        Intent intent = new Intent(PartsCribberViewToolData.this, PartsCribberUpdateItem.class);
+        intent.putExtra("selectedItem", String.valueOf(selectedItem));
+        startActivity(intent);
+    }
+
+    @Override
+    protected void onRestart()
+    {
+        super.onRestart();
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
     }
 
     class ToolDataBackgroundTasks extends AsyncTask<Void, Void, String>

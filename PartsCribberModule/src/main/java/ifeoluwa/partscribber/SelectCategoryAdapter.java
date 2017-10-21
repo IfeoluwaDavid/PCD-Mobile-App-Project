@@ -13,10 +13,10 @@ import java.util.List;
  * Created by Ifeoluwa David on 2017-10-16.
  */
 
-public class CategoryMenuAdapter extends ArrayAdapter
+public class SelectCategoryAdapter extends ArrayAdapter
 {
     private List list = new ArrayList();
-    CategoryMenuAdapter(Context context, int resource)
+    SelectCategoryAdapter(Context context, int resource)
     {
         super(context, resource);
     }

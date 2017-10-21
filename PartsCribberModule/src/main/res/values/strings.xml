@@ -65,11 +65,11 @@
     <string name="save_password_button">SAVE PASSWORD CHANGES</string>
     <string name="forgot_password_button">FORGOT CURRENT PASSWORD</string>
 
-    <!-- VIEW CATEGORY ACTIVITY -->
+    <!-- SELECT CATEGORY ACTIVITY -->
     <string name="select_category_header">Select Category</string>
     <string name="viewcategory_categoryname">Item Category</string>
 
-    <!-- VIEW TOOLS ACTIVITY -->
+    <!-- SELECT TOOLS ACTIVITY -->
     <string name="available_items_header">Available Items</string>
     <string name="viewtools_itemnametext">Item Name</string>
 
@@ -88,6 +88,20 @@
     <string name="serial_no_value">Serial Number</string>
     <string name="quantity_value">Stock Quantity</string>
     <string name="category_value">Item Category</string>
-    <string name="add_item_button">Add Item</string>
+    <string name="add_item_button">Add New Item</string>
+
+    <!-- VIEW ALL TOOLS ACTIVITY -->
+    <string name="all_available_tools">All Equipments</string>
+    <string name="viewalltools_itemnametext">Item Name</string>
+
+    <!-- UPDATE INVENTORY ACTIVITY -->
+    <string name="update_item_header">Update Item Information</string>
+    <string name="item_name">Item Name</string>
+    <string name="serial_number">Serial No.</string>
+    <string name="available_quantity">Available Qty</string>
+    <string name="rented_quantity">Rented Qty</string>
+    <string name="total_quantity">Total Qty</string>
+    <string name="category_name">Category</string>
+    <string name="save_item_changes">Save Changes</string>
 
 </resources>

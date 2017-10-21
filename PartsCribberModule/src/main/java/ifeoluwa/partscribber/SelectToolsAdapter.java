@@ -12,10 +12,10 @@ import java.util.List;
  * Created by Ifeoluwa David on 2017-10-14.
  */
 
-public class ItemMenuAdapter extends ArrayAdapter
+public class SelectToolsAdapter extends ArrayAdapter
 {
     private List list = new ArrayList();
-    ItemMenuAdapter(Context context, int resource)
+    SelectToolsAdapter(Context context, int resource)
     {
         super(context, resource);
     }
