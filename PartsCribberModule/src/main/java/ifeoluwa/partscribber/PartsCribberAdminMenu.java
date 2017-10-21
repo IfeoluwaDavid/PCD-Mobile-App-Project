@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,6 +31,10 @@ public class PartsCribberAdminMenu extends AppCompatActivity
         actionBar = getSupportActionBar();
         actionBar.setTitle(Html.fromHtml("<font color='#01579B'>PartsCribber</font>"));
 
+        TextView username = (TextView) findViewById(R.id.welcomeusername);
+        User user = UserSession.getInstance(this).getUser();
+        username.setText(user.getFirstname()+" "+user.getLastname());
+
         exp_list = (ExpandableListView) findViewById(R.id.exp_list);
         Admin_Menu = AdminMenuDataProvider.getInfo();
         Admin_List = new ArrayList<String>(Admin_Menu.keySet());
@@ -43,12 +48,12 @@ public class PartsCribberAdminMenu extends AppCompatActivity
             @Override
             public boolean onChildClick(ExpandableListView expandableListView, View view, int groupPosition, int childPosition, long id)
             {
-                if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals("Add New Student"))
+                if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals("Register Student"))
                 {
                     Intent intent = new Intent(PartsCribberAdminMenu.this, PartsCribberRegisterStudent.class);
                     startActivity(intent);
                 }
-                if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals("Add New Admin"))
+                if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals("Register Admin"))
                 {
                     Intent intent = new Intent(PartsCribberAdminMenu.this, PartsCribberRegisterAdmin.class);
                     startActivity(intent);
@@ -63,14 +68,19 @@ public class PartsCribberAdminMenu extends AppCompatActivity
                     Intent intent = new Intent(PartsCribberAdminMenu.this, PartsCribberChangePassword.class);
                     startActivity(intent);
                 }
-                if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals("View Equipment by Category"))
-                {
-                    Intent intent = new Intent(PartsCribberAdminMenu.this, PartsCribberViewCategory.class);
-                    startActivity(intent);
-                }
                 if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals("Add New Equipment"))
                 {
-                    Intent intent = new Intent(PartsCribberAdminMenu.this, PartsCribberUpdateInventory.class);
+                    Intent intent = new Intent(PartsCribberAdminMenu.this, PartsCribberAddItem.class);
+                    startActivity(intent);
+                }
+                if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals("View All Equipment"))
+                {
+                    Intent intent = new Intent(PartsCribberAdminMenu.this, PartsCribberViewAllTools.class);
+                    startActivity(intent);
+                }
+                if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals("View Equipment by Category"))
+                {
+                    Intent intent = new Intent(PartsCribberAdminMenu.this, PartsCribberSelectCategory.class);
                     startActivity(intent);
                 }
                 return false;

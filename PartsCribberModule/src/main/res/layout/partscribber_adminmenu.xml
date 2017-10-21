@@ -6,6 +6,25 @@
     android:layout_height="fill_parent"
     android:background="@color/mainBackgroundcolor">
 
+    <TextView
+        android:id="@+id/welcomeusername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:typeface="serif"
+        android:textColor="@color/mainBackgroundcolor"
+        android:textStyle="bold"
+        android:textSize="25sp"
+        android:padding="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:gravity="center"
+        android:background="@color/supportingColor"
+        android:layout_marginTop="12dp"
+        android:text="@string/welcomeusername"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true" />
+
     <ExpandableListView
         android:id="@+id/exp_list"
         android:layout_width="wrap_content"
@@ -13,11 +32,9 @@
         android:indicatorLeft="?android:attr/expandableListPreferredItemIndicatorLeft"
         android:divider="#0277BD"
         android:dividerHeight="3dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:layout_centerHorizontal="true">
+        android:layout_margin="10dp"
+        android:layout_below="@+id/welcomeusername"
+        android:layout_alignParentStart="true">
     </ExpandableListView>
 
 </RelativeLayout>

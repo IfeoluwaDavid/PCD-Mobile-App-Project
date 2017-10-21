@@ -1,9 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/mainBackgroundcolor"
     tools:context="ifeoluwa.partscribber.PartsCribberUpdateItem">
 
-</android.support.constraint.ConstraintLayout>
+    <TextView
+        android:id="@+id/update_item_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:typeface="serif"
+        android:textColor="#E1F5FE"
+        android:textSize="25sp"
+        android:layout_marginTop="68dp"
+        android:text="@string/update_item_header"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:id="@+id/item_name"
+        android:layout_width="170dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="@string/item_name"
+        android:textStyle="bold"
+        android:textColor="#000000"
+        android:padding="9dp"
+        android:background="#E1F5FE"
+        android:layout_marginTop="13dp"
+        android:layout_below="@+id/update_item_header"
+        android:layout_alignStart="@+id/update_item_header"
+        android:layout_alignEnd="@+id/update_item_header" />
+
+    <EditText
+        android:id="@+id/serial_number"
+        android:layout_width="170dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="number"
+        android:hint="@string/serial_number"
+        android:maxLength="6"
+        android:textStyle="bold"
+        android:textColor="#000000"
+        android:padding="9dp"
+        android:background="#E1F5FE"
+        android:layout_below="@+id/item_name"
+        android:layout_alignStart="@+id/item_name"
+        android:layout_marginTop="5dp"
+        android:layout_alignEnd="@+id/update_item_header" />
+
+    <EditText
+        android:id="@+id/total_quantity"
+        android:layout_width="170dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="number"
+        android:hint="@string/total_quantity"
+        android:textStyle="bold"
+        android:textColor="#000000"
+        android:padding="9dp"
+        android:background="#E1F5FE"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/serial_number"
+        android:layout_alignStart="@+id/serial_number"
+        android:layout_alignEnd="@+id/serial_number" />
+
+    <AutoCompleteTextView
+        android:id="@+id/category_name"
+        android:layout_width="170dp"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:hint="@string/category_name"
+        android:textStyle="bold"
+        android:textColor="#000000"
+        android:padding="9dp"
+        android:background="#E1F5FE"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/total_quantity"
+        android:layout_alignStart="@+id/total_quantity"
+        android:layout_alignEnd="@+id/total_quantity" />
+
+    <Button
+        android:id="@+id/save_item_changes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/save_item_changes"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:onClick="saveChanges"
+        android:background="#80D8FF"
+        android:layout_below="@+id/category_name"
+        android:layout_alignStart="@+id/category_name"
+        android:layout_alignEnd="@+id/category_name" />
+
+</RelativeLayout>

@@ -416,6 +416,7 @@ public class UserInfoBackgroundTasks extends AsyncTask<String, Void, String>
                 android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
                 builder.setTitle("Successful Profile Update");
                 builder.setMessage(message);
+                builder.setCancelable(false);
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
                 {
                     public void onClick(DialogInterface dialog, int which)
@@ -436,6 +437,7 @@ public class UserInfoBackgroundTasks extends AsyncTask<String, Void, String>
                 android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
                 builder.setTitle("Changed Password Successfully");
                 builder.setMessage(message);
+                builder.setCancelable(false);
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
                 {
                     public void onClick(DialogInterface dialog, int which)
@@ -471,6 +473,7 @@ public class UserInfoBackgroundTasks extends AsyncTask<String, Void, String>
         if (code.equals("reg_true"))
         {
             builder.setMessage(message);
+            builder.setCancelable(false);
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
             {
                 @Override

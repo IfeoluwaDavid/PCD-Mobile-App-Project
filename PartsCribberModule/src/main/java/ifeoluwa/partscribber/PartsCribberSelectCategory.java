@@ -9,14 +9,11 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,12 +28,12 @@ import java.net.URL;
 import java.util.HashSet;
 
 
-public class PartsCribberViewCategory extends AppCompatActivity
+public class PartsCribberSelectCategory extends AppCompatActivity
 {
     String jsonstring;
     JSONObject jsonObject;
     JSONArray jsonArray;
-    CategoryMenuAdapter categoryMenuAdapter;
+    SelectCategoryAdapter selectCategoryAdapter;
     ListView listView;
     ActionBar actionBar;
     Intent intent;
@@ -45,15 +42,15 @@ public class PartsCribberViewCategory extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.partscribber_viewcategory);
+        setContentView(R.layout.partscribber_selectcategory);
         actionBar = getSupportActionBar();
         actionBar.setTitle(Html.fromHtml("<font color='#01579B'>PartsCribber</font>"));
 
         new CategoryInfoBackgroundTasks(this).execute();
 
         listView = (ListView) findViewById(R.id.listview);
-        categoryMenuAdapter = new CategoryMenuAdapter(this, R.layout.viewcategory_rowlayout);
-        listView.setAdapter(categoryMenuAdapter);
+        selectCategoryAdapter = new SelectCategoryAdapter(this, R.layout.selectcategory_rowlayout);
+        listView.setAdapter(selectCategoryAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
@@ -61,11 +58,20 @@ public class PartsCribberViewCategory extends AppCompatActivity
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
                 String selectedCategory = (String) parent.getItemAtPosition(position);
-                intent = new Intent(PartsCribberViewCategory.this, PartsCribberViewTools.class);
+                intent = new Intent(PartsCribberSelectCategory.this, PartsCribberSelectTool.class);
                 intent.putExtra("selectedCategory", selectedCategory);
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    protected void onRestart()
+    {
+        super.onRestart();
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
     }
 
     class CategoryInfoBackgroundTasks extends AsyncTask<Void, Void, String>
@@ -153,7 +159,7 @@ public class PartsCribberViewCategory extends AppCompatActivity
                 }
                 for (String item : arraylistofCategoryObjects)
                 {
-                    categoryMenuAdapter.add(item);
+                    selectCategoryAdapter.add(item);
                 }
             }
             catch (JSONException e)

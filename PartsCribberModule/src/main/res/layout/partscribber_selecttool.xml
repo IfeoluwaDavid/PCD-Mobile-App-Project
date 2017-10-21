@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/mainBackgroundcolor"
-    tools:context="ifeoluwa.partscribber.PartsCribberViewTools">
+    tools:context="ifeoluwa.partscribber.PartsCribberSelectTool">
 
     <TextView
         android:id="@+id/available_items_header"
