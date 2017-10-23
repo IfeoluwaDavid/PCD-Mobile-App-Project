@@ -16,44 +16,44 @@ import java.util.List;
  * Created by Ifeoluwa David on 2017-10-09.
  */
 
-public class AdminMenuAdapter extends BaseExpandableListAdapter
+public class StudentMenuAdapter extends BaseExpandableListAdapter
 {
     private Context ctx;
-    private HashMap<String, List<String>> Admin_Menu;
-    private List<String> Admin_List;
+    private HashMap<String, List<String>> Student_Menu;
+    private List<String> Student_List;
 
-    public AdminMenuAdapter(Context ctx, HashMap<String, List<String>> Movies_category, List<String> Movies_list)
+    public StudentMenuAdapter(Context ctx, HashMap<String, List<String>> Movies_category, List<String> Movies_list)
     {
         this.ctx = ctx;
-        this.Admin_Menu = Movies_category;
-        this.Admin_List = Movies_list;
+        this.Student_Menu = Movies_category;
+        this.Student_List = Movies_list;
     }
 
     @Override
     public int getGroupCount()
     {
         //This will return the number of list in the variable "Movie_list"
-        return Admin_List.size();
+        return Student_List.size();
     }
 
     @Override
     public int getChildrenCount(int i)
     {
         //Returns the number of sub-titles available in each list.
-        return Admin_Menu.get(Admin_List.get(i)).size();
+        return Student_Menu.get(Student_List.get(i)).size();
     }
 
     @Override
     public Object getGroup(int i)
     {
         //Returns current title available in the list.
-        return Admin_List.get(i);
+        return Student_List.get(i);
     }
 
     @Override
     public Object getChild(int parent, int child)
     {
-        return Admin_Menu.get(Admin_List.get(parent)).get(child);
+        return Student_Menu.get(Student_List.get(parent)).get(child);
     }
 
     @Override
@@ -84,9 +84,9 @@ public class AdminMenuAdapter extends BaseExpandableListAdapter
         if(convertView == null)
         {
             LayoutInflater inflator = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflator.inflate(R.layout.adminmenu_parentlayout, parentview, false);
+            convertView = inflator.inflate(R.layout.studentmenu_parentlayout, parentview, false);
         }
-        TextView parent_textview = (TextView) convertView.findViewById(R.id.adminmenuparenttext);
+        TextView parent_textview = (TextView) convertView.findViewById(R.id.studentmenutext);
         parent_textview.setTypeface(null, Typeface.BOLD);
         parent_textview.setText(group_title);
         return convertView;
@@ -99,9 +99,9 @@ public class AdminMenuAdapter extends BaseExpandableListAdapter
         if(convertView == null)
         {
             LayoutInflater inflator = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflator.inflate(R.layout.adminmenu_childlayout, parentview, false);
+            convertView = inflator.inflate(R.layout.studentmenu_childlayout, parentview, false);
         }
-        TextView child_textview = (TextView) convertView.findViewById(R.id.adminmenuchildtext);
+        TextView child_textview = (TextView) convertView.findViewById(R.id.studentmenuchildtext);
         child_textview.setText(child_title);
 
         return convertView;

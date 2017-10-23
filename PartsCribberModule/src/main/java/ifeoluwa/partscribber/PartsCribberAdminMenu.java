@@ -33,7 +33,7 @@ public class PartsCribberAdminMenu extends AppCompatActivity
 
         TextView username = (TextView) findViewById(R.id.welcomeusername);
         User user = UserSession.getInstance(this).getUser();
-        username.setText(user.getFirstname()+" "+user.getLastname());
+        username.setText(user.getFirstname()+" "+user.getLastname()+" ("+user.getUsertype()+")");
 
         exp_list = (ExpandableListView) findViewById(R.id.exp_list);
         Admin_Menu = AdminMenuDataProvider.getInfo();
@@ -48,12 +48,12 @@ public class PartsCribberAdminMenu extends AppCompatActivity
             @Override
             public boolean onChildClick(ExpandableListView expandableListView, View view, int groupPosition, int childPosition, long id)
             {
-                if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals("Register Student"))
+                if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals("Register New Student"))
                 {
                     Intent intent = new Intent(PartsCribberAdminMenu.this, PartsCribberRegisterStudent.class);
                     startActivity(intent);
                 }
-                if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals("Register Admin"))
+                if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals("Register New Admin"))
                 {
                     Intent intent = new Intent(PartsCribberAdminMenu.this, PartsCribberRegisterAdmin.class);
                     startActivity(intent);

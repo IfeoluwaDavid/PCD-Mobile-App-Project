@@ -8,18 +8,17 @@ import android.os.AsyncTask;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.SearchView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.EditText;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,8 +27,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
+import java.util.Arrays;
 import java.util.List;
 
 public class PartsCribberViewAllTools extends AppCompatActivity
@@ -38,6 +36,7 @@ public class PartsCribberViewAllTools extends AppCompatActivity
     JSONObject jsonObject;
     JSONArray jsonArray;
     ViewAllToolsAdapter viewAllToolsAdapter;
+    ArrayAdapter<String> adapter;
     ListView listView;
     ActionBar actionBar;
     Intent intent;
@@ -48,34 +47,17 @@ public class PartsCribberViewAllTools extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.partscribber_viewalltools);
+        actionBar = getSupportActionBar();
+        actionBar.setTitle(Html.fromHtml("<font color='#01579B'>PartsCribber</font>"));
 
         new fetchAllToolsBackgroundTasks(this).execute();
-
-        listView = (ListView) findViewById(R.id.listview);
-        viewAllToolsAdapter = new ViewAllToolsAdapter(this, R.layout.viewalltools_rowlayout);
-        listView.setAdapter(viewAllToolsAdapter);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-            {
-                //Toast.makeText(getBaseContext(), parent.getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
-                String selectedItem = parent.getItemAtPosition(position).toString();
-                intent = new Intent(PartsCribberViewAllTools.this, PartsCribberViewToolData.class);
-                intent.putExtra("selectedItem", String.valueOf(selectedItem));
-                startActivity(intent);
-            }
-        });
     }
 
     @Override
     protected void onRestart()
     {
         super.onRestart();
-        Intent intent = getIntent();
-        finish();
-        startActivity(intent);
+        recreate();
     }
 
     class fetchAllToolsBackgroundTasks extends AsyncTask<Void, Void, String>
@@ -86,6 +68,9 @@ public class PartsCribberViewAllTools extends AppCompatActivity
         AlertDialog.Builder builder;
         private Activity activity;
         private AlertDialog loginDialog;
+        List<String> arraylistofCategoryObjects = new ArrayList<String>();
+        List<String> listItems = new ArrayList<String>();
+        String[] items;
 
         public fetchAllToolsBackgroundTasks(Context ctx)
         {
@@ -145,12 +130,17 @@ public class PartsCribberViewAllTools extends AppCompatActivity
             loginDialog.dismiss();
             jsonstring = result;
             count = 0;
-            List<String> arraylistofCategoryObjects = new ArrayList<String>();
+
+            listView =(ListView)findViewById(R.id.listview);
+            final SearchView editText = (SearchView)findViewById(R.id.txtsearch);
+            editText.setIconified(false);
+            editText.clearFocus();
+            initList();
+
             try
             {
                 jsonObject = new JSONObject(jsonstring);
                 jsonArray = jsonObject.getJSONArray("server_response");
-
 
                 String itemName;
 
@@ -159,20 +149,66 @@ public class PartsCribberViewAllTools extends AppCompatActivity
                     JSONObject JO = jsonArray.getJSONObject(count);
                     itemName = JO.getString("item_name");
                     arraylistofCategoryObjects.add(itemName);
+                    adapter.add(itemName);
                     count++;
                 }
-                Collections.reverse(arraylistofCategoryObjects);
-                for (String item : arraylistofCategoryObjects)
-                {
-                    viewAllToolsAdapter.add(item);
-                }
+
                 TextView amount = (TextView) findViewById(R.id.all_available_tools);
                 amount.setText("All Equipments ("+count+")");
+
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+                {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+                    {
+                        String selectedItem = parent.getItemAtPosition(position).toString();
+                        intent = new Intent(PartsCribberViewAllTools.this, PartsCribberViewToolData.class);
+                        intent.putExtra("selectedItem", String.valueOf(selectedItem));
+                        startActivity(intent);
+                    }
+                });
+
+                editText.setOnQueryTextListener(new SearchView.OnQueryTextListener()
+                {
+                    @Override
+                    public boolean onQueryTextSubmit(String query)
+                    {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText)
+                    {
+                        adapter.getFilter().filter(newText);
+                        return false;
+                    }
+                });
+
+                editText.setOnSearchClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        editText.onActionViewExpanded();
+                    }
+                });
             }
             catch (JSONException e)
             {
                 e.printStackTrace();
             }
+        }
+
+        public void initList()
+        {
+            items = new String[arraylistofCategoryObjects.size()];
+            for(int i=0; i < arraylistofCategoryObjects.size(); i++)
+            {
+                items[i] = arraylistofCategoryObjects.get(i);
+            }
+            listItems=new ArrayList<>(Arrays.asList(items));
+            adapter=new ArrayAdapter<String>(ctx, R.layout.viewalltools_rowlayout,R.id.viewalltools_itemnametext, listItems);
+            listView.setAdapter(adapter);
         }
     }
 }

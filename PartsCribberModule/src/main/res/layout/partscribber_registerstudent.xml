@@ -19,8 +19,8 @@
         android:textSize="25sp"
         tools:layout_editor_absoluteX="152dp"
         tools:layout_editor_absoluteY="86dp"
-        android:layout_marginBottom="13dp"
-        android:layout_above="@+id/register_username_hint"
+        android:layout_marginTop="42dp"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
     <EditText
@@ -34,11 +34,12 @@
         android:textColor="#000000"
         android:padding="9dp"
         android:background="#E1F5FE"
-        android:layout_marginTop="5dp"
         tools:layout_editor_absoluteX="85dp"
         tools:layout_editor_absoluteY="143dp"
+        android:layout_marginTop="5dp"
         android:layout_below="@+id/register_lastname_hint"
-        android:layout_alignStart="@+id/register_lastname_hint" />
+        android:layout_alignStart="@+id/register_lastname_hint"
+        android:layout_alignEnd="@+id/register_lastname_hint" />
 
     <EditText
         android:id="@+id/register_password_hint"
@@ -50,12 +51,13 @@
         android:textColor="#000000"
         android:padding="9dp"
         android:background="#E1F5FE"
-        android:layout_marginTop="5dp"
         android:inputType="textPassword"
         tools:layout_editor_absoluteX="85dp"
         tools:layout_editor_absoluteY="186dp"
-        android:layout_above="@+id/register_confirmpassword_hint"
-        android:layout_alignStart="@+id/register_username_hint" />
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/register_username_hint"
+        android:layout_alignStart="@+id/register_username_hint"
+        android:layout_alignEnd="@+id/register_username_hint" />
 
     <Button
         android:id="@+id/register_singlestudent_button"
@@ -67,9 +69,10 @@
         tools:layout_editor_absoluteX="86dp"
         tools:layout_editor_absoluteY="250dp"
         android:onClick="userRegister"
-        android:layout_marginTop="14dp"
+        android:layout_marginTop="10dp"
         android:layout_below="@+id/register_email_hint"
-        android:layout_alignStart="@+id/register_email_hint" />
+        android:layout_alignStart="@+id/register_email_hint"
+        android:layout_alignEnd="@+id/register_email_hint" />
 
     <EditText
         android:id="@+id/register_lastname_hint"
@@ -84,7 +87,8 @@
         android:background="#E1F5FE"
         android:layout_marginTop="5dp"
         android:layout_below="@+id/register_firstname_hint"
-        android:layout_alignStart="@+id/register_firstname_hint" />
+        android:layout_alignStart="@+id/register_firstname_hint"
+        android:layout_alignEnd="@+id/register_firstname_hint" />
 
     <EditText
         android:id="@+id/register_firstname_hint"
@@ -98,12 +102,13 @@
         android:padding="9dp"
         android:background="#E1F5FE"
         android:layout_marginTop="5dp"
-        android:layout_centerVertical="true"
-        android:layout_alignStart="@+id/register_confirmpassword_hint" />
+        android:layout_below="@+id/register_confirmpassword_hint"
+        android:layout_alignStart="@+id/register_confirmpassword_hint"
+        android:layout_alignEnd="@+id/register_confirmpassword_hint" />
 
     <EditText
         android:id="@+id/register_username_hint"
-        android:layout_width="wrap_content"
+        android:layout_width="330dp"
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPersonName"
@@ -112,8 +117,9 @@
         android:textColor="#000000"
         android:padding="9dp"
         android:background="#E1F5FE"
-        android:layout_above="@+id/register_password_hint"
-        android:layout_centerHorizontal="true" />
+        android:layout_below="@+id/register_singlestudent_header"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="14dp" />
 
     <EditText
         android:id="@+id/register_confirmpassword_hint"
@@ -127,7 +133,8 @@
         android:padding="9dp"
         android:background="#E1F5FE"
         android:layout_marginTop="5dp"
-        android:layout_above="@+id/register_firstname_hint"
-        android:layout_alignStart="@+id/register_password_hint" />
+        android:layout_below="@+id/register_password_hint"
+        android:layout_alignStart="@+id/register_password_hint"
+        android:layout_alignEnd="@+id/register_password_hint" />
 
 </RelativeLayout>

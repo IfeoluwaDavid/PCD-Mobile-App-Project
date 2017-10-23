@@ -19,7 +19,7 @@
         android:textSize="25sp"
         tools:layout_editor_absoluteX="152dp"
         tools:layout_editor_absoluteY="86dp"
-        android:layout_marginTop="65dp"
+        android:layout_marginTop="42dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
@@ -38,7 +38,8 @@
         tools:layout_editor_absoluteX="85dp"
         tools:layout_editor_absoluteY="143dp"
         android:layout_below="@+id/newadmin_lastname"
-        android:layout_alignStart="@+id/newadmin_lastname" />
+        android:layout_alignStart="@+id/newadmin_lastname"
+        android:layout_alignEnd="@+id/newadmin_lastname" />
 
     <EditText
         android:id="@+id/newadmin_password"
@@ -55,7 +56,8 @@
         tools:layout_editor_absoluteX="85dp"
         tools:layout_editor_absoluteY="186dp"
         android:layout_below="@+id/newadmin_username"
-        android:layout_alignStart="@+id/newadmin_username" />
+        android:layout_alignStart="@+id/newadmin_username"
+        android:layout_alignEnd="@+id/newadmin_username" />
 
     <Button
         android:id="@+id/register_newadmin_button"
@@ -69,7 +71,8 @@
         android:onClick="adminRegister"
         android:layout_marginTop="18dp"
         android:layout_below="@+id/newadmin_email"
-        android:layout_alignStart="@+id/newadmin_email" />
+        android:layout_alignStart="@+id/newadmin_email"
+        android:layout_alignEnd="@+id/newadmin_email" />
 
     <EditText
         android:id="@+id/newadmin_lastname"
@@ -84,7 +87,8 @@
         android:padding="9dp"
         android:background="#E1F5FE"
         android:layout_below="@+id/newadmin_firstname"
-        android:layout_alignStart="@+id/newadmin_firstname" />
+        android:layout_alignStart="@+id/newadmin_firstname"
+        android:layout_alignEnd="@+id/newadmin_firstname" />
 
     <EditText
         android:id="@+id/newadmin_firstname"
@@ -99,11 +103,12 @@
         android:padding="9dp"
         android:background="#E1F5FE"
         android:layout_below="@+id/newadmin_confirmpassword"
-        android:layout_alignStart="@+id/newadmin_confirmpassword" />
+        android:layout_alignStart="@+id/newadmin_confirmpassword"
+        android:layout_alignEnd="@+id/newadmin_confirmpassword" />
 
     <EditText
         android:id="@+id/newadmin_username"
-        android:layout_width="wrap_content"
+        android:layout_width="330dp"
         android:layout_height="wrap_content"
         android:ems="10"
         android:layout_marginTop="15dp"
@@ -129,6 +134,7 @@
         android:padding="9dp"
         android:background="#E1F5FE"
         android:layout_below="@+id/newadmin_password"
-        android:layout_alignStart="@+id/newadmin_password" />
+        android:layout_alignStart="@+id/newadmin_password"
+        android:layout_alignEnd="@+id/newadmin_password" />
 
 </RelativeLayout>
