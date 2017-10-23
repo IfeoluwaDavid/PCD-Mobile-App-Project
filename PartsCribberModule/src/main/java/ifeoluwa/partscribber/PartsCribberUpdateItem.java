@@ -521,7 +521,7 @@ public class PartsCribberUpdateItem extends AppCompatActivity
                     OutputStream os = httpURLConnection.getOutputStream();
                     BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
 
-                    Log.d("Debug", "ItemID = "  + itemID);
+                    //Log.d("Debug", "ItemID = "  + itemID);
                     String data =
                             URLEncoder.encode("item_id", "UTF-8") + "=" +
                             URLEncoder.encode(itemID, "UTF-8") + "&" +

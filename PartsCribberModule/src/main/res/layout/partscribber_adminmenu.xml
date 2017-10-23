@@ -13,7 +13,7 @@
         android:typeface="serif"
         android:textColor="@color/mainBackgroundcolor"
         android:textStyle="bold"
-        android:textSize="25sp"
+        android:textSize="22sp"
         android:padding="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"

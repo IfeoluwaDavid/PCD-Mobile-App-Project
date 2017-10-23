@@ -3,10 +3,12 @@
     android:id="@+id/studentmenutext"
     android:layout_width="fill_parent"
     android:layout_height="50dp"
+    android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"
+    android:background="@color/supportingColor"
     android:typeface="serif"
     android:textStyle="bold"
     android:textSize="20sp"
-    android:paddingStart="25dp"
     android:paddingTop="10dp"
     android:textColor="#01579B"
-    android:text="@string/studentmenutext"/>
+    android:text="@string/studentmenutext" />
+

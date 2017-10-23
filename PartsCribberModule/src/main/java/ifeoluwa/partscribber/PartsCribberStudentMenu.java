@@ -11,6 +11,7 @@ import android.text.Html;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -22,17 +23,20 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class PartsCribberStudentMenu extends AppCompatActivity
 {
-    ListView listView;
-    ListView listView2;
-    ArrayAdapter<String> adapter;
+    HashMap<String, List<String>> Student_Menu;
+    List<String> Student_List;
+    ExpandableListView exp_list;
+    StudentMenuAdapter adapter;
     ActionBar actionBar;
     TextView username;
 
-    String[] studentmenu = {"View Available Item", "My Current Rentals"};
-    String[] studentmenu2 = {"View/Edit Personal Info","Change My Password"};
+    //String[] studentmenu = {"View Available Item", "My Current Rentals"};
+    //String[] studentmenu2 = {"View/Edit Personal Info","Change My Password"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -44,33 +48,66 @@ public class PartsCribberStudentMenu extends AppCompatActivity
 
         username = (TextView) findViewById(R.id.welcomeusername);
         User user = UserSession.getInstance(this).getUser();
-        username.setText(user.getFirstname()+" "+user.getLastname());
+        username.setText(user.getFirstname()+" "+user.getLastname()+" ("+user.getUsertype()+")");
 
-        listView = (ListView) findViewById(R.id.studentmenulistview);
-        adapter = new ArrayAdapter<String>(this, R.layout.studentmenu_parentlayout,studentmenu);
-        listView.setAdapter(adapter);
+        exp_list = (ExpandableListView) findViewById(R.id.exp_list);
+        Student_Menu = StudentMenuDataProvider.getInfo();
+        Student_List = new ArrayList<String>(Student_Menu.keySet());
 
-        listView2 = (ListView) findViewById(R.id.studentmenulistview2);
-        adapter = new ArrayAdapter<String>(this, R.layout.studentmenu_parentlayout,studentmenu2);
-        listView2.setAdapter(adapter);
+        //Initialization of Array Class Object
+        adapter = new StudentMenuAdapter(this, Student_Menu, Student_List);
+        exp_list.setAdapter(adapter);
 
-        //NO LISTENER FOR LISTVIEW 1 YET.
-
-        listView2.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        exp_list.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener()
         {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id)
             {
-                if (parent.getItemAtPosition(position).equals("View/Edit Personal Info"))
+                return true; // This way the expander cannot be collapsed
+            }
+        });
+
+        exp_list.setOnChildClickListener(new ExpandableListView.OnChildClickListener()
+        {
+            @Override
+            public boolean onChildClick(ExpandableListView expandableListView, View view, int groupPosition, int childPosition, long id)
+            {
+                if(Student_Menu.get(Student_List.get(groupPosition)).get(childPosition).equals("Register Student"))
+                {
+                    Intent intent = new Intent(PartsCribberStudentMenu.this, PartsCribberRegisterStudent.class);
+                    startActivity(intent);
+                }
+                if(Student_Menu.get(Student_List.get(groupPosition)).get(childPosition).equals("Register Admin"))
+                {
+                    Intent intent = new Intent(PartsCribberStudentMenu.this, PartsCribberRegisterAdmin.class);
+                    startActivity(intent);
+                }
+                if(Student_Menu.get(Student_List.get(groupPosition)).get(childPosition).equals("View/Edit My Profile"))
                 {
                     Intent intent = new Intent(PartsCribberStudentMenu.this, PartsCribberViewProfile.class);
                     startActivity(intent);
                 }
-                if(parent.getItemAtPosition(position).equals("Change My Password"))
+                if(Student_Menu.get(Student_List.get(groupPosition)).get(childPosition).equals("Change My Password"))
                 {
                     Intent intent = new Intent(PartsCribberStudentMenu.this, PartsCribberChangePassword.class);
                     startActivity(intent);
                 }
+                if(Student_Menu.get(Student_List.get(groupPosition)).get(childPosition).equals("Add New Equipment"))
+                {
+                    Intent intent = new Intent(PartsCribberStudentMenu.this, PartsCribberAddItem.class);
+                    startActivity(intent);
+                }
+                if(Student_Menu.get(Student_List.get(groupPosition)).get(childPosition).equals("View All Equipment"))
+                {
+                    Intent intent = new Intent(PartsCribberStudentMenu.this, PartsCribberViewAllTools.class);
+                    startActivity(intent);
+                }
+                if(Student_Menu.get(Student_List.get(groupPosition)).get(childPosition).equals("View Equipment by Category"))
+                {
+                    Intent intent = new Intent(PartsCribberStudentMenu.this, PartsCribberSelectCategory.class);
+                    startActivity(intent);
+                }
+                return false;
             }
         });
     }

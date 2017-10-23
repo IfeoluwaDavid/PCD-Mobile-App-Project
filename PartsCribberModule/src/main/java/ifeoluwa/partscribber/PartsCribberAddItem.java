@@ -49,7 +49,7 @@ public class PartsCribberAddItem extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.partscribber_updateinventory);
+        setContentView(R.layout.partscribber_additem);
         actionBar = getSupportActionBar();
         actionBar.setTitle(Html.fromHtml("<font color='#01579B'>PartsCribber</font>"));
 

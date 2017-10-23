@@ -67,5 +67,4 @@ public class SelectToolsAdapter extends ArrayAdapter
     {
         TextView tx_itemname;
     }
-
 }

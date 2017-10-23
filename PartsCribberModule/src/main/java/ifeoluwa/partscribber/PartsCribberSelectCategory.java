@@ -65,13 +65,21 @@ public class PartsCribberSelectCategory extends AppCompatActivity
         });
     }
 
-    @Override
+    /*@Override
     protected void onRestart()
     {
         super.onRestart();
         Intent intent = getIntent();
         finish();
         startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_left,0);
+    }*/
+
+    @Override
+    protected void onRestart()
+    {
+        super.onRestart();
+        recreate();
     }
 
     class CategoryInfoBackgroundTasks extends AsyncTask<Void, Void, String>
