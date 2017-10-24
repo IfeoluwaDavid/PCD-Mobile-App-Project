@@ -30,7 +30,8 @@
         <activity android:name=".PartsCribberSelectTool" />
         <activity android:name=".PartsCribberViewToolData" />
         <activity android:name=".PartsCribberViewAllTools" />
-        <activity android:name=".PartsCribberUpdateItem"></activity>
+        <activity android:name=".PartsCribberUpdateItem" />
+        <activity android:name=".PartsCribberRentEquipment"></activity>
     </application>
 
 </manifest>

@@ -65,7 +65,7 @@
         android:text="@string/login_button"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:background="#80D8FF"
+        android:background="@color/supportingColor"
         android:onClick="afterLogin"
         tools:layout_editor_absoluteX="86dp"
         tools:layout_editor_absoluteY="250dp"

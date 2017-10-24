@@ -48,6 +48,11 @@ public class PartsCribberAdminMenu extends AppCompatActivity
             @Override
             public boolean onChildClick(ExpandableListView expandableListView, View view, int groupPosition, int childPosition, long id)
             {
+                if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals("Rent Equipment"))
+                {
+                    Intent intent = new Intent(PartsCribberAdminMenu.this, PartsCribberRentEquipment.class);
+                    startActivity(intent);
+                }
                 if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals("Register New Student"))
                 {
                     Intent intent = new Intent(PartsCribberAdminMenu.this, PartsCribberRegisterStudent.class);

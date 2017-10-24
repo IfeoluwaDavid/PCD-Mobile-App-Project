@@ -94,6 +94,7 @@
     <!-- VIEW ALL TOOLS ACTIVITY -->
     <string name="all_available_tools">All Equipments</string>
     <string name="viewalltools_itemnametext">Item Name</string>
+    <string name="search_equipment_hint">Search Equipment</string>
 
     <!-- UPDATE INVENTORY ACTIVITY -->
     <string name="update_item_header">Update Item Information</string>
@@ -104,5 +105,11 @@
     <string name="total_quantity">Total Qty</string>
     <string name="category_name">Category</string>
     <string name="save_item_changes">Save Changes</string>
+
+    <!-- ALERT DIALOG ACTIVITY -->
+    <string name="dialog_header">Student ID</string>
+    <string name="enter_student_id">Enter Student ID</string>
+    <string name="validate_button">VALIDATE</string>
+    <string name="cancel_button">EXIT</string>
 
 </resources>
