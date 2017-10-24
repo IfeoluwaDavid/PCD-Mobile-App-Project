@@ -23,8 +23,6 @@ public class PartsCribberLogin extends AppCompatActivity
         actionBar = getSupportActionBar();
         actionBar.hide();
 
-        //actionBar.setTitle(Html.fromHtml("<font color='#01579B'>PartsCribber</font>"));
-
         //if the user is already logged in we will directly start the profile activity
         User user = UserSession.getInstance(this).getUser();
 
