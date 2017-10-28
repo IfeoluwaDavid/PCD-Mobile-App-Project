@@ -82,6 +82,9 @@
     <string name="qty_total">Total Qty</string>
     <string name="item_category">Category</string>
     <string name="update_this_item_data">Update Item</string>
+    <string name="rent_item">Rent Item</string>
+    <string name="add_item_to_cart">Add to Cart</string>
+    <string name="view_cart_button">View Cart</string>
 
     <!-- UPDATE INVENTORY ACTIVITY -->
     <string name="update_inventory_header">Add New Equipment</string>
@@ -95,6 +98,7 @@
     <string name="all_available_tools">All Equipments</string>
     <string name="viewalltools_itemnametext">Item Name</string>
     <string name="search_equipment_hint">Search Equipment</string>
+    <string name="search_category_hint">Search Category</string>
 
     <!-- UPDATE INVENTORY ACTIVITY -->
     <string name="update_item_header">Update Item Information</string>
@@ -106,10 +110,20 @@
     <string name="category_name">Category</string>
     <string name="save_item_changes">Save Changes</string>
 
-    <!-- ALERT DIALOG ACTIVITY -->
-    <string name="dialog_header">Student ID</string>
+    <!-- STUDENT ID ALERT DIALOG ACTIVITY -->
+    <string name="id_dialog_header">Student ID</string>
     <string name="enter_student_id">Enter Student ID</string>
     <string name="validate_button">VALIDATE</string>
-    <string name="cancel_button">EXIT</string>
+    <string name="exit_button">EXIT</string>
+
+    <!-- RENT EQUIPMENTS ACTIVITY -->
+    <string name="individual_selection_header">Select Individually</string>
+    <string name="categorical_selection_header">Select by Category</string>
+
+    <!-- ITEM QUANTITY ALERT DIALOG ACTIVITY -->
+    <string name="quantity_dialog_header">Item Quantity</string>
+    <string name="item_quantity_hint">Quantity</string>
+    <string name="confirm_button">ENTER</string>
+    <string name="cancel_button">CANCEL</string>
 
 </resources>

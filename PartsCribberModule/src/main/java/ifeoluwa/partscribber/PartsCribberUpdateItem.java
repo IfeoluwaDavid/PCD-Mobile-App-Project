@@ -198,10 +198,9 @@ public class PartsCribberUpdateItem extends AppCompatActivity
                 other ++;
             }
         }
-        int sum = letter + num + space;
-        int unwantedCharacters = other;
+        int sum = letter + num + space + other;
 
-        if(sum < 3 || unwantedCharacters > 0)
+        if(sum < 3)
         {
             return false;
         }

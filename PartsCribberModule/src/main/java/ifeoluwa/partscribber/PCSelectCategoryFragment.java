@@ -5,19 +5,25 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Html;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,11 +31,17 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 
-
-public class PartsCribberSelectCategory extends AppCompatActivity
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class PCSelectCategoryFragment extends Fragment
 {
+    View finder;
     String jsonstring;
     JSONObject jsonObject;
     JSONArray jsonArray;
@@ -37,19 +49,31 @@ public class PartsCribberSelectCategory extends AppCompatActivity
     ListView listView;
     ActionBar actionBar;
     Intent intent;
+    SearchView editText;
+    private PCSelectCategoryFragment.PCSelectCategoryFragmentInterface mListener;
+
+    public PCSelectCategoryFragment()
+    {
+        // Required empty public constructor
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.partscribber_selectcategory);
-        actionBar = getSupportActionBar();
-        actionBar.setTitle(Html.fromHtml("<font color='#01579B'>PartsCribber</font>"));
+        // Inflate the layout for this fragment
+        finder = inflater.inflate(R.layout.pcselectcategory_fragment, container, false);
+        return finder;
+    }
 
-        new CategoryInfoBackgroundTasks(this).execute();
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        new CategoryInfoBackgroundTasks(getActivity()).execute();
 
-        listView = (ListView) findViewById(R.id.listview);
-        selectCategoryAdapter = new SelectCategoryAdapter(this, R.layout.selectcategory_rowlayout);
+        listView = (ListView) finder.findViewById(R.id.listview);
+        selectCategoryAdapter = new SelectCategoryAdapter(getActivity(), R.layout.selectcategory_rowlayout);
         listView.setAdapter(selectCategoryAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
@@ -58,28 +82,12 @@ public class PartsCribberSelectCategory extends AppCompatActivity
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
                 String selectedCategory = (String) parent.getItemAtPosition(position);
-                intent = new Intent(PartsCribberSelectCategory.this, PartsCribberSelectTool.class);
-                intent.putExtra("selectedCategory", selectedCategory);
-                startActivity(intent);
+                mListener.viewCategoryData(selectedCategory);
+                //intent = new Intent(getActivity(), PartsCribberSelectTool.class);
+                //intent.putExtra("selectedCategory", selectedCategory);
+                //startActivity(intent);
             }
         });
-    }
-
-    /*@Override
-    protected void onRestart()
-    {
-        super.onRestart();
-        Intent intent = getIntent();
-        finish();
-        startActivity(intent);
-        overridePendingTransition(R.anim.slide_in_left,0);
-    }*/
-
-    @Override
-    protected void onRestart()
-    {
-        super.onRestart();
-        recreate();
     }
 
     class CategoryInfoBackgroundTasks extends AsyncTask<Void, Void, String>
@@ -90,6 +98,11 @@ public class PartsCribberSelectCategory extends AppCompatActivity
         AlertDialog.Builder builder;
         private Activity activity;
         private AlertDialog loginDialog;
+        ArrayAdapter<String> adapter;
+        HashSet<String> arraylistofCategoryObjects = new HashSet<String>();
+        List<String> list;
+        List<String> listItems = new ArrayList<String>();
+        String[] items;
 
         public CategoryInfoBackgroundTasks(Context ctx)
         {
@@ -148,7 +161,6 @@ public class PartsCribberSelectCategory extends AppCompatActivity
         {
             loginDialog.dismiss();
             jsonstring = result;
-            HashSet<String> arraylistofCategoryObjects = new HashSet<String>();
 
             try
             {
@@ -165,15 +177,77 @@ public class PartsCribberSelectCategory extends AppCompatActivity
                     arraylistofCategoryObjects.add(itemCategory.toUpperCase());
                     count++;
                 }
+
+                list = new ArrayList<String>(arraylistofCategoryObjects);
+                editText = (SearchView)finder.findViewById(R.id.txtsearch);
+                editText.setIconified(false);
+                editText.clearFocus();
+                initList();
+
                 for (String item : arraylistofCategoryObjects)
                 {
                     selectCategoryAdapter.add(item);
                 }
+                editText.setOnQueryTextListener(new SearchView.OnQueryTextListener()
+                {
+                    @Override
+                    public boolean onQueryTextSubmit(String query)
+                    {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText)
+                    {
+                        adapter.getFilter().filter(newText);
+                        return false;
+                    }
+                });
+
+                editText.setOnSearchClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        editText.onActionViewExpanded();
+                    }
+                });
             }
             catch (JSONException e)
             {
                 e.printStackTrace();
             }
         }
+
+        public void initList()
+        {
+            items = new String[list.size()];
+            for(int i=0; i < list.size(); i++)
+            {
+                items[i] = list.get(i);
+            }
+            listItems=new ArrayList<>(Arrays.asList(items));
+            adapter=new ArrayAdapter<String>(ctx, R.layout.viewalltools_rowlayout,R.id.viewalltools_itemnametext, listItems);
+            listView.setAdapter(adapter);
+        }
+    }
+
+    @Override
+    public void onAttach(Context ctx)
+    {
+        super.onAttach(ctx);
+        try
+        {
+            mListener = (PCSelectCategoryFragment.PCSelectCategoryFragmentInterface)ctx;
+        }
+        catch (ClassCastException c)
+        {
+            throw new ClassCastException(ctx.toString() + " should implememt PCSelectCategoryFragmentInterface");
+        }
+    }
+
+    interface  PCSelectCategoryFragmentInterface
+    {
+        void viewCategoryData(String selectedCategory);
     }
 }
