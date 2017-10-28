@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mainBackgroundcolor"
+    tools:context="ifeoluwa.partscribber.PartsCribberStudentCart">
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="330dp"
+        android:layout_height="55dp"
+        android:background="@color/supportingColor"
+        android:padding="10dp"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:typeface="serif"
+        android:gravity="center"
+        android:text="TextView"
+        android:layout_marginTop="13dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>

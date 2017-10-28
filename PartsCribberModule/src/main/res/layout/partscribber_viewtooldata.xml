@@ -13,7 +13,7 @@
         android:id="@+id/item_name_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="22dp"
         android:text="@string/item_name_header"
         android:textStyle="bold"
         android:typeface="serif"
@@ -120,5 +120,34 @@
         android:layout_below="@+id/item_category"
         android:layout_alignStart="@+id/item_category"
         android:layout_alignEnd="@+id/item_category" />
+
+    <Button
+        android:id="@+id/add_item_to_cart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="9dp"
+        android:text="@string/add_item_to_cart"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:background="#80D8FF"
+        android:onClick="addtoCartANDrentItem"
+        android:layout_below="@+id/update_this_item_data"
+        android:layout_alignStart="@+id/item_category"
+        android:layout_alignEnd="@+id/item_category" />
+
+    <Button
+        android:id="@+id/view_cart_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/view_cart_button"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:background="#80D8FF"
+        android:layout_marginTop="9dp"
+        android:onClick="viewCart"
+        android:visibility="invisible"
+        android:layout_below="@+id/add_item_to_cart"
+        android:layout_alignStart="@+id/add_item_to_cart"
+        android:layout_alignEnd="@+id/add_item_to_cart" />
 
 </RelativeLayout>

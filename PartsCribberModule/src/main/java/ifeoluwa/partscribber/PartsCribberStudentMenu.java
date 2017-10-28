@@ -2,26 +2,15 @@ package ifeoluwa.partscribber;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -72,16 +61,6 @@ public class PartsCribberStudentMenu extends AppCompatActivity
             @Override
             public boolean onChildClick(ExpandableListView expandableListView, View view, int groupPosition, int childPosition, long id)
             {
-                if(Student_Menu.get(Student_List.get(groupPosition)).get(childPosition).equals("Register Student"))
-                {
-                    Intent intent = new Intent(PartsCribberStudentMenu.this, PartsCribberRegisterStudent.class);
-                    startActivity(intent);
-                }
-                if(Student_Menu.get(Student_List.get(groupPosition)).get(childPosition).equals("Register Admin"))
-                {
-                    Intent intent = new Intent(PartsCribberStudentMenu.this, PartsCribberRegisterAdmin.class);
-                    startActivity(intent);
-                }
                 if(Student_Menu.get(Student_List.get(groupPosition)).get(childPosition).equals("View/Edit My Profile"))
                 {
                     Intent intent = new Intent(PartsCribberStudentMenu.this, PartsCribberViewProfile.class);
@@ -99,12 +78,12 @@ public class PartsCribberStudentMenu extends AppCompatActivity
                 }
                 if(Student_Menu.get(Student_List.get(groupPosition)).get(childPosition).equals("View All Equipment"))
                 {
-                    Intent intent = new Intent(PartsCribberStudentMenu.this, PartsCribberViewAllTools.class);
+                    Intent intent = new Intent(PartsCribberStudentMenu.this, PartsCribberRegisterUser.class);
                     startActivity(intent);
                 }
                 if(Student_Menu.get(Student_List.get(groupPosition)).get(childPosition).equals("View Equipment by Category"))
                 {
-                    Intent intent = new Intent(PartsCribberStudentMenu.this, PartsCribberSelectCategory.class);
+                    Intent intent = new Intent(PartsCribberStudentMenu.this, PartsCribberViewEquipment.class);
                     startActivity(intent);
                 }
                 return false;

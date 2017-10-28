@@ -7,11 +7,11 @@
     android:padding="5dp">
 
     <TextView
-        android:id="@+id/id_dialog_header"
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="@string/id_dialog_header"
+        android:text="@string/quantity_dialog_header"
         android:typeface="serif"
         android:textColor="@color/mainBackgroundcolor"
         android:textSize="25sp"
@@ -20,45 +20,46 @@
         android:layout_centerHorizontal="true" />
 
     <EditText
-        android:id="@+id/enter_student_id"
+        android:id="@+id/enter_quantity"
         android:layout_width="330dp"
         android:layout_height="wrap_content"
         android:background="@android:color/white"
         android:ems="10"
-        android:hint="@string/enter_student_id"
-        android:inputType="textEmailAddress"
+        android:hint="@string/item_quantity_hint"
+        android:inputType="number"
+        android:maxLength="2"
         android:padding="9dp"
         android:textColor="#000000"
         android:textStyle="bold"
         android:layout_marginTop="5dp"
-        android:layout_below="@+id/id_dialog_header"
+        android:layout_below="@+id/textView"
         android:layout_centerHorizontal="true" />
 
     <Button
-        android:id="@+id/validate_button"
+        android:id="@+id/confirm_button"
         android:layout_width="146dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:background="@color/mainBackgroundcolor"
-        android:text="@string/validate_button"
+        android:text="@string/confirm_button"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:onClick="validateBtn"
+        android:onClick="quantityEnterBtn"
         android:textColor="@color/supportingColor"
-        android:layout_below="@+id/enter_student_id"
-        android:layout_alignStart="@+id/enter_student_id" />
+        android:layout_below="@+id/enter_quantity"
+        android:layout_alignStart="@+id/enter_quantity" />
 
     <Button
-        android:id="@+id/exit_button"
+        android:id="@+id/cancel_button"
         android:layout_width="146dp"
         android:layout_height="wrap_content"
         android:background="@color/mainBackgroundcolor"
-        android:text="@string/exit_button"
+        android:text="@string/cancel_button"
         android:textColor="@color/supportingColor"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:onClick="idExitButton"
-        android:layout_alignBaseline="@+id/validate_button"
-        android:layout_alignBottom="@+id/validate_button"
-        android:layout_alignEnd="@+id/enter_student_id" />
+        android:onClick="quantityCancelBtn"
+        android:layout_alignBaseline="@+id/confirm_button"
+        android:layout_alignBottom="@+id/confirm_button"
+        android:layout_alignEnd="@+id/enter_quantity" />
 </RelativeLayout>

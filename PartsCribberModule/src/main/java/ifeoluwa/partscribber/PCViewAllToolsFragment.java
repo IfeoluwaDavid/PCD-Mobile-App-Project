@@ -5,16 +5,17 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.SearchView;
-import android.text.Html;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,34 +31,43 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class PartsCribberViewAllTools extends AppCompatActivity
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class PCViewAllToolsFragment extends Fragment
 {
+    View finder;
     String jsonstring;
     JSONObject jsonObject;
     JSONArray jsonArray;
-    ViewAllToolsAdapter viewAllToolsAdapter;
     ArrayAdapter<String> adapter;
     ListView listView;
     ActionBar actionBar;
     Intent intent;
     int count;
+    android.support.v7.app.AlertDialog dialog;
+    SearchView editText;
+    private PCViewAllToolsFragmentInterface mListener;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState)
+    public PCViewAllToolsFragment()
     {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.partscribber_viewalltools);
-        actionBar = getSupportActionBar();
-        actionBar.setTitle(Html.fromHtml("<font color='#01579B'>PartsCribber</font>"));
-
-        new fetchAllToolsBackgroundTasks(this).execute();
+        // Required empty public constructor
     }
 
     @Override
-    protected void onRestart()
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        super.onRestart();
-        recreate();
+        // Inflate the layout for this fragment
+        finder = inflater.inflate(R.layout.pcviewalltools_fragment, container, false);
+        return finder;
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        new fetchAllToolsBackgroundTasks(getActivity()).execute();
     }
 
     class fetchAllToolsBackgroundTasks extends AsyncTask<Void, Void, String>
@@ -131,8 +141,8 @@ public class PartsCribberViewAllTools extends AppCompatActivity
             jsonstring = result;
             count = 0;
 
-            listView =(ListView)findViewById(R.id.listview);
-            final SearchView editText = (SearchView)findViewById(R.id.txtsearch);
+            listView =(ListView) finder.findViewById(R.id.listview);
+            editText = (SearchView)finder.findViewById(R.id.txtsearch);
             editText.setIconified(false);
             editText.clearFocus();
             initList();
@@ -153,18 +163,17 @@ public class PartsCribberViewAllTools extends AppCompatActivity
                     count++;
                 }
 
-                TextView amount = (TextView) findViewById(R.id.all_available_tools);
-                amount.setText("All Equipments ("+count+")");
+                //TextView amount = (TextView) finder.findViewById(R.id.all_available_tools);
+                //amount.setText("All Equipments ("+count+")");
 
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
                 {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id)
                     {
+                        // if we had ParentActivity then we can do
                         String selectedItem = parent.getItemAtPosition(position).toString();
-                        intent = new Intent(PartsCribberViewAllTools.this, PartsCribberViewToolData.class);
-                        intent.putExtra("selectedItem", String.valueOf(selectedItem));
-                        startActivity(intent);
+                        mListener.viewToolData(selectedItem);
                     }
                 });
 
@@ -210,5 +219,24 @@ public class PartsCribberViewAllTools extends AppCompatActivity
             adapter=new ArrayAdapter<String>(ctx, R.layout.viewalltools_rowlayout,R.id.viewalltools_itemnametext, listItems);
             listView.setAdapter(adapter);
         }
+    }
+
+    @Override
+    public void onAttach(Context ctx)
+    {
+        super.onAttach(ctx);
+        try
+        {
+            mListener = (PCViewAllToolsFragmentInterface)ctx;
+        }
+        catch (ClassCastException c)
+        {
+            throw new ClassCastException(ctx.toString() + " should implememt PCViewAllToolsFragmentInterface");
+        }
+    }
+
+    interface  PCViewAllToolsFragmentInterface
+    {
+        void viewToolData(String selectedItem);
     }
 }

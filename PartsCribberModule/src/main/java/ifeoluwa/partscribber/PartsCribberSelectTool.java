@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -41,19 +42,19 @@ public class PartsCribberSelectTool extends AppCompatActivity
     TextView availableItems;
     ListView listView;
     ActionBar actionBar;
-    String selectedCategory;
-
+    String selectedCategory, validatedID, alreadyhas, selectedItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.partscribber_selecttool);
+        setContentView(R.layout.partscribber_selecttools);
         actionBar = getSupportActionBar();
         actionBar.setTitle(Html.fromHtml("<font color='#01579B'>PartsCribber</font>"));
 
         intent = getIntent();
         selectedCategory = intent.getStringExtra("selectedCategory");
+        validatedID = intent.getStringExtra("theID");
 
         new ItemInfoBackgroundTasks(this).execute();
 
@@ -66,23 +67,15 @@ public class PartsCribberSelectTool extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                String selectedItem = parent.getItemAtPosition(position).toString();
+                selectedItem = parent.getItemAtPosition(position).toString();
                 intent = new Intent(PartsCribberSelectTool.this, PartsCribberViewToolData.class);
                 intent.putExtra("selectedItem", String.valueOf(selectedItem));
+                intent.putExtra("theID", validatedID);
+                intent.putExtra("alreadyhas", alreadyhas);
                 startActivity(intent);
             }
         });
     }
-
-    /*@Override
-    protected void onRestart()
-    {
-        super.onRestart();
-        Intent intent = getIntent();
-        finish();
-        startActivity(intent);
-        overridePendingTransition(R.anim.slide_in_left,0);
-    }*/
 
     @Override
     protected void onRestart()

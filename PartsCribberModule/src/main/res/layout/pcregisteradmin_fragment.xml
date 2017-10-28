@@ -1,0 +1,128 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mainBackgroundcolor"
+    tools:context="ifeoluwa.partscribber.PCRegisterAdminFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <EditText
+            android:id="@+id/newadmin_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/newadmin_lastname"
+            android:layout_alignStart="@+id/newadmin_lastname"
+            android:layout_below="@+id/newadmin_lastname"
+            android:layout_marginTop="5dp"
+            android:background="#E1F5FE"
+            android:ems="10"
+            android:hint="@string/newadmin_email"
+            android:inputType="textEmailAddress"
+            android:padding="9dp"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            tools:layout_editor_absoluteX="85dp"
+            tools:layout_editor_absoluteY="143dp" />
+
+        <EditText
+            android:id="@+id/newadmin_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/newadmin_username"
+            android:layout_alignStart="@+id/newadmin_username"
+            android:layout_below="@+id/newadmin_username"
+            android:layout_marginTop="5dp"
+            android:background="#E1F5FE"
+            android:ems="10"
+            android:hint="@string/newadmin_password"
+            android:inputType="textPassword"
+            android:padding="9dp"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            tools:layout_editor_absoluteX="85dp"
+            tools:layout_editor_absoluteY="186dp" />
+
+        <Button
+            android:id="@+id/register_newadmin_button"
+            android:layout_width="213dp"
+            android:layout_height="50dp"
+            android:layout_alignEnd="@+id/newadmin_email"
+            android:layout_alignStart="@+id/newadmin_email"
+            android:layout_below="@+id/newadmin_email"
+            android:layout_marginTop="18dp"
+            android:background="#80D8FF"
+            android:text="@string/register_newadmin_button"
+            android:textStyle="bold"
+            tools:layout_editor_absoluteX="86dp"
+            tools:layout_editor_absoluteY="250dp" />
+
+        <EditText
+            android:id="@+id/newadmin_lastname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/newadmin_firstname"
+            android:layout_alignStart="@+id/newadmin_firstname"
+            android:layout_below="@+id/newadmin_firstname"
+            android:layout_marginTop="5dp"
+            android:background="#E1F5FE"
+            android:ems="10"
+            android:hint="@string/newadmin_lastname"
+            android:inputType="textPersonName"
+            android:padding="9dp"
+            android:textColor="#000000"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/newadmin_firstname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/newadmin_confirmpassword"
+            android:layout_alignStart="@+id/newadmin_confirmpassword"
+            android:layout_below="@+id/newadmin_confirmpassword"
+            android:layout_marginTop="5dp"
+            android:background="#E1F5FE"
+            android:ems="10"
+            android:hint="@string/newadmin_firstname"
+            android:inputType="textPersonName"
+            android:padding="9dp"
+            android:textColor="#000000"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/newadmin_username"
+            android:layout_width="330dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/register_newadmin_header"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="60dp"
+            android:background="#E1F5FE"
+            android:ems="10"
+            android:hint="@string/newadmin_username"
+            android:inputType="textPersonName"
+            android:padding="9dp"
+            android:textColor="#000000"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/newadmin_confirmpassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/newadmin_password"
+            android:layout_alignStart="@+id/newadmin_password"
+            android:layout_below="@+id/newadmin_password"
+            android:layout_marginTop="5dp"
+            android:background="#E1F5FE"
+            android:ems="10"
+            android:hint="@string/newadmin_confirmpassword"
+            android:inputType="textPersonName"
+            android:padding="9dp"
+            android:textColor="#000000"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+</FrameLayout>

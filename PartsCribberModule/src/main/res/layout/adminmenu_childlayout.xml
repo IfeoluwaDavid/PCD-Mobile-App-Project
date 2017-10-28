@@ -7,7 +7,7 @@ android:layout_height="match_parent">
 <TextView
     android:id="@+id/adminmenuchildtext"
     android:layout_width="fill_parent"
-    android:layout_height="50dp"
+    android:layout_height="51dp"
     android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft"
     android:typeface="serif"
     android:textSize="20sp"

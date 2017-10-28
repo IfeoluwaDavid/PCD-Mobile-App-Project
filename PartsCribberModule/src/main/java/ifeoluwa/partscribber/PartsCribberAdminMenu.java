@@ -53,14 +53,9 @@ public class PartsCribberAdminMenu extends AppCompatActivity
                     Intent intent = new Intent(PartsCribberAdminMenu.this, PartsCribberRentEquipment.class);
                     startActivity(intent);
                 }
-                if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals("Register New Student"))
+                if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals("Register Student/Admin"))
                 {
-                    Intent intent = new Intent(PartsCribberAdminMenu.this, PartsCribberRegisterStudent.class);
-                    startActivity(intent);
-                }
-                if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals("Register New Admin"))
-                {
-                    Intent intent = new Intent(PartsCribberAdminMenu.this, PartsCribberRegisterAdmin.class);
+                    Intent intent = new Intent(PartsCribberAdminMenu.this, PartsCribberRegisterUser.class);
                     startActivity(intent);
                 }
                 if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals("View/Edit My Profile"))
@@ -78,14 +73,9 @@ public class PartsCribberAdminMenu extends AppCompatActivity
                     Intent intent = new Intent(PartsCribberAdminMenu.this, PartsCribberAddItem.class);
                     startActivity(intent);
                 }
-                if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals("View All Equipment"))
+                if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals("Search/View Equipment"))
                 {
-                    Intent intent = new Intent(PartsCribberAdminMenu.this, PartsCribberViewAllTools.class);
-                    startActivity(intent);
-                }
-                if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals("View Equipment by Category"))
-                {
-                    Intent intent = new Intent(PartsCribberAdminMenu.this, PartsCribberSelectCategory.class);
+                    Intent intent = new Intent(PartsCribberAdminMenu.this, PartsCribberViewEquipment.class);
                     startActivity(intent);
                 }
                 return false;

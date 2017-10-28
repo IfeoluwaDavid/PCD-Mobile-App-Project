@@ -1,0 +1,127 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mainBackgroundcolor"
+    tools:context="ifeoluwa.partscribber.PCRegisterStudentFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <EditText
+            android:id="@+id/register_email_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/register_lastname_hint"
+            android:layout_alignStart="@+id/register_lastname_hint"
+            android:layout_below="@+id/register_lastname_hint"
+            android:layout_marginTop="5dp"
+            android:background="#E1F5FE"
+            android:ems="10"
+            android:hint="@string/register_email_hint"
+            android:inputType="textEmailAddress"
+            android:padding="9dp"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            tools:layout_editor_absoluteX="85dp"
+            tools:layout_editor_absoluteY="143dp" />
+
+        <EditText
+            android:id="@+id/register_password_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/register_username_hint"
+            android:layout_alignStart="@+id/register_username_hint"
+            android:layout_below="@+id/register_username_hint"
+            android:layout_marginTop="5dp"
+            android:background="#E1F5FE"
+            android:ems="10"
+            android:hint="@string/register_password_hint"
+            android:inputType="textPassword"
+            android:padding="9dp"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            tools:layout_editor_absoluteX="85dp"
+            tools:layout_editor_absoluteY="186dp" />
+
+        <Button
+            android:id="@+id/register_singlestudent_button"
+            android:layout_width="213dp"
+            android:layout_height="50dp"
+            android:layout_alignEnd="@+id/register_email_hint"
+            android:layout_alignStart="@+id/register_email_hint"
+            android:layout_below="@+id/register_email_hint"
+            android:layout_marginTop="10dp"
+            android:background="#80D8FF"
+            android:onClick="userRegister"
+            android:text="@string/register_singlestudent_button"
+            android:textStyle="bold"
+            tools:layout_editor_absoluteX="86dp"
+            tools:layout_editor_absoluteY="250dp" />
+
+        <EditText
+            android:id="@+id/register_lastname_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/register_firstname_hint"
+            android:layout_alignStart="@+id/register_firstname_hint"
+            android:layout_below="@+id/register_firstname_hint"
+            android:layout_marginTop="5dp"
+            android:background="#E1F5FE"
+            android:ems="10"
+            android:hint="@string/register_lastname_hint"
+            android:inputType="textPersonName"
+            android:padding="9dp"
+            android:textColor="#000000"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/register_firstname_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/register_confirmpassword_hint"
+            android:layout_alignStart="@+id/register_confirmpassword_hint"
+            android:layout_below="@+id/register_confirmpassword_hint"
+            android:layout_marginTop="5dp"
+            android:background="#E1F5FE"
+            android:ems="10"
+            android:hint="@string/register_firstname_hint"
+            android:inputType="textPersonName"
+            android:padding="9dp"
+            android:textColor="#000000"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/register_username_hint"
+            android:layout_width="330dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="60dp"
+            android:background="#E1F5FE"
+            android:ems="10"
+            android:hint="@string/register_username_hint"
+            android:inputType="textPersonName"
+            android:padding="9dp"
+            android:textColor="#000000"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/register_confirmpassword_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/register_password_hint"
+            android:layout_alignStart="@+id/register_password_hint"
+            android:layout_below="@+id/register_password_hint"
+            android:layout_marginTop="5dp"
+            android:background="#E1F5FE"
+            android:ems="10"
+            android:hint="@string/register_confirmpassword_hint"
+            android:inputType="textPersonName"
+            android:padding="9dp"
+            android:textColor="#000000"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+</FrameLayout>

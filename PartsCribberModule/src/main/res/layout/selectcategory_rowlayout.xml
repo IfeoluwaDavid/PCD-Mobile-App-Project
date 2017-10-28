@@ -9,7 +9,7 @@
     <TextView
         android:id="@+id/viewcategory_categoryname"
         android:layout_width="300dp"
-        android:layout_height="50dp"
+        android:layout_height="51dp"
         android:typeface="serif"
         android:textStyle="bold"
         android:textSize="20sp"
