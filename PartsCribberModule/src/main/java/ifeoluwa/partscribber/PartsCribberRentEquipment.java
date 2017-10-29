@@ -118,12 +118,8 @@ implements PCViewAllToolsFragment.PCViewAllToolsFragmentInterface, PCSelectCateg
 
     public void viewCart (View view)
     {
-        TextView myTextView = (TextView) findViewById(R.id.hidden_text);
-        studentIDvalue = (String) myTextView.getText();
-
         Intent intenta = new Intent(PartsCribberRentEquipment.this, PartsCribberStudentCart.class);
         intenta.putExtra("theID", validatedID);
-
         startActivity(intenta);
     }
 

@@ -145,15 +145,15 @@ public class PartsCribberViewToolData extends AppCompatActivity
         {
             if (!digitValidation(itemQuantity.getText().toString()))
             {
-                Toast.makeText(getBaseContext(), "Quantity is expected to be 1 or more", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), "Quantity must be 1 or more, else, delete item.", Toast.LENGTH_SHORT).show();
             }
             else
             {
-                if(Integer.valueOf(itemQuantity.getText().toString()) > 3)
+                if(Integer.valueOf(itemQuantity.getText().toString()) > Integer.valueOf(globalSelectedItemAvailableQuantity))
                 {
                     dialog.dismiss();
                     android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
-                    builder.setMessage("You can only rent up to 3 of the same equipment at once.");
+                    builder.setMessage("Only "+globalSelectedItemAvailableQuantity+" available at the moment.");
                     builder.setCancelable(true);
                     builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
                     {
@@ -168,29 +168,9 @@ public class PartsCribberViewToolData extends AppCompatActivity
                 }
                 else
                 {
-                    if(Integer.valueOf(itemQuantity.getText().toString()) > Integer.valueOf(globalSelectedItemAvailableQuantity))
-                    {
-                        dialog.dismiss();
-                        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
-                        builder.setMessage("Only "+globalSelectedItemAvailableQuantity+" available at the moment.");
-                        builder.setCancelable(true);
-                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
-                        {
-                            public void onClick(DialogInterface dialog, int which)
-                            {
-                                dialog.dismiss();
-                                QuantityPrompt();
-                            }
-                        });
-                        android.support.v7.app.AlertDialog alert = builder.create();
-                        alert.show();
-                    }
-                    else
-                    {
-                        validItemQuantity = itemQuantity.getText().toString();
-                        new alterCartBackgroundTask(this).execute();
-                        dialog.dismiss();
-                    }
+                    validItemQuantity = itemQuantity.getText().toString();
+                    new alterCartBackgroundTask(this).execute();
+                    dialog.dismiss();
                 }
             }
         }
@@ -225,7 +205,6 @@ public class PartsCribberViewToolData extends AppCompatActivity
     protected void onRestart()
     {
         super.onRestart();
-
     }*/
 
     @Override
