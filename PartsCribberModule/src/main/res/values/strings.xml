@@ -126,4 +126,14 @@
     <string name="confirm_button">ENTER</string>
     <string name="cancel_button">CANCEL</string>
 
+    <!-- VIEW CART ROW LAYOUT -->
+    <string name="view_cart_item_name">Item Name</string>
+    <string name="view_cart_item_quantity">0</string>
+    <string name="approve_cart">Approve Cart</string>
+
+    <!-- CART CHANGES ALERT DIALOG ACTIVITY -->
+    <string name="cart_item_name_header">Item Name</string>
+    <string name="cart_save_button">SAVE</string>
+    <string name="cart_delete_button">DELETE</string>
+    <string name="cart_cancel_button">CANCEL</string>
 </resources>
