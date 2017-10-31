@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -34,6 +35,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class PartsCribberStudentCart extends AppCompatActivity
@@ -48,11 +50,11 @@ public class PartsCribberStudentCart extends AppCompatActivity
     ListView listView;
     ActionBar actionBar;
     CartItems selectedCartItem;
-    AlertDialog.Builder mBuilder;
-    AlertDialog dialog;
+    AlertDialog.Builder mBuilder, builder;
+    AlertDialog dialog, approveCartDialog;
     View mView;
     EditText newitemQuantity;
-    ArrayList<CartItems> listviewpositions = new ArrayList<CartItems>();
+    List<CartItems> listviewpositions = new ArrayList<CartItems>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -84,7 +86,6 @@ public class PartsCribberStudentCart extends AppCompatActivity
                 selectedCartItemName = selectedCartItem.getItemname();
                 selectedCartItemQuantity = selectedCartItem.getPossessionQuantity();
                 optionsPrompt();
-                //Toast.makeText(getBaseContext(), +" "+ , Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -148,11 +149,113 @@ public class PartsCribberStudentCart extends AppCompatActivity
         }
     }
 
-    /*public void deleteBtn (View view)
+    public void approveBtn (View view)
     {
-        new ItemInfoBackgroundTasks(this).execute();
-        dialog.dismiss();
-    }*/
+        if(listviewpositions.size() < 1)
+        {
+            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
+            builder.setMessage("Cart is presently empty.");
+            builder.setCancelable(false);
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+            {
+                public void onClick(DialogInterface dialog, int which)
+                {
+                    dialog.dismiss();
+                }
+            });
+            android.support.v7.app.AlertDialog alert = builder.create();
+            alert.show();
+        }
+        else
+        {
+            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
+            builder.setMessage("Are you sure you want to approve this student's cart?");
+            builder.setCancelable(false);
+            builder.setPositiveButton("YES", new DialogInterface.OnClickListener()
+            {
+                public void onClick(DialogInterface dialog, int which)
+                {
+                    dialog.dismiss();
+                    new ApproveCartBackgroundTasks(PartsCribberStudentCart.this).execute();
+                }
+            });
+            builder.setNegativeButton("NO", new DialogInterface.OnClickListener()
+            {
+                public void onClick(DialogInterface dialog, int which)
+                {
+                    dialog.dismiss();
+                }
+            });
+            android.support.v7.app.AlertDialog alert = builder.create();
+            alert.show();
+        }
+    }
+
+    public void clearCartBtn (View view)
+    {
+        if(listviewpositions.size() < 1)
+        {
+            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
+            builder.setMessage("Cart is presently empty.");
+            builder.setCancelable(false);
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+            {
+                public void onClick(DialogInterface dialog, int which)
+                {
+                    dialog.dismiss();
+                }
+            });
+            android.support.v7.app.AlertDialog alert = builder.create();
+            alert.show();
+        }
+        else
+        {
+            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
+            builder.setMessage("Are you sure you want to remove all items from your cart?");
+            builder.setCancelable(false);
+            builder.setPositiveButton("YES", new DialogInterface.OnClickListener()
+            {
+                public void onClick(DialogInterface dialog, int which)
+                {
+                    dialog.dismiss();
+                    new ClearCartBackgroundTasks(PartsCribberStudentCart.this).execute();
+                }
+            });
+            builder.setNegativeButton("NO", new DialogInterface.OnClickListener()
+            {
+                public void onClick(DialogInterface dialog, int which)
+                {
+                    dialog.dismiss();
+                }
+            });
+            android.support.v7.app.AlertDialog alert = builder.create();
+            alert.show();
+        }
+    }
+
+    public void deleteBtn (View view)
+    {
+        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
+        builder.setMessage("Are you sure you want to remove this item?");
+        builder.setCancelable(false);
+        builder.setPositiveButton("YES", new DialogInterface.OnClickListener()
+        {
+            public void onClick(DialogInterface dialog, int which)
+            {
+                dialog.dismiss();
+                new DeleteItemBackgroundTask(PartsCribberStudentCart.this).execute();
+            }
+        });
+        builder.setNegativeButton("NO", new DialogInterface.OnClickListener()
+        {
+            public void onClick(DialogInterface dialog, int which)
+            {
+                dialog.dismiss();
+            }
+        });
+        android.support.v7.app.AlertDialog alert = builder.create();
+        alert.show();
+    }
 
     public void cancelBtn (View view)
     {
@@ -536,6 +639,447 @@ public class PartsCribberStudentCart extends AppCompatActivity
                         {
                             dialog.dismiss();
                             optionsPrompt();
+                        }
+                    });
+                    android.support.v7.app.AlertDialog alert = builder.create();
+                    alert.show();
+                }
+            }
+            catch (JSONException e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    class ApproveCartBackgroundTasks extends AsyncTask<Void, Void, String>
+    {
+        String json_url;
+        String JSON_STRING;
+        Context ctx;
+        private Activity activity;
+
+        public ApproveCartBackgroundTasks(Context ctx)
+        {
+            this.ctx = ctx;
+            activity = (Activity)ctx;
+        }
+
+        @Override
+        protected void onPreExecute()
+        {
+            builder = new android.app.AlertDialog.Builder(activity);
+            View dialogView = LayoutInflater.from(ctx).inflate(R.layout.progress_dialog, null);
+            ((TextView)dialogView.findViewById(R.id.tv_progress_dialog)).setText("Approving...");
+            approveCartDialog = builder.setView(dialogView).setCancelable(false).setTitle("Please Wait").show();
+            json_url = "http://partscribdatabase.tech/androidconnect/approvecart.php";
+        }
+
+        @Override
+        protected String doInBackground(Void... voids)
+        {
+            try
+            {
+                URL url = new URL(json_url);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setDoOutput(true);
+                httpURLConnection.setDoInput(true);
+                OutputStream os = httpURLConnection.getOutputStream();
+                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+
+                String data = URLEncoder.encode("username", "UTF-8") + "=" + URLEncoder.encode(validatedID, "UTF-8");
+
+                bufferedWriter.write(data);
+                bufferedWriter.flush();
+                bufferedWriter.close();
+                os.close();
+                InputStream is = httpURLConnection.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is));
+                StringBuilder stringBuilder = new StringBuilder();
+                while ((JSON_STRING = bufferedReader.readLine()) != null)
+                {
+                    stringBuilder.append(JSON_STRING + "\n");
+                }
+                bufferedReader.close();
+                is.close();
+                httpURLConnection.disconnect();
+                return stringBuilder.toString().trim();
+            }
+            catch (MalformedURLException e)
+            {
+                e.printStackTrace();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values)
+        {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected void onPostExecute(String result)
+        {
+            approveCartDialog.dismiss();
+            jsonstring = result;
+
+            String code = "";
+            String message = "";
+
+            try
+            {
+                JSONObject jsonObject = new JSONObject(result);
+                JSONArray jsonArray = jsonObject.getJSONArray("server_response");
+                JSONObject JO = jsonArray.getJSONObject(0);
+
+                message = JO.getString("message");
+                code = JO.getString("code");
+
+                if (code.equals("cart_approved"))
+                {
+                    android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+                    builder.setTitle("Done!");
+                    builder.setMessage(message);
+                    builder.setCancelable(false);
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                    {
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+                            dialog.dismiss();
+                            recreate();
+                        }
+                    });
+                    android.support.v7.app.AlertDialog alert = builder.create();
+                    alert.show();
+                }
+                else if (code.equals("cart_disapproved"))
+                {
+                    android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+                    builder.setTitle("Something went wrong");
+                    builder.setMessage(message);
+                    builder.setCancelable(false);
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                    {
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+                            dialog.dismiss();
+                        }
+                    });
+                    android.support.v7.app.AlertDialog alert = builder.create();
+                    alert.show();
+                }
+                else
+                {
+                    android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+                    builder.setTitle("Non-server side problem ");
+                    builder.setMessage("Unknown application error occurred, Please Try Again.");
+                    builder.setCancelable(false);
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                    {
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+                            dialog.dismiss();
+                        }
+                    });
+                    android.support.v7.app.AlertDialog alert = builder.create();
+                    alert.show();
+                }
+            }
+            catch (JSONException e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    class ClearCartBackgroundTasks extends AsyncTask<Void, Void, String>
+    {
+        String json_url;
+        String JSON_STRING;
+        Context ctx;
+        private Activity activity;
+
+        public ClearCartBackgroundTasks(Context ctx)
+        {
+            this.ctx = ctx;
+            activity = (Activity)ctx;
+        }
+
+        @Override
+        protected void onPreExecute()
+        {
+            builder = new android.app.AlertDialog.Builder(activity);
+            View dialogView = LayoutInflater.from(ctx).inflate(R.layout.progress_dialog, null);
+            ((TextView)dialogView.findViewById(R.id.tv_progress_dialog)).setText("Approving...");
+            approveCartDialog = builder.setView(dialogView).setCancelable(false).setTitle("Please Wait").show();
+            json_url = "http://partscribdatabase.tech/androidconnect/clearcart.php";
+        }
+
+        @Override
+        protected String doInBackground(Void... voids)
+        {
+            try
+            {
+                URL url = new URL(json_url);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setDoOutput(true);
+                httpURLConnection.setDoInput(true);
+                OutputStream os = httpURLConnection.getOutputStream();
+                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+
+                String data = URLEncoder.encode("username", "UTF-8") + "=" + URLEncoder.encode(validatedID, "UTF-8");
+
+                bufferedWriter.write(data);
+                bufferedWriter.flush();
+                bufferedWriter.close();
+                os.close();
+                InputStream is = httpURLConnection.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is));
+                StringBuilder stringBuilder = new StringBuilder();
+                while ((JSON_STRING = bufferedReader.readLine()) != null)
+                {
+                    stringBuilder.append(JSON_STRING + "\n");
+                }
+                bufferedReader.close();
+                is.close();
+                httpURLConnection.disconnect();
+                return stringBuilder.toString().trim();
+            }
+            catch (MalformedURLException e)
+            {
+                e.printStackTrace();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values)
+        {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected void onPostExecute(String result)
+        {
+            approveCartDialog.dismiss();
+            jsonstring = result;
+
+            String code = "";
+            String message = "";
+
+            try
+            {
+                JSONObject jsonObject = new JSONObject(result);
+                JSONArray jsonArray = jsonObject.getJSONArray("server_response");
+                JSONObject JO = jsonArray.getJSONObject(0);
+
+                message = JO.getString("message");
+                code = JO.getString("code");
+
+                if (code.equals("cart_cleared"))
+                {
+                    android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+                    builder.setTitle("Done!");
+                    builder.setMessage(message);
+                    builder.setCancelable(false);
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                    {
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+                            dialog.dismiss();
+                            recreate();
+                        }
+                    });
+                    android.support.v7.app.AlertDialog alert = builder.create();
+                    alert.show();
+                }
+                else if (code.equals("cart_not_cleared"))
+                {
+                    android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+                    builder.setTitle("Something went wrong");
+                    builder.setMessage(message);
+                    builder.setCancelable(false);
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                    {
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+                            dialog.dismiss();
+                        }
+                    });
+                    android.support.v7.app.AlertDialog alert = builder.create();
+                    alert.show();
+                }
+                else
+                {
+                    android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+                    builder.setTitle("Non-server side problem ");
+                    builder.setMessage("Unknown application error occurred, Please Try Again.");
+                    builder.setCancelable(false);
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                    {
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+                            dialog.dismiss();
+                        }
+                    });
+                    android.support.v7.app.AlertDialog alert = builder.create();
+                    alert.show();
+                }
+            }
+            catch (JSONException e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    class DeleteItemBackgroundTask extends AsyncTask<Void, Void, String>
+    {
+        String json_url;
+        String JSON_STRING;
+        Context ctx;
+        private Activity activity;
+
+        public DeleteItemBackgroundTask(Context ctx)
+        {
+            this.ctx = ctx;
+            activity = (Activity)ctx;
+        }
+
+        @Override
+        protected void onPreExecute()
+        {
+            builder = new android.app.AlertDialog.Builder(activity);
+            View dialogView = LayoutInflater.from(ctx).inflate(R.layout.progress_dialog, null);
+            ((TextView)dialogView.findViewById(R.id.tv_progress_dialog)).setText("Approving...");
+            approveCartDialog = builder.setView(dialogView).setCancelable(false).setTitle("Please Wait").show();
+            json_url = "http://partscribdatabase.tech/androidconnect/deleteCartItem.php";
+        }
+
+        @Override
+        protected String doInBackground(Void... voids)
+        {
+            try
+            {
+                URL url = new URL(json_url);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setDoOutput(true);
+                httpURLConnection.setDoInput(true);
+                OutputStream os = httpURLConnection.getOutputStream();
+                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+
+                String data =
+                        URLEncoder.encode("username", "UTF-8")+"="+
+                        URLEncoder.encode(validatedID, "UTF-8")+"&"+
+                        URLEncoder.encode("itemname", "UTF-8") + "=" +
+                        URLEncoder.encode(selectedCartItemName, "UTF-8");
+
+                bufferedWriter.write(data);
+                bufferedWriter.flush();
+                bufferedWriter.close();
+                os.close();
+                InputStream is = httpURLConnection.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is));
+                StringBuilder stringBuilder = new StringBuilder();
+                while ((JSON_STRING = bufferedReader.readLine()) != null)
+                {
+                    stringBuilder.append(JSON_STRING + "\n");
+                }
+                bufferedReader.close();
+                is.close();
+                httpURLConnection.disconnect();
+                return stringBuilder.toString().trim();
+            }
+            catch (MalformedURLException e)
+            {
+                e.printStackTrace();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values)
+        {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected void onPostExecute(String result)
+        {
+            approveCartDialog.dismiss();
+            jsonstring = result;
+
+            String code = "";
+            String message = "";
+
+            try
+            {
+                JSONObject jsonObject = new JSONObject(result);
+                JSONArray jsonArray = jsonObject.getJSONArray("server_response");
+                JSONObject JO = jsonArray.getJSONObject(0);
+
+                message = JO.getString("message");
+                code = JO.getString("code");
+
+                if (code.equals("item_deleted"))
+                {
+                    android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+                    builder.setTitle("Done!");
+                    builder.setMessage(message);
+                    builder.setCancelable(false);
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                    {
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+                            dialog.dismiss();
+                            recreate();
+                        }
+                    });
+                    android.support.v7.app.AlertDialog alert = builder.create();
+                    alert.show();
+                }
+                else if (code.equals("item_not_deleted"))
+                {
+                    android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+                    builder.setMessage(message);
+                    builder.setCancelable(false);
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                    {
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+                            dialog.dismiss();
+                        }
+                    });
+                    android.support.v7.app.AlertDialog alert = builder.create();
+                    alert.show();
+                }
+                else
+                {
+                    android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+                    builder.setTitle("Non-server side problem ");
+                    builder.setMessage("Unknown application error occurred, Please Try Again.");
+                    builder.setCancelable(false);
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                    {
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+                            dialog.dismiss();
                         }
                     });
                     android.support.v7.app.AlertDialog alert = builder.create();

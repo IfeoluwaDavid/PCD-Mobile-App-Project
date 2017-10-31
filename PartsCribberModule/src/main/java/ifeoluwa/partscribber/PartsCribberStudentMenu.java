@@ -24,9 +24,6 @@ public class PartsCribberStudentMenu extends AppCompatActivity
     ActionBar actionBar;
     TextView username;
 
-    //String[] studentmenu = {"View Available Item", "My Current Rentals"};
-    //String[] studentmenu2 = {"View/Edit Personal Info","Change My Password"};
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
