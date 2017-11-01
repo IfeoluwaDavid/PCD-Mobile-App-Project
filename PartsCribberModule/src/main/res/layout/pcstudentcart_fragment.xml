@@ -1,25 +1,26 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/mainBackgroundcolor"
-    tools:context="ifeoluwa.partscribber.PartsCribberStudentCart">
+    tools:context="ifeoluwa.partscribber.PCStudentCartFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="330dp"
-        android:layout_height="55dp"
+        android:layout_height="45dp"
         android:background="@color/supportingColor"
-        android:padding="10dp"
+        android:padding="8dp"
         android:textSize="20sp"
         android:textStyle="bold"
         android:typeface="serif"
         android:gravity="center"
         android:text="TextView"
-        android:textColor="@color/mainBackgroundcolor"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="60dp"
         android:layout_alignParentTop="true"
         android:layout_alignStart="@+id/listview"
         android:layout_alignEnd="@+id/listview" />
@@ -27,7 +28,7 @@
     <ListView
         android:id="@+id/listview"
         android:layout_width="wrap_content"
-        android:layout_height="415dp"
+        android:layout_height="360dp"
         android:divider="#0277BD"
         android:dividerHeight="3dp"
         android:layout_margin="10dp"
@@ -43,7 +44,6 @@
         android:textStyle="bold"
         android:layout_gravity="center"
         android:onClick="approveBtn"
-        android:layout_marginBottom="8dp"
         android:background="@color/supportingColor"
         android:layout_below="@+id/listview"
         android:layout_alignStart="@+id/listview" />
@@ -57,9 +57,10 @@
         android:textStyle="bold"
         android:onClick="clearCartBtn"
         android:layout_gravity="center"
-        android:layout_marginBottom="8dp"
         android:background="@color/supportingColor"
         android:layout_below="@+id/listview"
         android:layout_alignEnd="@+id/listview" />
 
-</RelativeLayout>
+    </RelativeLayout>
+
+</FrameLayout>

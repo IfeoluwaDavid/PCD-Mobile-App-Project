@@ -23,14 +23,15 @@
         <activity android:name=".PartsCribberAdminMenu" />
         <activity android:name=".PartsCribberStudentMenu" />
         <activity android:name=".PartsCribberChangePassword" />
-        <activity android:name=".PartsCribberViewEquipment"/>
+        <activity android:name=".PartsCribberViewEquipment" />
         <activity android:name=".PartsCribberAddItem" />
         <activity android:name=".PartsCribberSelectTool" />
         <activity android:name=".PartsCribberViewToolData" />
         <activity android:name=".PartsCribberRegisterUser" />
         <activity android:name=".PartsCribberUpdateItem" />
-        <activity android:name=".PartsCribberRentEquipment"/>
-        <activity android:name=".PartsCribberStudentCart"/>
+        <activity android:name=".PartsCribberRentEquipment" />
+        <activity android:name=".PartsCribberStudentCart" />
+        <activity android:name=".PartsCribberReturnEquipment"></activity>
     </application>
 
 </manifest>
