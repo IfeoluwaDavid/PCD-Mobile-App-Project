@@ -98,7 +98,7 @@ implements PCViewAllToolsFragment.PCViewAllToolsFragmentInterface, PCSelectCateg
                 }
                 else
                 {
-                    Toast.makeText(getBaseContext(), "Failed to find student", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getBaseContext(), "Empty Field", Toast.LENGTH_SHORT).show();
                 }
             }
         });

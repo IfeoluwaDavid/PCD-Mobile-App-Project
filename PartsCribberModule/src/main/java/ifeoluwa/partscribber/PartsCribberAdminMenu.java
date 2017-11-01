@@ -53,6 +53,11 @@ public class PartsCribberAdminMenu extends AppCompatActivity
                     Intent intent = new Intent(PartsCribberAdminMenu.this, PartsCribberRentEquipment.class);
                     startActivity(intent);
                 }
+                if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals("Return Equipment"))
+                {
+                    Intent intent = new Intent(PartsCribberAdminMenu.this, PartsCribberReturnEquipment.class);
+                    startActivity(intent);
+                }
                 if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals("Register Student/Admin"))
                 {
                     Intent intent = new Intent(PartsCribberAdminMenu.this, PartsCribberRegisterUser.class);

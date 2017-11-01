@@ -136,4 +136,7 @@
     <string name="cart_save_button">SAVE</string>
     <string name="cart_delete_button">DELETE</string>
     <string name="cart_cancel_button">CANCEL</string>
+
+    <!-- STUDENT RETURN FRAGMENT -->
+    <string name="return_all">Return All</string>
 </resources>
