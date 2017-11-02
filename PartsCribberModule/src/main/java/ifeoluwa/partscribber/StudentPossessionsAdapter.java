@@ -68,6 +68,12 @@ public class StudentPossessionsAdapter extends ArrayAdapter
         return row;
     }
 
+    public void clearAdapter()
+    {
+        list.clear();
+        notifyDataSetChanged();
+    }
+
     static class ItemHolder
     {
         TextView tx_itemname;

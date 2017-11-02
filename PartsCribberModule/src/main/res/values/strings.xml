@@ -137,6 +137,11 @@
     <string name="cart_delete_button">DELETE</string>
     <string name="cart_cancel_button">CANCEL</string>
 
-    <!-- STUDENT RETURN FRAGMENT -->
+    <!-- STUDENT RETURNS ACTIVITY -->
+    <string name="returns_item_name_header">Item Name</string>
+    <string name="returned_quantity_hint">Returned Quantity</string>
+    <string name="enter_button">Enter</string>
+    <string name="complete_return_button">Complete Return</string>
+    <string name="cancel_dialog_button">Cancel</string>
     <string name="return_all">Return All</string>
 </resources>
