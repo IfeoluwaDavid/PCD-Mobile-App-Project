@@ -7,4 +7,6 @@
     <color name="mainBackgroundcolor">#0277BD</color>
     <color name="supportingColor">#81D4FA</color>
     <color name="buttonColor">#81D4FA</color>
+    <color name="primary">#F44336</color>
+    <color name="primary_dark">#B71C1C</color>
 </resources>

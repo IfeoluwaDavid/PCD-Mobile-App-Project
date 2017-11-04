@@ -14,9 +14,9 @@ public class AdminMenuDataProvider
     {
         HashMap <String, List<String>> Admin_Menu = new HashMap <String, List<String>>();
 
-        List<String> add_new_user = new ArrayList<String>();
-        add_new_user.add("Register Student/Admin");
-        add_new_user.add("Search Student User");
+        List<String> users_and_tools = new ArrayList<String>();
+        users_and_tools.add("Add/Search Users");
+        users_and_tools.add("Add/Search Tools");
 
         List<String> rentals_and_returns = new ArrayList<String>();
         rentals_and_returns.add("Rent Equipment");
@@ -26,14 +26,14 @@ public class AdminMenuDataProvider
         profile_settings.add("View/Edit My Profile");
         profile_settings.add("Change My Password");
 
-        List<String> inventory = new ArrayList<String>();
-        inventory.add("Add New Equipment");
-        inventory.add("Search/View Equipment");
+        //List<String> inventory = new ArrayList<String>();
+        //inventory.add("Add New Equipment");
+        //inventory.add("Search User/Tool");
+        //Admin_Menu.put("INVENTORY", inventory);
 
-        Admin_Menu.put("REGISTER/FIND USER", add_new_user);
+        Admin_Menu.put("ADD & SEARCH", users_and_tools);
         Admin_Menu.put("RENTALS & RETURNS", rentals_and_returns);
         Admin_Menu.put("PROFILE SETTINGS", profile_settings);
-        Admin_Menu.put("INVENTORY", inventory);
 
         return Admin_Menu;
     }

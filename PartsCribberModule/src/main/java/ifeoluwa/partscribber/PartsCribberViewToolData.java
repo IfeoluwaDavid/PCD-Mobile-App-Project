@@ -63,6 +63,7 @@ public class PartsCribberViewToolData extends AppCompatActivity
         selectedItem = intent.getStringExtra("selectedItem");
         alreadyhas = intent.getStringExtra("alreadyhas");
         validatedID = intent.getStringExtra("theID");
+
         ((Button)findViewById(R.id.add_item_to_cart)).setText(TextUtils.isEmpty(validatedID) ? R.string.rent_item : R.string.add_item_to_cart);
 
         viewCart = (Button) findViewById(R.id.view_cart_button);

@@ -68,7 +68,7 @@ public class PartsCribberStudentCart extends AppCompatActivity
         validatedID = intent.getStringExtra("theID");
 
         TextView theID = (TextView) findViewById(R.id.textView2);
-        theID.setText(validatedID);
+        theID.setText(validatedID.toUpperCase());
 
         new CartInfoBackgroundTasks(this).execute();
 

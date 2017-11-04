@@ -58,8 +58,9 @@ public class PartsCribberRegisterUser extends AppCompatActivity
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), this);
-        viewPagerAdapter.addFragments(new PCRegisterStudentFragment(), "Register Student");
-        viewPagerAdapter.addFragments(new PCRegisterAdminFragment(), "Register Admin");
+        viewPagerAdapter.addFragments(new PCViewAllUsers(), "All Users");
+        viewPagerAdapter.addFragments(new PCRegisterStudentFragment(), "Add Student");
+        viewPagerAdapter.addFragments(new PCRegisterAdminFragment(), "Add Admin");
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
     }
