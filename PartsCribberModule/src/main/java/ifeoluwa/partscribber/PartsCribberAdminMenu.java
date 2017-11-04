@@ -33,7 +33,7 @@ public class PartsCribberAdminMenu extends AppCompatActivity
 
         TextView username = (TextView) findViewById(R.id.welcomeusername);
         User user = UserSession.getInstance(this).getUser();
-        username.setText(user.getFirstname()+" "+user.getLastname()+" ("+user.getUsertype()+")");
+        username.setText(user.getFirstname().toUpperCase()+" "+user.getLastname().toUpperCase()+" ("+user.getUsertype()+")");
 
         exp_list = (ExpandableListView) findViewById(R.id.exp_list);
         Admin_Menu = AdminMenuDataProvider.getInfo();
@@ -58,9 +58,14 @@ public class PartsCribberAdminMenu extends AppCompatActivity
                     Intent intent = new Intent(PartsCribberAdminMenu.this, PartsCribberReturnEquipment.class);
                     startActivity(intent);
                 }
-                if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals("Register Student/Admin"))
+                if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals("Add/Search Users"))
                 {
                     Intent intent = new Intent(PartsCribberAdminMenu.this, PartsCribberRegisterUser.class);
+                    startActivity(intent);
+                }
+                if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals("Search Student User"))
+                {
+                    Intent intent = new Intent(PartsCribberAdminMenu.this, PartsCribberViewAllStudents.class);
                     startActivity(intent);
                 }
                 if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals("View/Edit My Profile"))
@@ -78,7 +83,7 @@ public class PartsCribberAdminMenu extends AppCompatActivity
                     Intent intent = new Intent(PartsCribberAdminMenu.this, PartsCribberAddItem.class);
                     startActivity(intent);
                 }
-                if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals("Search/View Equipment"))
+                if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals("Add/Search Tools"))
                 {
                     Intent intent = new Intent(PartsCribberAdminMenu.this, PartsCribberViewEquipment.class);
                     startActivity(intent);

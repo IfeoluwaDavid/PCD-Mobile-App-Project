@@ -15,7 +15,6 @@
                     android:layout_height="45dp"
                     android:layout_alignEnd="@+id/listview"
                     android:layout_alignStart="@+id/listview"
-                    android:windowSoftInputMode="stateHidden"
                     android:layout_marginTop="60dp"
                     android:background="#E1F5FE"
                     android:queryHint="@string/search_category_hint"

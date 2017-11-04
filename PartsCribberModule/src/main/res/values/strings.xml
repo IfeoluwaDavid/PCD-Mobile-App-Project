@@ -9,9 +9,9 @@
     <string name="open_registerpage_button">REGISTER</string>
     <string name="forgot_password">Forgot Password?</string>
 
-    <!-- REGISTER NEW STUDENT ACTIVITY -->
+    <!-- REGISTER NEW STUDENT/ADMIN ACTIVITY -->
     <string name="register_singlestudent_header">REGISTER STUDENT</string>
-    <string name="register_username_hint">Username</string>
+    <string name="register_username_hint">Student Username</string>
     <string name="register_firstname_hint">First Name </string>
     <string name="register_lastname_hint">Last Name</string>
     <string name="register_email_hint">Email Address</string>
@@ -90,7 +90,8 @@
     <string name="update_inventory_header">Add New Equipment</string>
     <string name="item_name_value">Item Name</string>
     <string name="serial_no_value">Serial Number</string>
-    <string name="quantity_value">Stock Quantity</string>
+    <string name="quantity_value">Total Quantity</string>
+    <string name="available_qty_value">Available Quantity</string>
     <string name="category_value">Item Category</string>
     <string name="add_item_button">Add New Item</string>
 
@@ -144,4 +145,8 @@
     <string name="complete_return_button">Complete Return</string>
     <string name="cancel_dialog_button">Cancel</string>
     <string name="return_all">Return All</string>
+    <string name="view_info">View Info</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

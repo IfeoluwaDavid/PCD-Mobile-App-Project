@@ -5,20 +5,19 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,64 +32,38 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class PCSelectCategoryFragment extends Fragment
+public class PartsCribberViewAllStudents extends AppCompatActivity
 {
-    View finder;
     String jsonstring;
     JSONObject jsonObject;
     JSONArray jsonArray;
-    SelectCategoryAdapter selectCategoryAdapter;
+    ArrayAdapter<String> adapter;
     ListView listView;
+    SearchView searchView;
     ActionBar actionBar;
     Intent intent;
-    SearchView editText;
-    private PCSelectCategoryFragment.PCSelectCategoryFragmentInterface mListener;
-
-    public PCSelectCategoryFragment()
-    {
-        // Required empty public constructor
-    }
+    int count;
+    android.support.v7.app.AlertDialog dialog;
+    private PCViewAllToolsFragment.PCViewAllToolsFragmentInterface mListener;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    protected void onCreate(Bundle savedInstanceState)
     {
-        // Inflate the layout for this fragment
-        finder = inflater.inflate(R.layout.pcselectcategory_fragment, container, false);
-        return finder;
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.partscribber_viewallstudents);
+        actionBar = getSupportActionBar();
+        actionBar.setTitle(Html.fromHtml("<font color='#01579B'>PartsCribber</font>"));
+
+        new fetchAllStudentsBackgroundTasks(this).execute();
+
+        /*listView = (ListView) findViewById(R.id.listview);
+        selectToolsAdapter = new SelectToolsAdapter(this, R.layout.selecttools_rowlayout);
+        listView.setAdapter(selectToolsAdapter);*/
     }
 
-    @Override
-    public void onResume()
-    {
-        super.onResume();
-        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        new CategoryInfoBackgroundTasks(getActivity()).execute();
-
-        listView = (ListView) finder.findViewById(R.id.listview);
-        selectCategoryAdapter = new SelectCategoryAdapter(getActivity(), R.layout.selectcategory_rowlayout);
-        listView.setAdapter(selectCategoryAdapter);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-            {
-                String selectedCategory = (String) parent.getItemAtPosition(position);
-                mListener.viewCategoryData(selectedCategory);
-                //intent = new Intent(getActivity(), PartsCribberSelectTool.class);
-                //intent.putExtra("selectedCategory", selectedCategory);
-                //startActivity(intent);
-            }
-        });
-    }
-
-    class CategoryInfoBackgroundTasks extends AsyncTask<Void, Void, String>
+    class fetchAllStudentsBackgroundTasks extends AsyncTask<Void, Void, String>
     {
         String json_url;
         String JSON_STRING;
@@ -98,13 +71,11 @@ public class PCSelectCategoryFragment extends Fragment
         AlertDialog.Builder builder;
         private Activity activity;
         private AlertDialog loginDialog;
-        ArrayAdapter<String> adapter;
-        HashSet<String> arraylistofCategoryObjects = new HashSet<String>();
-        List<String> list;
+        List<String> arraylistofStudentObjects = new ArrayList<String>();
         List<String> listItems = new ArrayList<String>();
         String[] items;
 
-        public CategoryInfoBackgroundTasks(Context ctx)
+        public fetchAllStudentsBackgroundTasks(Context ctx)
         {
             this.ctx = ctx;
             activity = (Activity)ctx;
@@ -115,9 +86,9 @@ public class PCSelectCategoryFragment extends Fragment
         {
             builder = new AlertDialog.Builder(activity);
             View dialogView = LayoutInflater.from(this.ctx).inflate(R.layout.progress_dialog, null);
-            ((TextView)dialogView.findViewById(R.id.tv_progress_dialog)).setText("Fetching Categorized Data");
+            ((TextView)dialogView.findViewById(R.id.tv_progress_dialog)).setText("Fetching Server Data");
             loginDialog = builder.setView(dialogView).setCancelable(false).setTitle("Please Wait").show();
-            json_url = "http://partscribdatabase.tech/androidconnect/fetchCategoryData.php";
+            json_url = "http://partscribdatabase.tech/androidconnect/fetchAllStudents.php";
         }
 
         @Override
@@ -161,32 +132,45 @@ public class PCSelectCategoryFragment extends Fragment
         {
             loginDialog.dismiss();
             jsonstring = result;
+            count = 0;
+
+            listView =(ListView) findViewById(R.id.listview);
+            searchView = (SearchView) findViewById(R.id.searchView);
+            searchView.setIconified(false);
+            searchView.clearFocus();
+            initList();
 
             try
             {
                 jsonObject = new JSONObject(jsonstring);
                 jsonArray = jsonObject.getJSONArray("server_response");
-                int count = 0;
 
-                String itemCategory;
+                String username;
 
                 while(count < jsonArray.length())
                 {
                     JSONObject JO = jsonArray.getJSONObject(count);
-                    itemCategory = JO.getString("category");
-                    arraylistofCategoryObjects.add(itemCategory.toUpperCase());
+                    username = JO.getString("username");
+                    arraylistofStudentObjects.add(username);
+                    adapter.add(username.toUpperCase());
                     count++;
                 }
 
-                list = new ArrayList<String>(arraylistofCategoryObjects);
-                editText = (SearchView)finder.findViewById(R.id.txtsearch);
-                initList();
-
-                for (String item : arraylistofCategoryObjects)
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
                 {
-                    selectCategoryAdapter.add(item);
-                }
-                editText.setOnQueryTextListener(new SearchView.OnQueryTextListener()
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+                    {
+                        //if we had ParentActivity then we can do
+                        String selectedID = parent.getItemAtPosition(position).toString();
+                        //Toast.makeText(getBaseContext(), selectedID ,Toast.LENGTH_LONG).show();
+                        intent = new Intent(ctx, PartsCribberStudentInfo.class);
+                        intent.putExtra("selectedID", selectedID);
+                        startActivity(intent);
+                    }
+                });
+
+                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener()
                 {
                     @Override
                     public boolean onQueryTextSubmit(String query)
@@ -202,12 +186,12 @@ public class PCSelectCategoryFragment extends Fragment
                     }
                 });
 
-                editText.setOnSearchClickListener(new View.OnClickListener()
+                searchView.setOnSearchClickListener(new View.OnClickListener()
                 {
                     @Override
                     public void onClick(View v)
                     {
-                        editText.onActionViewExpanded();
+                        searchView.onActionViewExpanded();
                     }
                 });
             }
@@ -219,33 +203,14 @@ public class PCSelectCategoryFragment extends Fragment
 
         public void initList()
         {
-            items = new String[list.size()];
-            for(int i=0; i < list.size(); i++)
+            items = new String[arraylistofStudentObjects.size()];
+            for(int i=0; i < arraylistofStudentObjects.size(); i++)
             {
-                items[i] = list.get(i);
+                items[i] = arraylistofStudentObjects.get(i);
             }
             listItems=new ArrayList<>(Arrays.asList(items));
             adapter=new ArrayAdapter<String>(ctx, R.layout.viewalltools_rowlayout,R.id.viewalltools_itemnametext, listItems);
             listView.setAdapter(adapter);
         }
-    }
-
-    @Override
-    public void onAttach(Context ctx)
-    {
-        super.onAttach(ctx);
-        try
-        {
-            mListener = (PCSelectCategoryFragment.PCSelectCategoryFragmentInterface)ctx;
-        }
-        catch (ClassCastException c)
-        {
-            throw new ClassCastException(ctx.toString() + " should implememt PCSelectCategoryFragmentInterface");
-        }
-    }
-
-    interface  PCSelectCategoryFragmentInterface
-    {
-        void viewCategoryData(String selectedCategory);
     }
 }

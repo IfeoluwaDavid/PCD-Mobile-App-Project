@@ -34,7 +34,7 @@ public class PartsCribberStudentMenu extends AppCompatActivity
 
         username = (TextView) findViewById(R.id.welcomeusername);
         User user = UserSession.getInstance(this).getUser();
-        username.setText(user.getFirstname()+" "+user.getLastname()+" ("+user.getUsertype()+")");
+        username.setText(user.getFirstname().toUpperCase()+" "+user.getLastname().toUpperCase()+" ("+user.getUsertype()+")");
 
         exp_list = (ExpandableListView) findViewById(R.id.exp_list);
         Student_Menu = StudentMenuDataProvider.getInfo();

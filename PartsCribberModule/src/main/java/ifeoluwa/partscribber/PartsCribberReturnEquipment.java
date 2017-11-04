@@ -47,12 +47,14 @@ public class PartsCribberReturnEquipment extends AppCompatActivity
     JSONArray jsonArray;
     Intent intent;
     StudentPossessionsAdapter studentPossessionsAdapter;
+    String fname, lname, possessionqty, email, status;
     String studentIDvalue, jsonstring, validatedID, validNewItemQuantity;
     AlertDialog.Builder mBuilder, builder;
     AlertDialog dialog, approveCartDialog;
     View mView;
     ListView listView;
-    EditText studentID, ReturnedQuantity;
+    TextView studentIDheader;
+    EditText studentID, ReturnedQuantity, studentfullname, studentpossessionqty, studentemail, studentstatus;
     ActionBar actionBar;
     List<StudentPossessions> listviewpositions = new ArrayList<StudentPossessions>();
     String selectedCartItemName, selectedCartItemQuantity;
@@ -85,9 +87,9 @@ public class PartsCribberReturnEquipment extends AppCompatActivity
             {
                 if(!studentID.getText().toString().isEmpty())
                 {
+                    dialog.dismiss();
                     studentIDvalue = studentID.getText().toString();
                     new ItemInfoBackgroundTasks(PartsCribberReturnEquipment.this).execute();
-                    dialog.dismiss();
                     getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
                 }
                 else
@@ -227,6 +229,129 @@ public class PartsCribberReturnEquipment extends AppCompatActivity
         }
     }
 
+    public void viewInfo (View view)
+    {
+        new UserInfoBackgroundTasks(PartsCribberReturnEquipment.this).execute();
+    }
+
+    class UserInfoBackgroundTasks extends AsyncTask<String, Void, String>
+    {
+        Context ctx;
+        String json_url, JSON_STRING;
+        android.app.AlertDialog.Builder builder;
+        private Activity activity;
+        private android.app.AlertDialog loginDialog;
+
+        public UserInfoBackgroundTasks(Context ctx)
+        {
+            this.ctx = ctx;
+            activity = (Activity) ctx;
+        }
+
+        @Override
+        protected void onPreExecute()
+        {
+            builder = new android.app.AlertDialog.Builder(activity);
+            View dialogView = LayoutInflater.from(this.ctx).inflate(R.layout.progress_dialog, null);
+            ((TextView) dialogView.findViewById(R.id.tv_progress_dialog)).setText("Connecting to Server");
+            loginDialog = builder.setView(dialogView).setCancelable(false).setTitle("Please Wait").show();
+            json_url = "http://partscribdatabase.tech/androidconnect/fetchStudentProfile.php";
+        }
+
+        @Override
+        protected String doInBackground(String... params)
+        {
+            try
+            {
+                URL url = new URL(json_url);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setDoOutput(true);
+                httpURLConnection.setDoInput(true);
+                OutputStream os = httpURLConnection.getOutputStream();
+                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+
+                String data = URLEncoder.encode("username", "UTF-8") + "=" + URLEncoder.encode(validatedID, "UTF-8");
+
+                bufferedWriter.write(data);
+                bufferedWriter.flush();
+                bufferedWriter.close();
+                os.close();
+                InputStream is = httpURLConnection.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is));
+                StringBuilder stringBuilder = new StringBuilder();
+                while ((JSON_STRING = bufferedReader.readLine()) != null)
+                {
+                    stringBuilder.append(JSON_STRING + "\n");
+                }
+                bufferedReader.close();
+                is.close();
+                httpURLConnection.disconnect();
+                return stringBuilder.toString().trim();
+            }
+            catch (MalformedURLException e)
+            {
+                e.printStackTrace();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected void onPostExecute(String result)
+        {
+            loginDialog.dismiss();
+            jsonstring = result;
+
+            try
+            {
+                jsonObject = new JSONObject(jsonstring);
+                jsonArray = jsonObject.getJSONArray("server_response");
+                JSONObject JO = jsonArray.getJSONObject(0);
+
+                fname = JO.getString("firstname");
+                lname = JO.getString("lastname");
+                possessionqty = JO.getString("possessionQty");
+                email = JO.getString("email");
+                status = JO.getString("status");
+
+                mBuilder = new AlertDialog.Builder(activity);
+                mView = getLayoutInflater().inflate(R.layout.studentinfo_alertdialog, null);
+
+                studentIDheader = (TextView) mView.findViewById(R.id.textView3);
+                studentfullname = (EditText) mView.findViewById(R.id.editText);
+                studentpossessionqty = (EditText) mView.findViewById(R.id.editText2);
+                studentemail = (EditText) mView.findViewById(R.id.editText3);
+                studentstatus = (EditText) mView.findViewById(R.id.editText4);
+
+                studentIDheader.setText(validatedID);
+                studentfullname.setText("Full Name: " + fname + " " + lname);
+                studentpossessionqty.setText("Possession Qty: " + possessionqty);
+                studentemail.setText("Email: " + email);
+                studentstatus.setText("Status: " + status);
+
+                mBuilder.setCancelable(false);
+                mBuilder.setView(mView);
+
+                dialog = mBuilder.create();
+                dialog.show();
+            }
+            catch (JSONException e)
+            {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
     class ItemInfoBackgroundTasks extends AsyncTask<Void, Void, String>
     {
         String json_url;
@@ -304,7 +429,7 @@ public class PartsCribberReturnEquipment extends AppCompatActivity
         protected void onPostExecute(String result)
         {
             loginDialog.dismiss();
-            //jsonstring = result;
+            jsonstring = result;
 
             String code = "";
             String message = "";
@@ -328,9 +453,9 @@ public class PartsCribberReturnEquipment extends AppCompatActivity
                     {
                         public void onClick(DialogInterface dialog, int which)
                         {
+                            dialog.dismiss();
                             validatedID = studentIDvalue;
                             new RentalInfoBackgroundTasks(PartsCribberReturnEquipment.this).execute();
-                            dialog.dismiss();
                         }
                     });
                     builder.setNegativeButton("NO", new DialogInterface.OnClickListener()
@@ -489,7 +614,7 @@ public class PartsCribberReturnEquipment extends AppCompatActivity
                 }
 
                 TextView theID = (TextView) findViewById(R.id.textView2);
-                theID.setText(validatedID);
+                theID.setText(validatedID.toUpperCase());
 
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
                 {

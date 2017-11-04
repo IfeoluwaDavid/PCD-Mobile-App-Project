@@ -41,7 +41,6 @@ public class PartsCribberLogin extends AppCompatActivity
                 //return;
             }
         }
-
         login_username_value = (EditText) findViewById(R.id.login_username);
         login_password_value = (EditText) findViewById(R.id.login_password);
     }
