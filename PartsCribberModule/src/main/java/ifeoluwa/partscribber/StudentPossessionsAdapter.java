@@ -68,6 +68,12 @@ public class StudentPossessionsAdapter extends ArrayAdapter
         return row;
     }
 
+    @Override
+    public boolean isEnabled(int position)
+    {
+        return false;
+    }
+
     static class ItemHolder
     {
         TextView tx_itemname;

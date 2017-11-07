@@ -2,25 +2,28 @@ package ifeoluwa.partscribber;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.ExpandableListView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 public class PartsCribberStudentMenu extends AppCompatActivity
+implements PCViewAllToolsFragment.PCViewAllToolsFragmentInterface, PCSelectCategoryFragment.PCSelectCategoryFragmentInterface
 {
-    HashMap<String, List<String>> Student_Menu;
-    List<String> Student_List;
-    ExpandableListView exp_list;
-    StudentMenuAdapter adapter;
+    TabLayout tabLayout;
+    ViewPager viewPager;
+    Intent intent;
+    android.app.AlertDialog dialog;
+    android.app.AlertDialog.Builder builder;
+    ViewPagerAdapter viewPagerAdapter;
     ActionBar actionBar;
     TextView username;
 
@@ -29,63 +32,35 @@ public class PartsCribberStudentMenu extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.partscribber_studentmenu);
+        
         actionBar = getSupportActionBar();
         actionBar.setTitle(Html.fromHtml("<font color='#01579B'>PartsCribber</font>"));
 
-        username = (TextView) findViewById(R.id.welcomeusername);
+        tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        viewPager = (ViewPager) findViewById(R.id.viewPager);
+
+        viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), this);
+        viewPagerAdapter.addFragments(new PCViewAllToolsFragment(), "All Equipment");
+        viewPagerAdapter.addFragments(new PCSelectCategoryFragment(), "All Categories");
+
+        viewPager.setAdapter(viewPagerAdapter);
+        tabLayout.setupWithViewPager(viewPager);
+    }
+
+    public void myCart(View view)
+    {
+        intent = new Intent(this, PartsCribberStudentCart.class);
         User user = UserSession.getInstance(this).getUser();
-        username.setText(user.getFirstname().toUpperCase()+" "+user.getLastname().toUpperCase()+" ("+user.getUsertype()+")");
+        intent.putExtra("theID", String.valueOf(user.getUsername()));
+        startActivity(intent);
+    }
 
-        exp_list = (ExpandableListView) findViewById(R.id.exp_list);
-        Student_Menu = StudentMenuDataProvider.getInfo();
-        Student_List = new ArrayList<String>(Student_Menu.keySet());
-
-        //Initialization of Array Class Object
-        adapter = new StudentMenuAdapter(this, Student_Menu, Student_List);
-        exp_list.setAdapter(adapter);
-
-        exp_list.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener()
-        {
-            @Override
-            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id)
-            {
-                return true; // This way the expander cannot be collapsed
-            }
-        });
-
-        exp_list.setOnChildClickListener(new ExpandableListView.OnChildClickListener()
-        {
-            @Override
-            public boolean onChildClick(ExpandableListView expandableListView, View view, int groupPosition, int childPosition, long id)
-            {
-                if(Student_Menu.get(Student_List.get(groupPosition)).get(childPosition).equals("View/Edit My Profile"))
-                {
-                    Intent intent = new Intent(PartsCribberStudentMenu.this, PartsCribberViewProfile.class);
-                    startActivity(intent);
-                }
-                if(Student_Menu.get(Student_List.get(groupPosition)).get(childPosition).equals("Change My Password"))
-                {
-                    Intent intent = new Intent(PartsCribberStudentMenu.this, PartsCribberChangePassword.class);
-                    startActivity(intent);
-                }
-                if(Student_Menu.get(Student_List.get(groupPosition)).get(childPosition).equals("Add New Equipment"))
-                {
-                    Intent intent = new Intent(PartsCribberStudentMenu.this, PartsCribberAddItem.class);
-                    startActivity(intent);
-                }
-                if(Student_Menu.get(Student_List.get(groupPosition)).get(childPosition).equals("View All Equipment"))
-                {
-                    Intent intent = new Intent(PartsCribberStudentMenu.this, PartsCribberRegisterUser.class);
-                    startActivity(intent);
-                }
-                if(Student_Menu.get(Student_List.get(groupPosition)).get(childPosition).equals("View Equipment by Category"))
-                {
-                    Intent intent = new Intent(PartsCribberStudentMenu.this, PartsCribberViewEquipment.class);
-                    startActivity(intent);
-                }
-                return false;
-            }
-        });
+    public void myPossessions(View view)
+    {
+        intent = new Intent(this, PartsCribberReturnEquipment.class);
+        User user = UserSession.getInstance(this).getUser();
+        intent.putExtra("theID", String.valueOf(user.getUsername()));
+        startActivity(intent);
     }
 
     public void onBackPressed()
@@ -114,5 +89,37 @@ public class PartsCribberStudentMenu extends AppCompatActivity
         });
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    @Override
+    public void viewToolData(String selectedItem)
+    {
+        intent = new Intent(this, PartsCribberViewToolData.class);
+        intent.putExtra("selectedItem", String.valueOf(selectedItem));
+        startActivity(intent);
+    }
+
+    @Override
+    public void viewCategoryData(String selectedCategory)
+    {
+        intent = new Intent(this, PartsCribberSelectTool.class);
+        intent.putExtra("selectedCategory", selectedCategory);
+        startActivity(intent);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        Intent profile = new Intent(this, PartsCribberViewProfile.class);
+        startActivity(profile);
+        return super.onOptionsItemSelected(item);
     }
 }

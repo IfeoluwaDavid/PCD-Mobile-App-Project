@@ -14,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -21,12 +23,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -38,7 +44,7 @@ import java.util.List;
 public class PCViewAllUsers extends Fragment
 {
     View finder;
-    String jsonstring;
+    String jsonstring,selectedID;
     JSONObject jsonObject;
     JSONArray jsonArray;
     ArrayAdapter<String> adapter;
@@ -48,6 +54,12 @@ public class PCViewAllUsers extends Fragment
     Intent intent;
     int count;
     android.support.v7.app.AlertDialog dialog;
+
+    String fname, lname, possessionqty, email, status;
+    android.support.v7.app.AlertDialog.Builder mBuilder, builder;
+    View mView;
+    TextView studentIDheader;
+    EditText studentfullname, studentpossessionqty, studentemail, studentstatus;
 
     public PCViewAllUsers()
     {
@@ -161,12 +173,8 @@ public class PCViewAllUsers extends Fragment
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id)
                     {
-                        //if we had ParentActivity then we can do
-                        String selectedID = parent.getItemAtPosition(position).toString();
-                        //Toast.makeText(getBaseContext(), selectedID ,Toast.LENGTH_LONG).show();
-                        intent = new Intent(ctx, PartsCribberStudentInfo.class);
-                        intent.putExtra("selectedID", selectedID);
-                        startActivity(intent);
+                        selectedID = parent.getItemAtPosition(position).toString();
+                        new UserInfoBackgroundTasks(getActivity()).execute();
                     }
                 });
 
@@ -211,6 +219,150 @@ public class PCViewAllUsers extends Fragment
             listItems=new ArrayList<>(Arrays.asList(items));
             adapter=new ArrayAdapter<String>(ctx, R.layout.viewalltools_rowlayout,R.id.viewalltools_itemnametext, listItems);
             listView.setAdapter(adapter);
+        }
+    }
+
+    class UserInfoBackgroundTasks extends AsyncTask<String, Void, String>
+    {
+        Context ctx;
+        String json_url, JSON_STRING;
+        android.app.AlertDialog.Builder builder;
+        private Activity activity;
+        private android.app.AlertDialog loginDialog;
+
+        public UserInfoBackgroundTasks(Context ctx)
+        {
+            this.ctx = ctx;
+            activity = (Activity) ctx;
+        }
+
+        @Override
+        protected void onPreExecute()
+        {
+            builder = new android.app.AlertDialog.Builder(activity);
+            View dialogView = LayoutInflater.from(this.ctx).inflate(R.layout.progress_dialog, null);
+            ((TextView) dialogView.findViewById(R.id.tv_progress_dialog)).setText("Connecting to Server");
+            loginDialog = builder.setView(dialogView).setCancelable(false).setTitle("Please Wait").show();
+            json_url = "http://partscribdatabase.tech/androidconnect/fetchStudentProfile.php";
+        }
+
+        @Override
+        protected String doInBackground(String... params)
+        {
+            try
+            {
+                URL url = new URL(json_url);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setDoOutput(true);
+                httpURLConnection.setDoInput(true);
+                OutputStream os = httpURLConnection.getOutputStream();
+                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+
+                String data = URLEncoder.encode("username", "UTF-8") + "=" + URLEncoder.encode(selectedID, "UTF-8");
+
+                bufferedWriter.write(data);
+                bufferedWriter.flush();
+                bufferedWriter.close();
+                os.close();
+                InputStream is = httpURLConnection.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is));
+                StringBuilder stringBuilder = new StringBuilder();
+                while ((JSON_STRING = bufferedReader.readLine()) != null)
+                {
+                    stringBuilder.append(JSON_STRING + "\n");
+                }
+                bufferedReader.close();
+                is.close();
+                httpURLConnection.disconnect();
+                return stringBuilder.toString().trim();
+            }
+            catch (MalformedURLException e)
+            {
+                e.printStackTrace();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected void onPostExecute(String result)
+        {
+            loginDialog.dismiss();
+            jsonstring = result;
+
+            try
+            {
+                jsonObject = new JSONObject(jsonstring);
+                jsonArray = jsonObject.getJSONArray("server_response");
+                JSONObject JO = jsonArray.getJSONObject(0);
+
+                fname = JO.getString("firstname");
+                lname = JO.getString("lastname");
+                possessionqty = JO.getString("possessionQty");
+                email = JO.getString("email");
+                status = JO.getString("status");
+
+                mBuilder = new android.support.v7.app.AlertDialog.Builder(activity);
+
+                LayoutInflater inflater = LayoutInflater.from(getContext());
+                mView = inflater.inflate(R.layout.studentinfo_alertdialog, null);
+
+                studentIDheader = (TextView) mView.findViewById(R.id.textView3);
+                studentfullname = (EditText) mView.findViewById(R.id.editText);
+                studentpossessionqty = (EditText) mView.findViewById(R.id.editText2);
+                studentemail = (EditText) mView.findViewById(R.id.editText3);
+                studentstatus = (EditText) mView.findViewById(R.id.editText4);
+
+                studentIDheader.setText(selectedID);
+                studentfullname.setText("Full Name: " + fname + " " + lname);
+                studentpossessionqty.setText("Possession Qty: " + possessionqty);
+                studentemail.setText("Email: " + email);
+                studentstatus.setText("Status: " + status);
+
+                mBuilder.setCancelable(false);
+                mBuilder.setView(mView);
+
+                dialog = mBuilder.create();
+                dialog.show();
+
+                final Button cancelBtn = (Button) mView.findViewById(R.id.button3);
+                cancelBtn.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(final View v)
+                    {
+                        dialog.dismiss();
+                    }
+                });
+
+                final Button rentalInfo = (Button) mView.findViewById(R.id.button2);
+                rentalInfo.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(final View v)
+                    {
+                        Intent intent = new Intent(getActivity(), PartsCribberReturnEquipment.class);
+                        intent.putExtra("theID", selectedID);
+                        startActivity(intent);
+                    }
+                });
+            }
+            catch (JSONException e)
+            {
+                e.printStackTrace();
+            }
+
+
+
         }
     }
 }

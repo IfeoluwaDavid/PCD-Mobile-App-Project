@@ -12,14 +12,17 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,7 +51,7 @@ public class PartsCribberReturnEquipment extends AppCompatActivity
     Intent intent;
     StudentPossessionsAdapter studentPossessionsAdapter;
     String fname, lname, possessionqty, email, status;
-    String studentIDvalue, jsonstring, validatedID, validNewItemQuantity;
+    String studentIDvalue, jsonstring, validatedID, validNewItemQuantity, passedID;
     AlertDialog.Builder mBuilder, builder;
     AlertDialog dialog, approveCartDialog;
     View mView;
@@ -68,6 +71,41 @@ public class PartsCribberReturnEquipment extends AppCompatActivity
         actionBar = getSupportActionBar();
         actionBar.setTitle(Html.fromHtml("<font color='#01579B'>PartsCribber</font>"));
 
+        intent = getIntent();
+        passedID = intent.getStringExtra("theID");
+
+        if (TextUtils.isEmpty(passedID))
+        {
+            provideID();
+        }
+        else
+        {
+            validatedID = passedID;
+            new RentalInfoBackgroundTasks(PartsCribberReturnEquipment.this).execute();
+        }
+
+        User user = UserSession.getInstance(this).getUser();
+        if(user.getUsertype().equals("Student"))
+        {
+            Button returnAll = (Button) findViewById(R.id.return_all_button);
+            returnAll.setVisibility(View.INVISIBLE);
+
+            Button viewInfo = (Button) findViewById(R.id.view_info_button);
+            viewInfo.setVisibility(View.INVISIBLE);
+
+            ListView listview = (ListView) findViewById(R.id.listview);
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            params.addRule(RelativeLayout.BELOW, R.id.textView2);
+            params.setMargins(28, 28, 28, 28);
+            listview.setLayoutParams(params);
+
+            listview.isEnabled();
+
+        }
+    }
+
+    public void provideID()
+    {
         mBuilder = new android.support.v7.app.AlertDialog.Builder(this);
         mView = getLayoutInflater().inflate(R.layout.studentid_alertdialog, null);
 
@@ -79,35 +117,27 @@ public class PartsCribberReturnEquipment extends AppCompatActivity
         mBuilder.setView(mView);
         dialog = mBuilder.create();
         dialog.show();
+    }
 
-        validateBtn.setOnClickListener(new View.OnClickListener()
+    public void validateBtn(View view)
+    {
+        if(!studentID.getText().toString().isEmpty())
         {
-            @Override
-            public void onClick(final View v)
-            {
-                if(!studentID.getText().toString().isEmpty())
-                {
-                    dialog.dismiss();
-                    studentIDvalue = studentID.getText().toString();
-                    new ItemInfoBackgroundTasks(PartsCribberReturnEquipment.this).execute();
-                    getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-                }
-                else
-                {
-                    Toast.makeText(getBaseContext(), "Empty Field", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+            dialog.dismiss();
+            studentIDvalue = studentID.getText().toString();
+            new ItemInfoBackgroundTasks(PartsCribberReturnEquipment.this).execute();
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        }
+        else
+        {
+            Toast.makeText(getBaseContext(), "Empty Field", Toast.LENGTH_SHORT).show();
+        }
+    }
 
-        idExitButton.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(final View v)
-            {
-                dialog.dismiss();
-                finish();
-            }
-        });
+    public void idExitButton(View view)
+    {
+        dialog.dismiss();
+        finish();
     }
 
     public void optionsPrompt()
@@ -161,9 +191,28 @@ public class PartsCribberReturnEquipment extends AppCompatActivity
                 }
                 else
                 {
-                    validNewItemQuantity = ReturnedQuantity.getText().toString();
-                    new alterRentalInfoBackgroundTasks(this).execute();
                     dialog.dismiss();
+                    android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
+                    builder.setMessage("Are you sure you want to return "+ReturnedQuantity.getText().toString()+" "+selectedCartItemName+"s?");
+                    builder.setCancelable(false);
+                    builder.setPositiveButton("YES", new DialogInterface.OnClickListener()
+                    {
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+                            dialog.dismiss();
+                            validNewItemQuantity = ReturnedQuantity.getText().toString();
+                            new alterRentalInfoBackgroundTasks(PartsCribberReturnEquipment.this).execute();
+                        }
+                    });
+                    builder.setNegativeButton("NO", new DialogInterface.OnClickListener()
+                    {
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+                            dialog.dismiss();
+                        }
+                    });
+                    android.support.v7.app.AlertDialog alert = builder.create();
+                    alert.show();
                 }
             }
         }
@@ -332,7 +381,7 @@ public class PartsCribberReturnEquipment extends AppCompatActivity
                 studentemail = (EditText) mView.findViewById(R.id.editText3);
                 studentstatus = (EditText) mView.findViewById(R.id.editText4);
 
-                studentIDheader.setText(validatedID);
+                studentIDheader.setText(validatedID.toUpperCase());
                 studentfullname.setText("Full Name: " + fname + " " + lname);
                 studentpossessionqty.setText("Possession Qty: " + possessionqty);
                 studentemail.setText("Email: " + email);
@@ -343,6 +392,16 @@ public class PartsCribberReturnEquipment extends AppCompatActivity
 
                 dialog = mBuilder.create();
                 dialog.show();
+
+                final Button rentalInfo = (Button) mView.findViewById(R.id.button2);
+                rentalInfo.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(final View v)
+                    {
+                        dialog.dismiss();
+                    }
+                });
             }
             catch (JSONException e)
             {

@@ -49,10 +49,27 @@
         android:layout_alignStart="@+id/listview" />
 
     <Button
+        android:id="@+id/button3"
+        android:layout_width="165dp"
+        android:layout_height="50dp"
+        android:text="@string/clear_cart"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:onClick="clearCartBtn"
+        android:layout_marginTop="10dp"
+        android:visibility="invisible"
+        android:background="@color/supportingColor"
+        android:layout_alignBaseline="@+id/button"
+        android:layout_alignBottom="@+id/button"
+        android:layout_alignStart="@+id/button"
+        android:layout_alignEnd="@+id/button2" />
+
+    <Button
         android:id="@+id/button2"
         android:layout_width="165dp"
         android:layout_height="50dp"
-        android:text="CLEAR CART"
+        android:text="@string/clear_cart"
         android:textSize="16sp"
         android:textStyle="bold"
         android:onClick="clearCartBtn"

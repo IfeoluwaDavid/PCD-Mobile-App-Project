@@ -13,9 +13,12 @@ import android.text.Html;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,9 +67,18 @@ public class PartsCribberViewToolData extends AppCompatActivity
         alreadyhas = intent.getStringExtra("alreadyhas");
         validatedID = intent.getStringExtra("theID");
 
+        User user = UserSession.getInstance(this).getUser();
+        if(user.getUsertype().equals("Student"))
+        {
+            validatedID = user.getUsername();
+            Button updateItem = (Button) findViewById(R.id.update_this_item_data);
+            updateItem.setVisibility(View.INVISIBLE);
+        }
+
         ((Button)findViewById(R.id.add_item_to_cart)).setText(TextUtils.isEmpty(validatedID) ? R.string.rent_item : R.string.add_item_to_cart);
 
         viewCart = (Button) findViewById(R.id.view_cart_button);
+
         if(!TextUtils.isEmpty(validatedID))
         {
             viewCart.setVisibility(View.VISIBLE);
