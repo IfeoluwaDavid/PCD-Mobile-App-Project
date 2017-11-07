@@ -32,8 +32,6 @@
         <activity android:name=".PartsCribberRentEquipment" />
         <activity android:name=".PartsCribberStudentCart" />
         <activity android:name=".PartsCribberReturnEquipment" />
-        <activity android:name=".PartsCribberViewAllStudents" />
-        <activity android:name=".PartsCribberStudentInfo" />
     </application>
 
 </manifest>

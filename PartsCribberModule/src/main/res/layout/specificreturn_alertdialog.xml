@@ -55,7 +55,7 @@
         android:layout_width="147dp"
         android:layout_height="wrap_content"
         android:background="@color/mainBackgroundcolor"
-        android:text="@string/enter_button"
+        android:text="@string/specific_return_button"
         android:textColor="@color/supportingColor"
         android:textSize="16sp"
         android:textStyle="bold"

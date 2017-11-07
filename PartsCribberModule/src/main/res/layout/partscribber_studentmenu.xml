@@ -1,37 +1,63 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@color/mainBackgroundcolor"
     tools:context=".PartsCribberStudentMenu">
 
-    <TextView
-        android:id="@+id/welcomeusername"
-        android:layout_width="wrap_content"
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:typeface="serif"
-        android:textColor="@color/mainBackgroundcolor"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        android:padding="10dp"
-        android:layout_marginRight="10dp"
-        android:gravity="center"
-        android:background="@color/supportingColor"
-        android:layout_marginTop="20dp"
-        android:text="@string/welcomeusername"
-        android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/exp_list"
-        android:layout_alignParentEnd="true" />
+        android:textColorPrimary="@color/titletextcolor"
+        android:background="@color/supportingColor">
 
-    <ExpandableListView
-        android:id="@+id/exp_list"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:indicatorLeft="?android:attr/expandableListPreferredItemIndicatorLeft"
-        android:divider="#0277BD"
-        android:dividerHeight="3dp"
+        <android.support.design.widget.TabLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tab_layout"
+            app:tabMode="fixed"
+            app:tabGravity="fill">
+        </android.support.design.widget.TabLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.view.ViewPager
+        android:layout_width="match_parent"
+        android:layout_height="490dp"
+        android:id="@+id/viewPager"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
+    </android.support.v4.view.ViewPager>
+
+    <Button
+        android:id="@+id/my_cart_button"
+        android:layout_width="164dp"
+        android:layout_height="52dp"
+        android:text="@string/my_cart_button"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:visibility="visible"
+        android:onClick="myCart"
         android:layout_margin="10dp"
-        android:layout_below="@+id/welcomeusername"
+        android:background="@color/supportingColor"
+        android:layout_below="@+id/viewPager"
         android:layout_alignParentStart="true"/>
+
+    <Button
+        android:id="@+id/my_possessions_button"
+        android:layout_width="164dp"
+        android:layout_height="52dp"
+        android:text="@string/my_possessions_button"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:visibility="visible"
+        android:onClick="myPossessions"
+        android:layout_margin="10dp"
+        android:background="@color/supportingColor"
+        android:layout_below="@+id/viewPager"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>

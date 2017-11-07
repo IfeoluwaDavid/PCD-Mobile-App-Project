@@ -15,13 +15,12 @@ public class StudentMenuDataProvider
         HashMap <String, List<String>> Student_Menu = new HashMap <String, List<String>>();
 
         List<String> view_equipments = new ArrayList<String>();
-        view_equipments.add("View All Equipments");
+        view_equipments.add("Select Equipment");
         view_equipments.add("View By Category");
-        view_equipments.add("Search Equipment");
 
         List<String> my_rentals = new ArrayList<String>();
-        my_rentals.add("My Current Possessions");
-        my_rentals.add("My Equipment Cart");
+        my_rentals.add("My Current Possessions"); //Straight to View Rental Info
+        my_rentals.add("My Cart Items"); //Straight to View Cart Info
 
         List<String> profile_settings = new ArrayList<String>();
         profile_settings.add("View/Edit My Profile");

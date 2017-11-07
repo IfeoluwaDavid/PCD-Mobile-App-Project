@@ -63,11 +63,6 @@ public class PartsCribberAdminMenu extends AppCompatActivity
                     Intent intent = new Intent(PartsCribberAdminMenu.this, PartsCribberRegisterUser.class);
                     startActivity(intent);
                 }
-                if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals("Search Student User"))
-                {
-                    Intent intent = new Intent(PartsCribberAdminMenu.this, PartsCribberViewAllStudents.class);
-                    startActivity(intent);
-                }
                 if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals("View/Edit My Profile"))
                 {
                     Intent intent = new Intent(PartsCribberAdminMenu.this, PartsCribberViewProfile.class);

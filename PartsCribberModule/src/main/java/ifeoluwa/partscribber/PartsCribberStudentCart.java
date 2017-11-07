@@ -11,11 +11,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -88,6 +94,19 @@ public class PartsCribberStudentCart extends AppCompatActivity
                 optionsPrompt();
             }
         });
+
+        User user = UserSession.getInstance(this).getUser();
+        if(user.getUsertype().equals("Student"))
+        {
+            Button button = (Button) findViewById(R.id.button);
+            button.setVisibility(View.INVISIBLE);
+
+            Button button2 = (Button) findViewById(R.id.button2);
+            button2.setVisibility(View.INVISIBLE);
+
+            Button button3 = (Button) findViewById(R.id.button3);
+            button3.setVisibility(View.VISIBLE);
+        }
     }
 
     public void optionsPrompt()
@@ -211,7 +230,7 @@ public class PartsCribberStudentCart extends AppCompatActivity
         else
         {
             android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
-            builder.setMessage("Are you sure you want to remove all items from your cart?");
+            builder.setMessage("Are you sure you want to remove all items from this cart?");
             builder.setCancelable(false);
             builder.setPositiveButton("YES", new DialogInterface.OnClickListener()
             {

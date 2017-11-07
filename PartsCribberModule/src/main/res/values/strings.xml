@@ -30,12 +30,12 @@
     <!-- ADMIN MENU ACTIVITY -->
     <string name="adminmenuparenttext">Admin Menu Parent Text</string>
     <string name="adminmenuchildtext">Admin Menu Child Text</string>
+    <string name="welcomeusername">Firstname Lastname</string>
 
     <!-- STUDENT MENU ACTIVITY -->
     <string name="studentmenutext">Student Menu Text</string>
-    <string name="studentmenuchildtext">Student Menu Child Text</string>
-    <string name="welcomeusername">Firstname Lastname</string>
-    <string name="studentprofileinfoheader2">Profile Settings</string>
+    <string name="my_possessions_button">Possessions</string>
+    <string name="my_cart_button">My Cart</string>
 
     <!-- REGISTER NEW ADMIN ACTIVITY -->
     <string name="register_newadmin_header">REGISTER ADMIN</string>
@@ -81,7 +81,7 @@
     <string name="qty_rented">Qty Rented</string>
     <string name="qty_total">Total Qty</string>
     <string name="item_category">Category</string>
-    <string name="update_this_item_data">Update Item</string>
+    <string name="update_this_item_data">Update Item Info</string>
     <string name="rent_item">Rent Item</string>
     <string name="add_item_to_cart">Add to Cart</string>
     <string name="view_cart_button">View Cart</string>
@@ -137,15 +137,21 @@
     <string name="cart_save_button">SAVE</string>
     <string name="cart_delete_button">DELETE</string>
     <string name="cart_cancel_button">CANCEL</string>
+    <string name="clear_cart">CLEAR CART</string>
 
     <!-- STUDENT RETURNS ACTIVITY -->
     <string name="returns_item_name_header">Item Name</string>
     <string name="returned_quantity_hint">Returned Quantity</string>
     <string name="enter_button">Enter</string>
-    <string name="complete_return_button">Complete Return</string>
     <string name="cancel_dialog_button">Cancel</string>
     <string name="return_all">Return All</string>
+    <string name="specific_return_button">Return</string>
+    <string name="view_rental_info">View Rental Info</string>
     <string name="view_info">View Info</string>
+
+    <!-- MENU DROPDOWN -->
+    <string name="profile">My Profile</string>
+    <string name="log_out">Log Out</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
