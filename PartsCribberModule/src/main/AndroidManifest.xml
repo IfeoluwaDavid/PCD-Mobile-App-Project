@@ -2,7 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ifeoluwa.partscribber">
 
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
         android:allowBackup="true"
@@ -24,7 +25,6 @@
         <activity android:name=".PartsCribberStudentMenu" />
         <activity android:name=".PartsCribberChangePassword" />
         <activity android:name=".PartsCribberViewEquipment" />
-        <activity android:name=".PartsCribberAddItem" />
         <activity android:name=".PartsCribberSelectTool" />
         <activity android:name=".PartsCribberViewToolData" />
         <activity android:name=".PartsCribberRegisterUser" />

@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,7 +60,6 @@ public class PartsCribberUpdateItem extends AppCompatActivity
 
         intent = getIntent();
         selectedItem = intent.getStringExtra("selectedItem");
-        itemID = "0";
 
         et_itemName = (EditText) findViewById(R.id.item_name);
         et_itemSerialNo = (EditText) findViewById(R.id.serial_number);
@@ -163,8 +163,7 @@ public class PartsCribberUpdateItem extends AppCompatActivity
                         }
                         else
                         {
-                            String method = "update_item";
-                            new UpdateItemInfoBackgroundTasks(this).execute(method,itemID,newItemName,newSerialNo,newQtyTotal,newCategory);
+                            new UpdateItemInfoBackgroundTasks(this).execute();
                         }
                     }
                 }
@@ -282,8 +281,8 @@ public class PartsCribberUpdateItem extends AppCompatActivity
         {
             builder = new AlertDialog.Builder(activity);
             View dialogView = LayoutInflater.from(this.ctx).inflate(R.layout.progress_dialog, null);
-            ((TextView)dialogView.findViewById(R.id.tv_progress_dialog)).setText("Fetching Category Suggestions");
-            loginDialog = builder.setView(dialogView).setCancelable(false).setTitle("Please Wait").show();
+            ((TextView)dialogView.findViewById(R.id.tv_progress_dialog)).setText("Please wait...");
+            loginDialog = builder.setView(dialogView).setCancelable(false).show();
             json_url = "http://partscribdatabase.tech/androidconnect/fetchCategoryData.php";
         }
 
@@ -327,40 +326,66 @@ public class PartsCribberUpdateItem extends AppCompatActivity
         protected void onPostExecute(String result)
         {
             loginDialog.dismiss();
-            jsonstring = result;
-            HashSet<String> arraylistofCategoryObjects = new HashSet<String>();
-
-            try
+            if(TextUtils.isEmpty(result))
             {
-                jsonObject = new JSONObject(jsonstring);
-                jsonArray = jsonObject.getJSONArray("server_response");
-                int count = 0;
-
-                String itemCategory;
-
-                while(count < jsonArray.length())
+                android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+                builder.setMessage("Connection Error.");
+                builder.setCancelable(false);
+                builder.setPositiveButton("Retry", new DialogInterface.OnClickListener()
                 {
-                    JSONObject JO = jsonArray.getJSONObject(count);
-                    itemCategory = JO.getString("category");
-                    arraylistofCategoryObjects.add(itemCategory);
-                    count++;
-                }
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        dialog.dismiss();
+                        new fetchCategoryBackgroundTasks(ctx).execute();
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        dialog.dismiss();
+                    }
+                });
+                android.support.v7.app.AlertDialog alert = builder.create();
+                alert.show();
             }
-            catch (JSONException e)
+            else
             {
-                e.printStackTrace();
-            }
+                jsonstring = result;
+                HashSet<String> arraylistofCategoryObjects = new HashSet<String>();
 
-            categoryArray = new String[arraylistofCategoryObjects.size()];
-            int index = 0;
-            for (String item : arraylistofCategoryObjects)
-            {
-                categoryArray[index] = item;
-                index ++;
+                try
+                {
+                    jsonObject = new JSONObject(jsonstring);
+                    jsonArray = jsonObject.getJSONArray("server_response");
+                    int count = 0;
+
+                    String itemCategory;
+
+                    while(count < jsonArray.length())
+                    {
+                        JSONObject JO = jsonArray.getJSONObject(count);
+                        itemCategory = JO.getString("category");
+                        arraylistofCategoryObjects.add(itemCategory);
+                        count++;
+                    }
+                }
+                catch (JSONException e)
+                {
+                    e.printStackTrace();
+                }
+
+                categoryArray = new String[arraylistofCategoryObjects.size()];
+                int index = 0;
+                for (String item : arraylistofCategoryObjects)
+                {
+                    categoryArray[index] = item;
+                    index ++;
+                }
+                ac_category = (AutoCompleteTextView) findViewById(R.id.category_name);
+                adapter = new ArrayAdapter<String>(ctx,android.R.layout.simple_list_item_1,categoryArray);
+                ac_category.setAdapter(adapter);
             }
-            ac_category = (AutoCompleteTextView) findViewById(R.id.category_name);
-            adapter = new ArrayAdapter<String>(ctx,android.R.layout.simple_list_item_1,categoryArray);
-            ac_category.setAdapter(adapter);
         }
     }
 
@@ -384,8 +409,8 @@ public class PartsCribberUpdateItem extends AppCompatActivity
         {
             builder = new AlertDialog.Builder(activity);
             View dialogView = LayoutInflater.from(this.ctx).inflate(R.layout.progress_dialog, null);
-            ((TextView)dialogView.findViewById(R.id.tv_progress_dialog)).setText("Fetching Item Data");
-            loginDialog = builder.setView(dialogView).setCancelable(false).setTitle("Please Wait").show();
+            ((TextView)dialogView.findViewById(R.id.tv_progress_dialog)).setText("Please wait...");
+            loginDialog = builder.setView(dialogView).setCancelable(false).show();
             json_url = "http://partscribdatabase.tech/androidconnect/fetchSelectedItemData.php";
         }
 
@@ -441,36 +466,61 @@ public class PartsCribberUpdateItem extends AppCompatActivity
         protected void onPostExecute(String result)
         {
             loginDialog.dismiss();
-            jsonstring = result;
-
-            try
+            if(TextUtils.isEmpty(result))
             {
-                jsonObject = new JSONObject(jsonstring);
-                jsonArray = jsonObject.getJSONArray("server_response");
-                JSONObject JO = jsonArray.getJSONObject(0);
-
-                String itemName, serialNo, qtyTotal, itemCategory;
-
-                itemID = JO.getString("item_id");
-                itemName = JO.getString("item_name");
-                serialNo = JO.getString("serial_no");
-                qtyTotal = JO.getString("total_qty");
-                itemCategory = JO.getString("category");
-
-                et_itemName = (EditText) findViewById(R.id.item_name);
-                et_itemSerialNo = (EditText) findViewById(R.id.serial_number);
-                et_qtyTotal = (EditText) findViewById(R.id.total_quantity);
-                ac_category = (AutoCompleteTextView) findViewById(R.id.category_name);
-
-                et_itemName.setText(itemName);
-                et_itemSerialNo.setText(serialNo);
-                et_qtyTotal.setText(qtyTotal);
-                ac_category.setText(itemCategory);
-
+                android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+                builder.setMessage("Connection Error.");
+                builder.setCancelable(false);
+                builder.setPositiveButton("Retry", new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        dialog.dismiss();
+                        new ToolDataBackgroundTasks(ctx).execute();
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        dialog.dismiss();
+                        finish();
+                    }
+                });
+                android.support.v7.app.AlertDialog alert = builder.create();
+                alert.show();
             }
-            catch (JSONException e)
+            else
             {
-                e.printStackTrace();
+                jsonstring = result;
+                try
+                {
+                    jsonObject = new JSONObject(jsonstring);
+                    jsonArray = jsonObject.getJSONArray("server_response");
+                    JSONObject JO = jsonArray.getJSONObject(0);
+
+                    String itemName, serialNo, qtyTotal, itemCategory;
+
+                    itemID = JO.getString("item_id");
+                    itemName = JO.getString("item_name");
+                    serialNo = JO.getString("serial_no");
+                    qtyTotal = JO.getString("total_qty");
+                    itemCategory = JO.getString("category");
+
+                    et_itemName = (EditText) findViewById(R.id.item_name);
+                    et_itemSerialNo = (EditText) findViewById(R.id.serial_number);
+                    et_qtyTotal = (EditText) findViewById(R.id.total_quantity);
+                    ac_category = (AutoCompleteTextView) findViewById(R.id.category_name);
+
+                    et_itemName.setText(itemName);
+                    et_itemSerialNo.setText(serialNo);
+                    et_qtyTotal.setText(qtyTotal);
+                    ac_category.setText(itemCategory);
+                }
+                catch (JSONException e)
+                {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -495,68 +545,59 @@ public class PartsCribberUpdateItem extends AppCompatActivity
         {
             builder = new AlertDialog.Builder(activity);
             View dialogView = LayoutInflater.from(this.ctx).inflate(R.layout.progress_dialog, null);
-            ((TextView)dialogView.findViewById(R.id.tv_progress_dialog)).setText("Connecting to Server");
-            loginDialog = builder.setView(dialogView).setCancelable(false).setTitle("Please Wait").show();
+            ((TextView)dialogView.findViewById(R.id.tv_progress_dialog)).setText("Please wait...");
+            loginDialog = builder.setView(dialogView).setCancelable(false).show();
             json_url = "http://partscribdatabase.tech/androidconnect/updateitem.php";
         }
 
         @Override
         protected String doInBackground(String... params)
         {
-            String method = params[0];
-            if (method.equals("update_item"))
+            try
             {
-                itemID = params[1];
-                String item_name = params[2];
-                String serial_no = params[3];
-                String total_qty = params[4];
-                String category = params[5];
-                try {
-                    URL url = new URL(json_url);
-                    HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-                    httpURLConnection.setRequestMethod("POST");
-                    httpURLConnection.setDoOutput(true);
-                    httpURLConnection.setDoInput(true);
-                    OutputStream os = httpURLConnection.getOutputStream();
-                    BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+                URL url = new URL(json_url);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setDoOutput(true);
+                httpURLConnection.setDoInput(true);
+                OutputStream os = httpURLConnection.getOutputStream();
+                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
 
-                    //Log.d("Debug", "ItemID = "  + itemID);
-                    String data =
-                            URLEncoder.encode("item_id", "UTF-8") + "=" +
-                            URLEncoder.encode(itemID, "UTF-8") + "&" +
-                            URLEncoder.encode("item_name", "UTF-8") + "=" +
-                            URLEncoder.encode(item_name, "UTF-8") + "&" +
-                            URLEncoder.encode("serial_no", "UTF-8") + "=" +
-                            URLEncoder.encode(serial_no, "UTF-8") + "&" +
-                            URLEncoder.encode("total_qty", "UTF-8") + "=" +
-                            URLEncoder.encode(total_qty, "UTF-8") + "&" +
-                            URLEncoder.encode("category", "UTF-8") + "=" +
-                            URLEncoder.encode(category, "UTF-8");
+                String data =
+                        URLEncoder.encode("item_id", "UTF-8") + "=" +
+                        URLEncoder.encode(itemID, "UTF-8") + "&" +
+                        URLEncoder.encode("item_name", "UTF-8") + "=" +
+                        URLEncoder.encode(newItemName, "UTF-8") + "&" +
+                        URLEncoder.encode("serial_no", "UTF-8") + "=" +
+                        URLEncoder.encode(newSerialNo, "UTF-8") + "&" +
+                        URLEncoder.encode("total_qty", "UTF-8") + "=" +
+                        URLEncoder.encode(newQtyTotal, "UTF-8") + "&" +
+                        URLEncoder.encode("category", "UTF-8") + "=" +
+                        URLEncoder.encode(newCategory, "UTF-8");
 
-                    bufferedWriter.write(data);
-                    bufferedWriter.flush();
-                    bufferedWriter.close();
-                    os.close();
-                    InputStream is = httpURLConnection.getInputStream();
-                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is));
-                    StringBuilder stringBuilder = new StringBuilder();
-                    while ((JSON_STRING = bufferedReader.readLine()) != null)
-                    {
-                        stringBuilder.append(JSON_STRING + "\n");
-                    }
-                    bufferedReader.close();
-                    is.close();
-                    httpURLConnection.disconnect();
-                    return stringBuilder.toString().trim();
-                }
-                catch (MalformedURLException e)
+                bufferedWriter.write(data);
+                bufferedWriter.flush();
+                bufferedWriter.close();
+                os.close();
+                InputStream is = httpURLConnection.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is));
+                StringBuilder stringBuilder = new StringBuilder();
+                while ((JSON_STRING = bufferedReader.readLine()) != null)
                 {
-                    e.printStackTrace();
+                    stringBuilder.append(JSON_STRING + "\n");
                 }
-                catch (IOException e)
-                {
-                    e.printStackTrace();
-                }
+                bufferedReader.close();
+                is.close();
+                httpURLConnection.disconnect();
+                return stringBuilder.toString().trim();
+            }
+            catch (MalformedURLException e)
+            {
+                e.printStackTrace();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
             }
             return null;
         }
@@ -571,56 +612,20 @@ public class PartsCribberUpdateItem extends AppCompatActivity
         protected void onPostExecute(String result)
         {
             loginDialog.dismiss();
-            String code = "";
-            String message = "";
-            try
-            {
-                JSONObject jsonObject = new JSONObject(result);
-                JSONArray jsonArray = jsonObject.getJSONArray("server_response");
-                JSONObject JO = jsonArray.getJSONObject(0);
-
-                // Server always responds with this values
-                message = JO.getString("message");
-                code = JO.getString("code");
-
-                if (code.equals("update_true"))
-                {
-                    android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
-                    builder.setTitle("Successfully Added");
-                    builder.setMessage(message);
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
-                    {
-                        public void onClick(DialogInterface dialog, int which)
-                        {
-                            dialog.dismiss();
-                            activity.finish();
-                        }
-                    });
-                    android.support.v7.app.AlertDialog alert = builder.create();
-                    alert.show();
-                }
-                else if(code.equals("update_false"))
-                {
-                    android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
-                    builder.setTitle("Something went wrong!");
-                    builder.setMessage(message);
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
-                    {
-                        public void onClick(DialogInterface dialog, int which)
-                        {
-                            dialog.dismiss();
-                        }
-                    });
-                    android.support.v7.app.AlertDialog alert = builder.create();
-                    alert.show();
-                }
-            }
-            catch (JSONException e)
+            if(TextUtils.isEmpty(result))
             {
                 android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
-                builder.setTitle("Unknown error occured");
-                builder.setMessage("Unknown Error Occurred, Please Try Again.");
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                builder.setMessage("Connection Error.");
+                builder.setCancelable(false);
+                builder.setPositiveButton("Retry", new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        dialog.dismiss();
+                        new UpdateItemInfoBackgroundTasks(ctx).execute();
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
                 {
                     public void onClick(DialogInterface dialog, int which)
                     {
@@ -629,7 +634,69 @@ public class PartsCribberUpdateItem extends AppCompatActivity
                 });
                 android.support.v7.app.AlertDialog alert = builder.create();
                 alert.show();
-                e.printStackTrace();
+            }
+            else
+            {
+                String code = "";
+                String message = "";
+                try
+                {
+                    JSONObject jsonObject = new JSONObject(result);
+                    JSONArray jsonArray = jsonObject.getJSONArray("server_response");
+                    JSONObject JO = jsonArray.getJSONObject(0);
+
+                    // Server always responds with this values
+                    message = JO.getString("message");
+                    code = JO.getString("code");
+
+                    if (code.equals("update_true"))
+                    {
+                        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+                        builder.setTitle("Successfully Added");
+                        builder.setMessage(message);
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                        {
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                dialog.dismiss();
+                                activity.finish();
+                            }
+                        });
+                        android.support.v7.app.AlertDialog alert = builder.create();
+                        alert.show();
+                    }
+                    else if(code.equals("update_false"))
+                    {
+                        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+                        builder.setTitle("Something went wrong!");
+                        builder.setMessage(message);
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                        {
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                dialog.dismiss();
+                            }
+                        });
+                        android.support.v7.app.AlertDialog alert = builder.create();
+                        alert.show();
+                    }
+                }
+                catch (JSONException e)
+                {
+                    android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+                    builder.setTitle("Unknown error occured");
+                    builder.setMessage("Unknown Error Occurred, Please Try Again.");
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                    {
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+                            dialog.dismiss();
+                        }
+                    });
+                    android.support.v7.app.AlertDialog alert = builder.create();
+                    alert.show();
+                    e.printStackTrace();
+                }
             }
         }
     }

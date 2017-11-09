@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,127 +49,15 @@ public class UserInfoBackgroundTasks extends AsyncTask<String, Void, String>
     {
         builder = new AlertDialog.Builder(activity);
         View dialogView = LayoutInflater.from(this.ctx).inflate(R.layout.progress_dialog, null);
-        ((TextView)dialogView.findViewById(R.id.tv_progress_dialog)).setText("Connecting to Server");
-        loginDialog = builder.setView(dialogView).setCancelable(false).setTitle("Please Wait").show();
+        ((TextView)dialogView.findViewById(R.id.tv_progress_dialog)).setText("Please wait...");
+        loginDialog = builder.setView(dialogView).setCancelable(false).show();
     }
 
     @Override
     protected String doInBackground(String... params)
     {
         String method = params[0];
-        if (method.equals("register_student"))
-        {
-            String username = params[1];
-            String password = params[2];
-            String first_name = params[3];
-            String last_name = params[4];
-            String email = params[5];
-            try
-            {
-                String add_url_info = "http://partscribdatabase.tech/androidconnect/registerstudent.php";
-                URL url = new URL(add_url_info);
-                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-                httpURLConnection.setRequestMethod("POST");
-                httpURLConnection.setDoOutput(true);
-                httpURLConnection.setDoInput(true);
-                OutputStream os = httpURLConnection.getOutputStream();
-                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
-
-                String data =
-                        URLEncoder.encode("username", "UTF-8")+"="+
-                        URLEncoder.encode(username, "UTF-8")+"&"+
-                        URLEncoder.encode("password", "UTF-8")+"="+
-                        URLEncoder.encode(password, "UTF-8") + "&" +
-                        URLEncoder.encode("first_name", "UTF-8") + "=" +
-                        URLEncoder.encode(first_name, "UTF-8") + "&" +
-                        URLEncoder.encode("last_name", "UTF-8") + "=" +
-                        URLEncoder.encode(last_name, "UTF-8") + "&" +
-                        URLEncoder.encode("email", "UTF-8") + "=" +
-                        URLEncoder.encode(email, "UTF-8");
-
-                bufferedWriter.write(data);
-                bufferedWriter.flush();
-                bufferedWriter.close();
-                os.close();
-                InputStream is = httpURLConnection.getInputStream();
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is));
-                StringBuilder stringBuilder = new StringBuilder();
-                String line = "";
-                while((line = bufferedReader.readLine())!= null)
-                {
-                    stringBuilder.append(line+"\n");
-                }
-                bufferedReader.close();
-                is.close();
-                httpURLConnection.disconnect();
-                return stringBuilder.toString().trim();
-            }
-            catch (MalformedURLException e)
-            {
-                e.printStackTrace();
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-            }
-        }
-        else if (method.equals("register_admin"))
-        {
-            String username = params[1];
-            String password = params[2];
-            String first_name = params[3];
-            String last_name = params[4];
-            String email = params[5];
-            try
-            {
-                String add_url_info = "http://partscribdatabase.tech/androidconnect/registeradmin.php";
-                URL url = new URL(add_url_info);
-                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-                httpURLConnection.setRequestMethod("POST");
-                httpURLConnection.setDoOutput(true);
-                httpURLConnection.setDoInput(true);
-                OutputStream os = httpURLConnection.getOutputStream();
-                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
-
-                String data =
-                        URLEncoder.encode("username", "UTF-8")+"="+
-                        URLEncoder.encode(username, "UTF-8")+"&"+
-                        URLEncoder.encode("password", "UTF-8")+"="+
-                        URLEncoder.encode(password, "UTF-8") + "&" +
-                        URLEncoder.encode("first_name", "UTF-8") + "=" +
-                        URLEncoder.encode(first_name, "UTF-8") + "&" +
-                        URLEncoder.encode("last_name", "UTF-8") + "=" +
-                        URLEncoder.encode(last_name, "UTF-8") + "&" +
-                        URLEncoder.encode("email", "UTF-8") + "=" +
-                        URLEncoder.encode(email, "UTF-8");
-
-                bufferedWriter.write(data);
-                bufferedWriter.flush();
-                bufferedWriter.close();
-                os.close();
-                InputStream is = httpURLConnection.getInputStream();
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is));
-                StringBuilder stringBuilder = new StringBuilder();
-                String line = "";
-                while((line = bufferedReader.readLine())!= null)
-                {
-                    stringBuilder.append(line+"\n");
-                }
-                bufferedReader.close();
-                is.close();
-                httpURLConnection.disconnect();
-                return stringBuilder.toString().trim();
-            }
-            catch (MalformedURLException e)
-            {
-                e.printStackTrace();
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-            }
-        }
-        else if (method.equals("update_user"))
+        if (method.equals("update_user"))
         {
             String user_id = params[1];
             String username = params[2];
@@ -338,130 +227,139 @@ public class UserInfoBackgroundTasks extends AsyncTask<String, Void, String>
     protected void onPostExecute(String result)
     {
         loginDialog.dismiss();
-        String code = "";
-        String message = "";
-        String user_id = "";
-        String username = "";
-        String firstname = "";
-        String lastname = "";
-        String email = "";
-        String usertype = "";
-        try
+        if(TextUtils.isEmpty(result))
         {
-            JSONObject jsonObject = new JSONObject(result);
-            JSONArray jsonArray = jsonObject.getJSONArray("server_response");
-            JSONObject JO = jsonArray.getJSONObject(0);
-
-            // Server always responds with this values
-            message = JO.getString("message");
-            code = JO.getString("code");
+            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+            builder.setMessage("Connection Error.");
+            builder.setCancelable(false);
+            builder.setPositiveButton("Cancel", new DialogInterface.OnClickListener()
+            {
+                public void onClick(DialogInterface dialog, int which)
+                {
+                    dialog.dismiss();
+                }
+            });
+            android.support.v7.app.AlertDialog alert = builder.create();
+            alert.show();
+        }
+        else
+        {
+            String code = "";
+            String message = "";
+            String user_id = "";
+            String username = "";
+            String firstname = "";
+            String lastname = "";
+            String email = "";
+            String usertype = "";
             try
             {
-                user_id = JO.getString("userid");
-                username = JO.getString("username");
-                firstname = JO.getString("firstname");
-                lastname = JO.getString("lastname");
-                email = JO.getString("email");
-                usertype = JO.getString("usertype");
-            }
-            catch (Exception e)
-            {
-                // Server did not respond  with these values
-            }
+                JSONObject jsonObject = new JSONObject(result);
+                JSONArray jsonArray = jsonObject.getJSONArray("server_response");
+                JSONObject JO = jsonArray.getJSONObject(0);
 
-            if (code.equals("reg_true"))
-            {
-                showDialog("Registration Success",message,code);
-            }
-            else if (code.equals("reg_false"))
-            {
-                showDialog("Registration Failed",message,code);
-            }
-            else if (code.equals("login_true"))
-            {
-                if (usertype.equals("Admin"))
+                // Server always responds with this values
+                message = JO.getString("message");
+                code = JO.getString("code");
+                try
                 {
-                    Toast.makeText(ctx, message, Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(activity, PartsCribberAdminMenu.class);
+                    user_id = JO.getString("userid");
+                    username = JO.getString("username");
+                    firstname = JO.getString("firstname");
+                    lastname = JO.getString("lastname");
+                    email = JO.getString("email");
+                    usertype = JO.getString("usertype");
+                }
+                catch (Exception e)
+                {
+                    // Server did not respond  with these values
+                }
+                if (code.equals("login_true"))
+                {
+                    if (usertype.equals("Admin"))
+                    {
+                        Toast.makeText(ctx, message, Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(activity, PartsCribberAdminMenu.class);
 
+                        int castedUserID = Integer.valueOf(user_id);
+                        User user = new User(castedUserID, username, firstname, lastname, email, usertype);
+                        UserSession.getInstance(ctx).userLogin(user);
+
+                        activity.startActivity(intent);
+                        activity.finish();
+                    }
+                    else
+                    {
+                        Toast.makeText(ctx, message, Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(activity, PartsCribberStudentMenu.class);
+
+                        int castedUserID = Integer.valueOf(user_id);
+                        User user = new User(castedUserID, username, firstname, lastname, email, usertype);
+
+                        UserSession.getInstance(ctx).userLogin(user);
+                        activity.startActivity(intent);
+                        activity.finish();
+                    }
+                }
+                else if (code.equals("login_false"))
+                {
+                    showDialog("Login Failed", message, code);
+                }
+                else if (code.equals("update_true"))
+                {
                     int castedUserID = Integer.valueOf(user_id);
                     User user = new User(castedUserID, username, firstname, lastname, email, usertype);
                     UserSession.getInstance(ctx).userLogin(user);
-
-                    activity.startActivity(intent);
-                    activity.finish();
+                    android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+                    builder.setTitle("Successful Profile Update");
+                    builder.setMessage(message);
+                    builder.setCancelable(false);
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                    {
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+                            dialog.dismiss();
+                            activity.finish();
+                        }
+                    });
+                    android.support.v7.app.AlertDialog alert = builder.create();
+                    alert.show();
+                }
+                else if (code.equals("update_false"))
+                {
+                    showDialog("Update Failed", message, code);
+                }
+                else if (code.equals("changepassword_true"))
+                {
+                    android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+                    builder.setTitle("Changed Password Successfully");
+                    builder.setMessage(message);
+                    builder.setCancelable(false);
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                    {
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+                            dialog.dismiss();
+                            activity.finish();
+                        }
+                    });
+                    android.support.v7.app.AlertDialog alert = builder.create();
+                    alert.show();
+                }
+                else if (code.equals("changepassword_false"))
+                {
+                    showDialog("Sorry! Something went wrong.", message, code);
                 }
                 else
                 {
-                    Toast.makeText(ctx, message, Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(activity, PartsCribberStudentMenu.class);
-
-                    int castedUserID = Integer.valueOf(user_id);
-                    User user = new User(castedUserID, username, firstname, lastname, email, usertype);
-
-                    UserSession.getInstance(ctx).userLogin(user);
-                    activity.startActivity(intent);
-                    activity.finish();
+                    showDialog("Unknown Error Occured", "Unknown Error", "Unknown Error");
                 }
             }
-            else if (code.equals("login_false"))
+            catch (JSONException e)
             {
-                showDialog("Login Failed", message, code);
+                showDialog("Unknown Error Occurred", message, code);
+                e.printStackTrace();
             }
-            else if (code.equals("update_true"))
-            {
-                int castedUserID = Integer.valueOf(user_id);
-                User user = new User(castedUserID, username, firstname, lastname, email, usertype);
-                UserSession.getInstance(ctx).userLogin(user);
-                android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
-                builder.setTitle("Successful Profile Update");
-                builder.setMessage(message);
-                builder.setCancelable(false);
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
-                {
-                    public void onClick(DialogInterface dialog, int which)
-                    {
-                        dialog.dismiss();
-                        activity.finish();
-                    }
-                });
-                android.support.v7.app.AlertDialog alert = builder.create();
-                alert.show();
-            }
-            else if (code.equals("update_false"))
-            {
-                showDialog("Update Failed", message, code);
-            }
-            else if (code.equals("changepassword_true"))
-            {
-                android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
-                builder.setTitle("Changed Password Successfully");
-                builder.setMessage(message);
-                builder.setCancelable(false);
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
-                {
-                    public void onClick(DialogInterface dialog, int which)
-                    {
-                        dialog.dismiss();
-                        activity.finish();
-                    }
-                });
-                android.support.v7.app.AlertDialog alert = builder.create();
-                alert.show();
-            }
-            else if (code.equals("changepassword_false"))
-            {
-                showDialog("Sorry! Something went wrong.", message, code);
-            }
-            else
-            {
-                showDialog("Unknown Error Occured", "Unknown Error", "Unknown Error");
-            }
-        }
-        catch (JSONException e)
-        {
-            showDialog("Unknown Error Occurred", message, code);
-            e.printStackTrace();
         }
     }
 
@@ -470,35 +368,7 @@ public class UserInfoBackgroundTasks extends AsyncTask<String, Void, String>
         builder = new AlertDialog.Builder(activity);
         builder.setTitle(title);
         Log.d("Login BG Task", "Server message - " + message + " | Server code - " + code + " | Server title" + title);
-        if (code.equals("reg_true"))
-        {
-            builder.setMessage(message);
-            builder.setCancelable(false);
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
-            {
-                @Override
-                public void onClick(DialogInterface dialog, int which)
-                {
-                    dialog.dismiss();
-                    activity.finish();
-                }
-            });
-            builder.show();
-        }
-        else if (code.equals("reg_false"))
-        {
-            builder.setMessage(message);
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
-            {
-                @Override
-                public void onClick(DialogInterface dialog, int which)
-                {
-                    dialog.dismiss();
-                }
-            });
-            builder.show();
-        }
-        else if (code.equals("login_false"))
+        if (code.equals("login_false"))
         {
             builder.setMessage(message);
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener()

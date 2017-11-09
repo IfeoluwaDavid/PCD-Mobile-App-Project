@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -160,9 +161,9 @@ public class PartsCribberStudentCart extends AppCompatActivity
                 }
                 else
                 {
+                    dialog.dismiss();
                     validNewItemQuantity = newitemQuantity.getText().toString();
                     new alterCartBackgroundTask(this).execute();
-                    dialog.dismiss();
                 }
             }
         }
@@ -314,8 +315,8 @@ public class PartsCribberStudentCart extends AppCompatActivity
         {
             builder = new AlertDialog.Builder(activity);
             View dialogView = LayoutInflater.from(this.ctx).inflate(R.layout.progress_dialog, null);
-            ((TextView)dialogView.findViewById(R.id.tv_progress_dialog)).setText("Fetching Item Data");
-            loginDialog = builder.setView(dialogView).setCancelable(false).setTitle("Please Wait").show();
+            ((TextView)dialogView.findViewById(R.id.tv_progress_dialog)).setText("Please wait...");
+            loginDialog = builder.setView(dialogView).setCancelable(false).show();
             json_url = "http://partscribdatabase.tech/androidconnect/fetchStudentCart.php";
         }
 
@@ -371,30 +372,56 @@ public class PartsCribberStudentCart extends AppCompatActivity
         protected void onPostExecute(String result)
         {
             loginDialog.dismiss();
-            jsonstring = result;
-
-            try
+            if(TextUtils.isEmpty(result))
             {
-                jsonObject = new JSONObject(jsonstring);
-                jsonArray = jsonObject.getJSONArray("server_response");
-                int count = 0;
-
-                String itemName, quantity;
-
-                while(count < jsonArray.length())
+                android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+                builder.setMessage("Connection Error.");
+                builder.setCancelable(false);
+                builder.setPositiveButton("Retry", new DialogInterface.OnClickListener()
                 {
-                    JSONObject JO = jsonArray.getJSONObject(count);
-                    itemName = JO.getString("item_name");
-                    quantity = JO.getString("quantity");
-                    CartItems cartItems = new CartItems(itemName, quantity);
-                    listviewpositions.add(cartItems);
-                    cartItemsAdapter.add(cartItems);
-                    count++;
-                }
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        dialog.dismiss();
+                        new CartInfoBackgroundTasks(ctx).execute();
+                    }
+                });
+                builder.setNegativeButton("Exit", new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        dialog.dismiss();
+                        finish();
+                    }
+                });
+                android.support.v7.app.AlertDialog alert = builder.create();
+                alert.show();
             }
-            catch (JSONException e)
+            else
             {
-                e.printStackTrace();
+                jsonstring = result;
+                try
+                {
+                    jsonObject = new JSONObject(jsonstring);
+                    jsonArray = jsonObject.getJSONArray("server_response");
+                    int count = 0;
+
+                    String itemName, quantity;
+
+                    while(count < jsonArray.length())
+                    {
+                        JSONObject JO = jsonArray.getJSONObject(count);
+                        itemName = JO.getString("item_name");
+                        quantity = JO.getString("quantity");
+                        CartItems cartItems = new CartItems(itemName, quantity);
+                        listviewpositions.add(cartItems);
+                        cartItemsAdapter.add(cartItems);
+                        count++;
+                    }
+                }
+                catch (JSONException e)
+                {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -440,8 +467,8 @@ public class PartsCribberStudentCart extends AppCompatActivity
         {
             builder = new AlertDialog.Builder(activity);
             View dialogView = LayoutInflater.from(this.ctx).inflate(R.layout.progress_dialog, null);
-            ((TextView)dialogView.findViewById(R.id.tv_progress_dialog)).setText("Fetching Item Data");
-            loginDialog = builder.setView(dialogView).setCancelable(false).setTitle("Please Wait").show();
+            ((TextView)dialogView.findViewById(R.id.tv_progress_dialog)).setText("Please wait...");
+            loginDialog = builder.setView(dialogView).setCancelable(false).show();
             json_url = "http://partscribdatabase.tech/androidconnect/fetchSelectedItemData.php";
         }
 
@@ -497,21 +524,46 @@ public class PartsCribberStudentCart extends AppCompatActivity
         protected void onPostExecute(String result)
         {
             loginDialog.dismiss();
-            jsonstring = result;
-
-            try
+            if(TextUtils.isEmpty(result))
             {
-                jsonObject = new JSONObject(jsonstring);
-                jsonArray = jsonObject.getJSONArray("server_response");
-                JSONObject JO = jsonArray.getJSONObject(0);
-
-                String qtyAvailable;
-                qtyAvailable = JO.getString("available_qty");
-                globalSelectedItemAvailableQuantity = qtyAvailable;
+                android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+                builder.setMessage("Connection Error.");
+                builder.setCancelable(false);
+                builder.setPositiveButton("Retry", new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        dialog.dismiss();
+                        new ToolDataBackgroundTasks(ctx).execute();
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        dialog.dismiss();
+                    }
+                });
+                android.support.v7.app.AlertDialog alert = builder.create();
+                alert.show();
             }
-            catch (JSONException e)
+            else
             {
-                e.printStackTrace();
+                jsonstring = result;
+                try
+                {
+                    jsonObject = new JSONObject(jsonstring);
+                    jsonArray = jsonObject.getJSONArray("server_response");
+                    JSONObject JO = jsonArray.getJSONObject(0);
+
+                    String qtyAvailable;
+                    qtyAvailable = JO.getString("available_qty");
+                    globalSelectedItemAvailableQuantity = qtyAvailable;
+                }
+                catch (JSONException e)
+                {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -536,8 +588,8 @@ public class PartsCribberStudentCart extends AppCompatActivity
         {
             builder = new android.app.AlertDialog.Builder(activity);
             View dialogView = LayoutInflater.from(this.ctx).inflate(R.layout.progress_dialog, null);
-            ((TextView)dialogView.findViewById(R.id.tv_progress_dialog)).setText("Loading...");
-            loginDialog = builder.setView(dialogView).setCancelable(false).setTitle("Please Wait").show();
+            ((TextView)dialogView.findViewById(R.id.tv_progress_dialog)).setText("Updating Cart...");
+            loginDialog = builder.setView(dialogView).setCancelable(false).show();
             json_url = "http://partscribdatabase.tech/androidconnect/updateStudentCart.php";
         }
 
@@ -599,74 +651,102 @@ public class PartsCribberStudentCart extends AppCompatActivity
         protected void onPostExecute(String result)
         {
             loginDialog.dismiss();
-            jsonstring = result;
-
-            String code = "";
-            String message = "";
-
-            try
+            if(TextUtils.isEmpty(result))
             {
-                JSONObject jsonObject = new JSONObject(result);
-                JSONArray jsonArray = jsonObject.getJSONArray("server_response");
-                JSONObject JO = jsonArray.getJSONObject(0);
-
-                message = JO.getString("message");
-                code = JO.getString("code");
-
-                if (code.equals("update_true"))
+                android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+                builder.setMessage("Connection Error.");
+                builder.setCancelable(false);
+                builder.setPositiveButton("Retry", new DialogInterface.OnClickListener()
                 {
-                    android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
-                    builder.setMessage("Your changes have been saved to your cart.");
-                    builder.setCancelable(true);
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                    public void onClick(DialogInterface dialog, int which)
                     {
-                        public void onClick(DialogInterface dialog, int which)
-                        {
-                            dialog.dismiss();
-                            recreate();
-                        }
-                    });
-                    android.support.v7.app.AlertDialog alert = builder.create();
-                    alert.show();
-                }
-                else if (code.equals("update_false"))
+                        dialog.dismiss();
+                        new alterCartBackgroundTask(ctx).execute();
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
                 {
-                    android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
-                    builder.setTitle("Something went wrong");
-                    builder.setMessage(message);
-                    builder.setCancelable(false);
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                    public void onClick(DialogInterface dialog, int which)
                     {
-                        public void onClick(DialogInterface dialog, int which)
-                        {
-                            dialog.dismiss();
-                            optionsPrompt();
-                        }
-                    });
-                    android.support.v7.app.AlertDialog alert = builder.create();
-                    alert.show();
-                }
-                else
-                {
-                    android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
-                    builder.setTitle("Non-server side problem ");
-                    builder.setMessage("Unknown application error occurred, Please Try Again.");
-                    builder.setCancelable(false);
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
-                    {
-                        public void onClick(DialogInterface dialog, int which)
-                        {
-                            dialog.dismiss();
-                            optionsPrompt();
-                        }
-                    });
-                    android.support.v7.app.AlertDialog alert = builder.create();
-                    alert.show();
-                }
+                        dialog.dismiss();
+                    }
+                });
+                android.support.v7.app.AlertDialog alert = builder.create();
+                alert.show();
             }
-            catch (JSONException e)
+            else
             {
-                e.printStackTrace();
+                jsonstring = result;
+                String code = "";
+                String message = "";
+
+                try
+                {
+                    JSONObject jsonObject = new JSONObject(result);
+                    JSONArray jsonArray = jsonObject.getJSONArray("server_response");
+                    JSONObject JO = jsonArray.getJSONObject(0);
+
+                    message = JO.getString("message");
+                    code = JO.getString("code");
+
+                    if (code.equals("update_true"))
+                    {
+                        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+                        builder.setMessage("Your changes have been saved to your cart.");
+                        builder.setCancelable(true);
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                        {
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                dialog.dismiss();
+                                listviewpositions.clear();
+                                cartItemsAdapter.clearAdapter();
+                                new CartInfoBackgroundTasks(ctx).execute();
+                                //recreate();
+                            }
+                        });
+                        android.support.v7.app.AlertDialog alert = builder.create();
+                        alert.show();
+                    }
+                    else if (code.equals("update_false"))
+                    {
+                        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+                        builder.setTitle("Something went wrong");
+                        builder.setMessage(message);
+                        builder.setCancelable(false);
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                        {
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                dialog.dismiss();
+                                optionsPrompt();
+                            }
+                        });
+                        android.support.v7.app.AlertDialog alert = builder.create();
+                        alert.show();
+                    }
+                    else
+                    {
+                        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+                        builder.setTitle("Non-server side problem ");
+                        builder.setMessage("Unknown application error occurred, Please Try Again.");
+                        builder.setCancelable(false);
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                        {
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                dialog.dismiss();
+                                optionsPrompt();
+                            }
+                        });
+                        android.support.v7.app.AlertDialog alert = builder.create();
+                        alert.show();
+                    }
+                }
+                catch (JSONException e)
+                {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -689,8 +769,8 @@ public class PartsCribberStudentCart extends AppCompatActivity
         {
             builder = new android.app.AlertDialog.Builder(activity);
             View dialogView = LayoutInflater.from(ctx).inflate(R.layout.progress_dialog, null);
-            ((TextView)dialogView.findViewById(R.id.tv_progress_dialog)).setText("Approving...");
-            approveCartDialog = builder.setView(dialogView).setCancelable(false).setTitle("Please Wait").show();
+            ((TextView)dialogView.findViewById(R.id.tv_progress_dialog)).setText("Please wait...");
+            approveCartDialog = builder.setView(dialogView).setCancelable(false).show();
             json_url = "http://partscribdatabase.tech/androidconnect/approvecart.php";
         }
 
@@ -746,73 +826,98 @@ public class PartsCribberStudentCart extends AppCompatActivity
         protected void onPostExecute(String result)
         {
             approveCartDialog.dismiss();
-            jsonstring = result;
-
-            String code = "";
-            String message = "";
-
-            try
+            if(TextUtils.isEmpty(result))
             {
-                JSONObject jsonObject = new JSONObject(result);
-                JSONArray jsonArray = jsonObject.getJSONArray("server_response");
-                JSONObject JO = jsonArray.getJSONObject(0);
-
-                message = JO.getString("message");
-                code = JO.getString("code");
-
-                if (code.equals("cart_approved"))
+                android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+                builder.setMessage("Connection Error.");
+                builder.setCancelable(false);
+                builder.setPositiveButton("Retry", new DialogInterface.OnClickListener()
                 {
-                    android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
-                    builder.setTitle("Done!");
-                    builder.setMessage(message);
-                    builder.setCancelable(false);
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                    public void onClick(DialogInterface dialog, int which)
                     {
-                        public void onClick(DialogInterface dialog, int which)
-                        {
-                            dialog.dismiss();
-                            recreate();
-                        }
-                    });
-                    android.support.v7.app.AlertDialog alert = builder.create();
-                    alert.show();
-                }
-                else if (code.equals("cart_disapproved"))
+                        dialog.dismiss();
+                        new ApproveCartBackgroundTasks(ctx).execute();
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
                 {
-                    android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
-                    builder.setTitle("Something went wrong");
-                    builder.setMessage(message);
-                    builder.setCancelable(false);
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                    public void onClick(DialogInterface dialog, int which)
                     {
-                        public void onClick(DialogInterface dialog, int which)
-                        {
-                            dialog.dismiss();
-                        }
-                    });
-                    android.support.v7.app.AlertDialog alert = builder.create();
-                    alert.show();
-                }
-                else
-                {
-                    android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
-                    builder.setTitle("Non-server side problem ");
-                    builder.setMessage("Unknown application error occurred, Please Try Again.");
-                    builder.setCancelable(false);
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
-                    {
-                        public void onClick(DialogInterface dialog, int which)
-                        {
-                            dialog.dismiss();
-                        }
-                    });
-                    android.support.v7.app.AlertDialog alert = builder.create();
-                    alert.show();
-                }
+                        dialog.dismiss();
+                    }
+                });
+                android.support.v7.app.AlertDialog alert = builder.create();
+                alert.show();
             }
-            catch (JSONException e)
+            else
             {
-                e.printStackTrace();
+                jsonstring = result;
+                String code = "";
+                String message = "";
+
+                try
+                {
+                    JSONObject jsonObject = new JSONObject(result);
+                    JSONArray jsonArray = jsonObject.getJSONArray("server_response");
+                    JSONObject JO = jsonArray.getJSONObject(0);
+
+                    message = JO.getString("message");
+                    code = JO.getString("code");
+
+                    if (code.equals("cart_approved"))
+                    {
+                        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+                        builder.setTitle("Done!");
+                        builder.setMessage(message);
+                        builder.setCancelable(false);
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                        {
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                dialog.dismiss();
+                                recreate();
+                            }
+                        });
+                        android.support.v7.app.AlertDialog alert = builder.create();
+                        alert.show();
+                    }
+                    else if (code.equals("cart_disapproved"))
+                    {
+                        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+                        builder.setTitle("Something went wrong");
+                        builder.setMessage(message);
+                        builder.setCancelable(false);
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                        {
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                dialog.dismiss();
+                            }
+                        });
+                        android.support.v7.app.AlertDialog alert = builder.create();
+                        alert.show();
+                    }
+                    else
+                    {
+                        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+                        builder.setTitle("Non-server side problem ");
+                        builder.setMessage("Unknown application error occurred, Please Try Again.");
+                        builder.setCancelable(false);
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                        {
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                dialog.dismiss();
+                            }
+                        });
+                        android.support.v7.app.AlertDialog alert = builder.create();
+                        alert.show();
+                    }
+                }
+                catch (JSONException e)
+                {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -835,8 +940,8 @@ public class PartsCribberStudentCart extends AppCompatActivity
         {
             builder = new android.app.AlertDialog.Builder(activity);
             View dialogView = LayoutInflater.from(ctx).inflate(R.layout.progress_dialog, null);
-            ((TextView)dialogView.findViewById(R.id.tv_progress_dialog)).setText("Approving...");
-            approveCartDialog = builder.setView(dialogView).setCancelable(false).setTitle("Please Wait").show();
+            ((TextView)dialogView.findViewById(R.id.tv_progress_dialog)).setText("Clearing Cart...");
+            approveCartDialog = builder.setView(dialogView).setCancelable(false).show();
             json_url = "http://partscribdatabase.tech/androidconnect/clearcart.php";
         }
 
@@ -892,73 +997,98 @@ public class PartsCribberStudentCart extends AppCompatActivity
         protected void onPostExecute(String result)
         {
             approveCartDialog.dismiss();
-            jsonstring = result;
-
-            String code = "";
-            String message = "";
-
-            try
+            if(TextUtils.isEmpty(result))
             {
-                JSONObject jsonObject = new JSONObject(result);
-                JSONArray jsonArray = jsonObject.getJSONArray("server_response");
-                JSONObject JO = jsonArray.getJSONObject(0);
-
-                message = JO.getString("message");
-                code = JO.getString("code");
-
-                if (code.equals("cart_cleared"))
+                android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+                builder.setMessage("Connection Error.");
+                builder.setCancelable(false);
+                builder.setPositiveButton("Retry", new DialogInterface.OnClickListener()
                 {
-                    android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
-                    builder.setTitle("Done!");
-                    builder.setMessage(message);
-                    builder.setCancelable(false);
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                    public void onClick(DialogInterface dialog, int which)
                     {
-                        public void onClick(DialogInterface dialog, int which)
-                        {
-                            dialog.dismiss();
-                            recreate();
-                        }
-                    });
-                    android.support.v7.app.AlertDialog alert = builder.create();
-                    alert.show();
-                }
-                else if (code.equals("cart_not_cleared"))
+                        dialog.dismiss();
+                        new ClearCartBackgroundTasks(ctx).execute();
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
                 {
-                    android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
-                    builder.setTitle("Something went wrong");
-                    builder.setMessage(message);
-                    builder.setCancelable(false);
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                    public void onClick(DialogInterface dialog, int which)
                     {
-                        public void onClick(DialogInterface dialog, int which)
-                        {
-                            dialog.dismiss();
-                        }
-                    });
-                    android.support.v7.app.AlertDialog alert = builder.create();
-                    alert.show();
-                }
-                else
-                {
-                    android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
-                    builder.setTitle("Non-server side problem ");
-                    builder.setMessage("Unknown application error occurred, Please Try Again.");
-                    builder.setCancelable(false);
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
-                    {
-                        public void onClick(DialogInterface dialog, int which)
-                        {
-                            dialog.dismiss();
-                        }
-                    });
-                    android.support.v7.app.AlertDialog alert = builder.create();
-                    alert.show();
-                }
+                        dialog.dismiss();
+                    }
+                });
+                android.support.v7.app.AlertDialog alert = builder.create();
+                alert.show();
             }
-            catch (JSONException e)
+            else
             {
-                e.printStackTrace();
+                jsonstring = result;
+                String code = "";
+                String message = "";
+
+                try
+                {
+                    JSONObject jsonObject = new JSONObject(result);
+                    JSONArray jsonArray = jsonObject.getJSONArray("server_response");
+                    JSONObject JO = jsonArray.getJSONObject(0);
+
+                    message = JO.getString("message");
+                    code = JO.getString("code");
+
+                    if (code.equals("cart_cleared"))
+                    {
+                        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+                        builder.setTitle("Done!");
+                        builder.setMessage(message);
+                        builder.setCancelable(false);
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                        {
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                dialog.dismiss();
+                                recreate();
+                            }
+                        });
+                        android.support.v7.app.AlertDialog alert = builder.create();
+                        alert.show();
+                    }
+                    else if (code.equals("cart_not_cleared"))
+                    {
+                        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+                        builder.setTitle("Something went wrong");
+                        builder.setMessage(message);
+                        builder.setCancelable(false);
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                        {
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                dialog.dismiss();
+                            }
+                        });
+                        android.support.v7.app.AlertDialog alert = builder.create();
+                        alert.show();
+                    }
+                    else
+                    {
+                        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+                        builder.setTitle("Non-server side problem ");
+                        builder.setMessage("Unknown application error occurred, Please Try Again.");
+                        builder.setCancelable(false);
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                        {
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                dialog.dismiss();
+                            }
+                        });
+                        android.support.v7.app.AlertDialog alert = builder.create();
+                        alert.show();
+                    }
+                }
+                catch (JSONException e)
+                {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -981,8 +1111,8 @@ public class PartsCribberStudentCart extends AppCompatActivity
         {
             builder = new android.app.AlertDialog.Builder(activity);
             View dialogView = LayoutInflater.from(ctx).inflate(R.layout.progress_dialog, null);
-            ((TextView)dialogView.findViewById(R.id.tv_progress_dialog)).setText("Approving...");
-            approveCartDialog = builder.setView(dialogView).setCancelable(false).setTitle("Please Wait").show();
+            ((TextView)dialogView.findViewById(R.id.tv_progress_dialog)).setText("Deleting item...");
+            approveCartDialog = builder.setView(dialogView).setCancelable(false).show();
             json_url = "http://partscribdatabase.tech/androidconnect/deleteCartItem.php";
         }
 
@@ -1042,72 +1172,96 @@ public class PartsCribberStudentCart extends AppCompatActivity
         protected void onPostExecute(String result)
         {
             approveCartDialog.dismiss();
-            jsonstring = result;
-
-            String code = "";
-            String message = "";
-
-            try
+            if(TextUtils.isEmpty(result))
             {
-                JSONObject jsonObject = new JSONObject(result);
-                JSONArray jsonArray = jsonObject.getJSONArray("server_response");
-                JSONObject JO = jsonArray.getJSONObject(0);
-
-                message = JO.getString("message");
-                code = JO.getString("code");
-
-                if (code.equals("item_deleted"))
+                android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+                builder.setMessage("Connection Error.");
+                builder.setCancelable(false);
+                builder.setPositiveButton("Retry", new DialogInterface.OnClickListener()
                 {
-                    android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
-                    builder.setTitle("Done!");
-                    builder.setMessage(message);
-                    builder.setCancelable(false);
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                    public void onClick(DialogInterface dialog, int which)
                     {
-                        public void onClick(DialogInterface dialog, int which)
-                        {
-                            dialog.dismiss();
-                            recreate();
-                        }
-                    });
-                    android.support.v7.app.AlertDialog alert = builder.create();
-                    alert.show();
-                }
-                else if (code.equals("item_not_deleted"))
+                        dialog.dismiss();
+                        new DeleteItemBackgroundTask(ctx).execute();
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
                 {
-                    android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
-                    builder.setMessage(message);
-                    builder.setCancelable(false);
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                    public void onClick(DialogInterface dialog, int which)
                     {
-                        public void onClick(DialogInterface dialog, int which)
-                        {
-                            dialog.dismiss();
-                        }
-                    });
-                    android.support.v7.app.AlertDialog alert = builder.create();
-                    alert.show();
-                }
-                else
-                {
-                    android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
-                    builder.setTitle("Non-server side problem ");
-                    builder.setMessage("Unknown application error occurred, Please Try Again.");
-                    builder.setCancelable(false);
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
-                    {
-                        public void onClick(DialogInterface dialog, int which)
-                        {
-                            dialog.dismiss();
-                        }
-                    });
-                    android.support.v7.app.AlertDialog alert = builder.create();
-                    alert.show();
-                }
+                        dialog.dismiss();
+                    }
+                });
+                android.support.v7.app.AlertDialog alert = builder.create();
+                alert.show();
             }
-            catch (JSONException e)
+            else
             {
-                e.printStackTrace();
+                jsonstring = result;
+                String code = "";
+                String message = "";
+                try
+                {
+                    JSONObject jsonObject = new JSONObject(result);
+                    JSONArray jsonArray = jsonObject.getJSONArray("server_response");
+                    JSONObject JO = jsonArray.getJSONObject(0);
+
+                    message = JO.getString("message");
+                    code = JO.getString("code");
+
+                    if (code.equals("item_deleted"))
+                    {
+                        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+                        builder.setTitle("Done!");
+                        builder.setMessage(message);
+                        builder.setCancelable(false);
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                        {
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                dialog.dismiss();
+                                recreate();
+                            }
+                        });
+                        android.support.v7.app.AlertDialog alert = builder.create();
+                        alert.show();
+                    }
+                    else if (code.equals("item_not_deleted"))
+                    {
+                        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+                        builder.setMessage(message);
+                        builder.setCancelable(false);
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                        {
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                dialog.dismiss();
+                            }
+                        });
+                        android.support.v7.app.AlertDialog alert = builder.create();
+                        alert.show();
+                    }
+                    else
+                    {
+                        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+                        builder.setTitle("Non-server side problem ");
+                        builder.setMessage("Unknown application error occurred, Please Try Again.");
+                        builder.setCancelable(false);
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                        {
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                dialog.dismiss();
+                            }
+                        });
+                        android.support.v7.app.AlertDialog alert = builder.create();
+                        alert.show();
+                    }
+                }
+                catch (JSONException e)
+                {
+                    e.printStackTrace();
+                }
             }
         }
     }

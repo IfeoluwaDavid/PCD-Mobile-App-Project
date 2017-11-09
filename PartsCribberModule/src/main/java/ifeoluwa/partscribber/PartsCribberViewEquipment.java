@@ -12,6 +12,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -76,6 +77,7 @@ implements PCViewAllToolsFragment.PCViewAllToolsFragmentInterface, PCSelectCateg
 
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
+
     }
 
     @Override
@@ -96,6 +98,20 @@ implements PCViewAllToolsFragment.PCViewAllToolsFragmentInterface, PCSelectCateg
 
     public void addItem(View view)
     {
+        mBuilder = new AlertDialog.Builder(this);
+        mView = getLayoutInflater().inflate(R.layout.addequipment_alertdialog, null);
+
+        mBuilder.setCancelable(false);
+        mBuilder.setView(mView);
+
+        dialog = mBuilder.create();
+        dialog.show();
+
+        et_itemname = (EditText) mView.findViewById(R.id.item_name_value);
+        et_serialno = (EditText) mView.findViewById(R.id.serial_no_value);
+        et_stockquantity = (EditText) mView.findViewById(R.id.quantity_value);
+        ac_category = (AutoCompleteTextView) mView.findViewById(R.id.category_value);
+
         new fetchCategoryBackgroundTasks(this).execute();
     }
 
@@ -192,9 +208,8 @@ implements PCViewAllToolsFragment.PCViewAllToolsFragmentInterface, PCSelectCateg
                         }
                         else
                         {
-                            dialog.dismiss();
                             String method = "update_inventory";
-                            new UpdateItemInfoBackgroundTasks(this).execute(method,item_name,serial_no,total_qty,category);
+                            new AddNewItemBackgroundTasks(this).execute(method,item_name,serial_no,total_qty,category);
                         }
                     }
                 }
@@ -313,8 +328,8 @@ implements PCViewAllToolsFragment.PCViewAllToolsFragmentInterface, PCSelectCateg
         {
             builder = new AlertDialog.Builder(activity);
             View dialogView = LayoutInflater.from(this.ctx).inflate(R.layout.progress_dialog, null);
-            ((TextView)dialogView.findViewById(R.id.tv_progress_dialog)).setText("Fetching Category Suggestions");
-            loginDialog = builder.setView(dialogView).setCancelable(false).setTitle("Please Wait").show();
+            ((TextView)dialogView.findViewById(R.id.tv_progress_dialog)).setText("Please wait...");
+            loginDialog = builder.setView(dialogView).setCancelable(false).show();
             json_url = "http://partscribdatabase.tech/androidconnect/fetchCategoryData.php";
         }
 
@@ -358,58 +373,70 @@ implements PCViewAllToolsFragment.PCViewAllToolsFragmentInterface, PCSelectCateg
         protected void onPostExecute(String result)
         {
             loginDialog.dismiss();
-            jsonstring = result;
-            HashSet<String> arraylistofCategoryObjects = new HashSet<String>();
-
-            try
+            if(TextUtils.isEmpty(result))
             {
-                jsonObject = new JSONObject(jsonstring);
-                jsonArray = jsonObject.getJSONArray("server_response");
-                int count = 0;
-
-                String itemCategory;
-
-                while(count < jsonArray.length())
+                android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+                builder.setMessage("Connection Error.");
+                builder.setCancelable(false);
+                builder.setPositiveButton("Retry", new DialogInterface.OnClickListener()
                 {
-                    JSONObject JO = jsonArray.getJSONObject(count);
-                    itemCategory = JO.getString("category");
-                    arraylistofCategoryObjects.add(itemCategory);
-                    count++;
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        dialog.dismiss();
+                        new fetchCategoryBackgroundTasks(ctx).execute();
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        dialog.dismiss();
+                    }
+                });
+                android.support.v7.app.AlertDialog alert = builder.create();
+                alert.show();
+            }
+            else
+            {
+                jsonstring = result;
+                HashSet<String> arraylistofCategoryObjects = new HashSet<String>();
+
+                try
+                {
+                    jsonObject = new JSONObject(jsonstring);
+                    jsonArray = jsonObject.getJSONArray("server_response");
+                    int count = 0;
+
+                    String itemCategory;
+
+                    while(count < jsonArray.length())
+                    {
+                        JSONObject JO = jsonArray.getJSONObject(count);
+                        itemCategory = JO.getString("category");
+                        arraylistofCategoryObjects.add(itemCategory);
+                        count++;
+                    }
                 }
+                catch (JSONException e)
+                {
+                    e.printStackTrace();
+                }
+
+                categoryArray = new String[arraylistofCategoryObjects.size()];
+                int index = 0;
+                for (String item : arraylistofCategoryObjects)
+                {
+                    categoryArray[index] = item;
+                    index ++;
+                }
+
+                adapter = new ArrayAdapter<String>(ctx,android.R.layout.simple_list_item_1,categoryArray);
+                ac_category.setAdapter(adapter);
             }
-            catch (JSONException e)
-            {
-                e.printStackTrace();
-            }
-
-            categoryArray = new String[arraylistofCategoryObjects.size()];
-            int index = 0;
-            for (String item : arraylistofCategoryObjects)
-            {
-                categoryArray[index] = item;
-                index ++;
-            }
-
-            mBuilder = new AlertDialog.Builder(ctx);
-            mView = getLayoutInflater().inflate(R.layout.addequipment_alertdialog, null);
-
-            mBuilder.setCancelable(false);
-            mBuilder.setView(mView);
-
-            dialog = mBuilder.create();
-            dialog.show();
-
-            et_itemname = (EditText) mView.findViewById(R.id.item_name_value);
-            et_serialno = (EditText) mView.findViewById(R.id.serial_no_value);
-            et_stockquantity = (EditText) mView.findViewById(R.id.quantity_value);
-            ac_category = (AutoCompleteTextView) mView.findViewById(R.id.category_value);
-
-            adapter = new ArrayAdapter<String>(ctx,android.R.layout.simple_list_item_1,categoryArray);
-            ac_category.setAdapter(adapter);
         }
     }
 
-    class UpdateItemInfoBackgroundTasks extends AsyncTask<String, Void, String>
+    class AddNewItemBackgroundTasks extends AsyncTask<String, Void, String>
     {
         String json_url;
         String JSON_STRING;
@@ -418,7 +445,7 @@ implements PCViewAllToolsFragment.PCViewAllToolsFragmentInterface, PCSelectCateg
         private Activity activity;
         private AlertDialog loginDialog;
 
-        public UpdateItemInfoBackgroundTasks(Context ctx)
+        public AddNewItemBackgroundTasks(Context ctx)
         {
             this.ctx = ctx;
             activity = (Activity)ctx;
@@ -429,8 +456,8 @@ implements PCViewAllToolsFragment.PCViewAllToolsFragmentInterface, PCSelectCateg
         {
             builder = new AlertDialog.Builder(activity);
             View dialogView = LayoutInflater.from(this.ctx).inflate(R.layout.progress_dialog, null);
-            ((TextView)dialogView.findViewById(R.id.tv_progress_dialog)).setText("Connecting to Server");
-            loginDialog = builder.setView(dialogView).setCancelable(false).setTitle("Please Wait").show();
+            ((TextView)dialogView.findViewById(R.id.tv_progress_dialog)).setText("Please wait...");
+            loginDialog = builder.setView(dialogView).setCancelable(false).show();
             json_url = "http://partscribdatabase.tech/androidconnect/updateinventory.php";
         }
 
@@ -501,56 +528,20 @@ implements PCViewAllToolsFragment.PCViewAllToolsFragmentInterface, PCSelectCateg
         protected void onPostExecute(String result)
         {
             loginDialog.dismiss();
-            String code = "";
-            String message = "";
-            try
-            {
-                JSONObject jsonObject = new JSONObject(result);
-                JSONArray jsonArray = jsonObject.getJSONArray("server_response");
-                JSONObject JO = jsonArray.getJSONObject(0);
-
-                // Server always responds with this values
-                message = JO.getString("message");
-                code = JO.getString("code");
-
-                if (code.equals("update_true"))
-                {
-                    android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
-                    builder.setTitle("Successfully Added");
-                    builder.setMessage(message);
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
-                    {
-                        public void onClick(DialogInterface dialog, int which)
-                        {
-                            dialog.dismiss();
-                            recreate();
-                        }
-                    });
-                    android.support.v7.app.AlertDialog alert = builder.create();
-                    alert.show();
-                }
-                else if(code.equals("update_false"))
-                {
-                    android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
-                    builder.setTitle("Something went wrong!");
-                    builder.setMessage(message);
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
-                    {
-                        public void onClick(DialogInterface dialog, int which)
-                        {
-                            dialog.dismiss();
-                        }
-                    });
-                    android.support.v7.app.AlertDialog alert = builder.create();
-                    alert.show();
-                }
-            }
-            catch (JSONException e)
+            if(TextUtils.isEmpty(result))
             {
                 android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
-                builder.setTitle("Unknown error occured");
-                builder.setMessage("Unknown Error Occurred, Please Try Again.");
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                builder.setMessage("Connection Error.");
+                builder.setCancelable(false);
+                builder.setPositiveButton("Retry", new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        dialog.dismiss();
+                        new AddNewItemBackgroundTasks(ctx).execute();
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
                 {
                     public void onClick(DialogInterface dialog, int which)
                     {
@@ -559,7 +550,69 @@ implements PCViewAllToolsFragment.PCViewAllToolsFragmentInterface, PCSelectCateg
                 });
                 android.support.v7.app.AlertDialog alert = builder.create();
                 alert.show();
-                e.printStackTrace();
+            }
+            else
+            {
+                String code = "";
+                String message = "";
+                try
+                {
+                    JSONObject jsonObject = new JSONObject(result);
+                    JSONArray jsonArray = jsonObject.getJSONArray("server_response");
+                    JSONObject JO = jsonArray.getJSONObject(0);
+
+                    // Server always responds with this values
+                    message = JO.getString("message");
+                    code = JO.getString("code");
+
+                    if (code.equals("update_true"))
+                    {
+                        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+                        builder.setTitle("Successfully Added");
+                        builder.setMessage(message);
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                        {
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                dialog.dismiss();
+                                recreate();
+                            }
+                        });
+                        android.support.v7.app.AlertDialog alert = builder.create();
+                        alert.show();
+                    }
+                    else if(code.equals("update_false"))
+                    {
+                        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+                        builder.setTitle("Something went wrong!");
+                        builder.setMessage(message);
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                        {
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                dialog.dismiss();
+                            }
+                        });
+                        android.support.v7.app.AlertDialog alert = builder.create();
+                        alert.show();
+                    }
+                }
+                catch (JSONException e)
+                {
+                    android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+                    builder.setTitle("Unknown error occured");
+                    builder.setMessage("Unknown Error Occurred, Please Try Again.");
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                    {
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+                            dialog.dismiss();
+                        }
+                    });
+                    android.support.v7.app.AlertDialog alert = builder.create();
+                    alert.show();
+                    e.printStackTrace();
+                }
             }
         }
     }

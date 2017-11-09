@@ -4,11 +4,13 @@ package ifeoluwa.partscribber;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -98,8 +100,8 @@ public class PCViewAllUsers extends Fragment
         {
             builder = new AlertDialog.Builder(activity);
             View dialogView = LayoutInflater.from(this.ctx).inflate(R.layout.progress_dialog, null);
-            ((TextView)dialogView.findViewById(R.id.tv_progress_dialog)).setText("Fetching Server Data");
-            loginDialog = builder.setView(dialogView).setCancelable(false).setTitle("Please Wait").show();
+            ((TextView)dialogView.findViewById(R.id.tv_progress_dialog)).setText("Please wait...");
+            loginDialog = builder.setView(dialogView).setCancelable(false).show();
             json_url = "http://partscribdatabase.tech/androidconnect/fetchAllStudents.php";
         }
 
@@ -143,82 +145,97 @@ public class PCViewAllUsers extends Fragment
         protected void onPostExecute(String result)
         {
             loginDialog.dismiss();
-            jsonstring = result;
-            count = 0;
-
-            listView =(ListView) finder.findViewById(R.id.listview);
-            searchView = (SearchView) finder.findViewById(R.id.searchView);
-            searchView.setIconified(false);
-            searchView.clearFocus();
-            initList();
-
-            try
+            if(TextUtils.isEmpty(result))
             {
-                jsonObject = new JSONObject(jsonstring);
-                jsonArray = jsonObject.getJSONArray("server_response");
-
-                String username;
-
-                while(count < jsonArray.length())
+                android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+                builder.setMessage("Connection Error.");
+                builder.setCancelable(false);
+                builder.setPositiveButton("Retry", new DialogInterface.OnClickListener()
                 {
-                    JSONObject JO = jsonArray.getJSONObject(count);
-                    username = JO.getString("username");
-                    arraylistofStudentObjects.add(username);
-                    adapter.add(username.toUpperCase());
-                    count++;
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        dialog.dismiss();
+                        new fetchAllStudentsBackgroundTasks(ctx).execute();
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        dialog.dismiss();
+                    }
+                });
+                android.support.v7.app.AlertDialog alert = builder.create();
+                alert.show();
+            }
+            else
+            {
+                jsonstring = result;
+                count = 0;
+
+                listView =(ListView) finder.findViewById(R.id.listview);
+                searchView = (SearchView) finder.findViewById(R.id.searchView);
+                searchView.setIconified(false);
+                searchView.clearFocus();
+
+                try
+                {
+                    jsonObject = new JSONObject(jsonstring);
+                    jsonArray = jsonObject.getJSONArray("server_response");
+
+                    String username;
+
+                    while(count < jsonArray.length())
+                    {
+                        JSONObject JO = jsonArray.getJSONObject(count);
+                        username = JO.getString("username");
+                        arraylistofStudentObjects.add(username.toUpperCase());
+                        count++;
+                    }
+
+                    adapter=new ArrayAdapter<String>(ctx, R.layout.viewalltools_rowlayout,R.id.viewalltools_itemnametext, arraylistofStudentObjects);
+                    listView.setAdapter(adapter);
+
+                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+                    {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+                        {
+                            selectedID = parent.getItemAtPosition(position).toString();
+                            new UserInfoBackgroundTasks(getActivity()).execute();
+                        }
+                    });
+
+                    searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener()
+                    {
+                        @Override
+                        public boolean onQueryTextSubmit(String query)
+                        {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onQueryTextChange(String newText)
+                        {
+                            adapter.getFilter().filter(newText);
+                            return false;
+                        }
+                    });
+
+                    searchView.setOnSearchClickListener(new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View v)
+                        {
+                            searchView.onActionViewExpanded();
+                        }
+                    });
                 }
-
-                listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+                catch (JSONException e)
                 {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-                    {
-                        selectedID = parent.getItemAtPosition(position).toString();
-                        new UserInfoBackgroundTasks(getActivity()).execute();
-                    }
-                });
-
-                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener()
-                {
-                    @Override
-                    public boolean onQueryTextSubmit(String query)
-                    {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onQueryTextChange(String newText)
-                    {
-                        adapter.getFilter().filter(newText);
-                        return false;
-                    }
-                });
-
-                searchView.setOnSearchClickListener(new View.OnClickListener()
-                {
-                    @Override
-                    public void onClick(View v)
-                    {
-                        searchView.onActionViewExpanded();
-                    }
-                });
+                    e.printStackTrace();
+                }
             }
-            catch (JSONException e)
-            {
-                e.printStackTrace();
-            }
-        }
-
-        public void initList()
-        {
-            items = new String[arraylistofStudentObjects.size()];
-            for(int i=0; i < arraylistofStudentObjects.size(); i++)
-            {
-                items[i] = arraylistofStudentObjects.get(i);
-            }
-            listItems=new ArrayList<>(Arrays.asList(items));
-            adapter=new ArrayAdapter<String>(ctx, R.layout.viewalltools_rowlayout,R.id.viewalltools_itemnametext, listItems);
-            listView.setAdapter(adapter);
         }
     }
 
@@ -241,8 +258,8 @@ public class PCViewAllUsers extends Fragment
         {
             builder = new android.app.AlertDialog.Builder(activity);
             View dialogView = LayoutInflater.from(this.ctx).inflate(R.layout.progress_dialog, null);
-            ((TextView) dialogView.findViewById(R.id.tv_progress_dialog)).setText("Connecting to Server");
-            loginDialog = builder.setView(dialogView).setCancelable(false).setTitle("Please Wait").show();
+            ((TextView) dialogView.findViewById(R.id.tv_progress_dialog)).setText("Please wait...");
+            loginDialog = builder.setView(dialogView).setCancelable(false).show();
             json_url = "http://partscribdatabase.tech/androidconnect/fetchStudentProfile.php";
         }
 
@@ -297,72 +314,94 @@ public class PCViewAllUsers extends Fragment
         protected void onPostExecute(String result)
         {
             loginDialog.dismiss();
-            jsonstring = result;
-
-            try
+            if(TextUtils.isEmpty(result))
             {
-                jsonObject = new JSONObject(jsonstring);
-                jsonArray = jsonObject.getJSONArray("server_response");
-                JSONObject JO = jsonArray.getJSONObject(0);
-
-                fname = JO.getString("firstname");
-                lname = JO.getString("lastname");
-                possessionqty = JO.getString("possessionQty");
-                email = JO.getString("email");
-                status = JO.getString("status");
-
-                mBuilder = new android.support.v7.app.AlertDialog.Builder(activity);
-
-                LayoutInflater inflater = LayoutInflater.from(getContext());
-                mView = inflater.inflate(R.layout.studentinfo_alertdialog, null);
-
-                studentIDheader = (TextView) mView.findViewById(R.id.textView3);
-                studentfullname = (EditText) mView.findViewById(R.id.editText);
-                studentpossessionqty = (EditText) mView.findViewById(R.id.editText2);
-                studentemail = (EditText) mView.findViewById(R.id.editText3);
-                studentstatus = (EditText) mView.findViewById(R.id.editText4);
-
-                studentIDheader.setText(selectedID);
-                studentfullname.setText("Full Name: " + fname + " " + lname);
-                studentpossessionqty.setText("Possession Qty: " + possessionqty);
-                studentemail.setText("Email: " + email);
-                studentstatus.setText("Status: " + status);
-
-                mBuilder.setCancelable(false);
-                mBuilder.setView(mView);
-
-                dialog = mBuilder.create();
-                dialog.show();
-
-                final Button cancelBtn = (Button) mView.findViewById(R.id.button3);
-                cancelBtn.setOnClickListener(new View.OnClickListener()
+                android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+                builder.setMessage("Connection Error.");
+                builder.setCancelable(false);
+                builder.setPositiveButton("Retry", new DialogInterface.OnClickListener()
                 {
-                    @Override
-                    public void onClick(final View v)
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        dialog.dismiss();
+                        new UserInfoBackgroundTasks(ctx).execute();
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int which)
                     {
                         dialog.dismiss();
                     }
                 });
-
-                final Button rentalInfo = (Button) mView.findViewById(R.id.button2);
-                rentalInfo.setOnClickListener(new View.OnClickListener()
-                {
-                    @Override
-                    public void onClick(final View v)
-                    {
-                        Intent intent = new Intent(getActivity(), PartsCribberReturnEquipment.class);
-                        intent.putExtra("theID", selectedID);
-                        startActivity(intent);
-                    }
-                });
+                android.support.v7.app.AlertDialog alert = builder.create();
+                alert.show();
             }
-            catch (JSONException e)
+            else
             {
-                e.printStackTrace();
+                jsonstring = result;
+                try
+                {
+                    jsonObject = new JSONObject(jsonstring);
+                    jsonArray = jsonObject.getJSONArray("server_response");
+                    JSONObject JO = jsonArray.getJSONObject(0);
+
+                    fname = JO.getString("firstname");
+                    lname = JO.getString("lastname");
+                    possessionqty = JO.getString("possessionQty");
+                    email = JO.getString("email");
+                    status = JO.getString("status");
+
+                    mBuilder = new android.support.v7.app.AlertDialog.Builder(activity);
+
+                    LayoutInflater inflater = LayoutInflater.from(getContext());
+                    mView = inflater.inflate(R.layout.studentinfo_alertdialog, null);
+
+                    studentIDheader = (TextView) mView.findViewById(R.id.textView3);
+                    studentfullname = (EditText) mView.findViewById(R.id.editText);
+                    studentpossessionqty = (EditText) mView.findViewById(R.id.editText2);
+                    studentemail = (EditText) mView.findViewById(R.id.editText3);
+                    studentstatus = (EditText) mView.findViewById(R.id.editText4);
+
+                    studentIDheader.setText(selectedID);
+                    studentfullname.setText("Full Name: " + fname + " " + lname);
+                    studentpossessionqty.setText("Possession Qty: " + possessionqty);
+                    studentemail.setText("Email: " + email);
+                    studentstatus.setText("Status: " + status);
+
+                    mBuilder.setCancelable(false);
+                    mBuilder.setView(mView);
+
+                    dialog = mBuilder.create();
+                    dialog.show();
+
+                    final Button cancelBtn = (Button) mView.findViewById(R.id.button3);
+                    cancelBtn.setOnClickListener(new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(final View v)
+                        {
+                            dialog.dismiss();
+                        }
+                    });
+
+                    final Button rentalInfo = (Button) mView.findViewById(R.id.button2);
+                    rentalInfo.setOnClickListener(new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(final View v)
+                        {
+                            Intent intent = new Intent(getActivity(), PartsCribberReturnEquipment.class);
+                            intent.putExtra("theID", selectedID);
+                            startActivity(intent);
+                        }
+                    });
+                }
+                catch (JSONException e)
+                {
+                    e.printStackTrace();
+                }
             }
-
-
-
         }
     }
 }

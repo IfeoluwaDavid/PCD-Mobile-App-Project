@@ -3,16 +3,19 @@ package ifeoluwa.partscribber;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -38,8 +41,7 @@ public class PartsCribberSelectTool extends AppCompatActivity
     JSONObject jsonObject;
     JSONArray jsonArray;
     Intent intent;
-    SelectToolsAdapter selectToolsAdapter;
-    TextView availableItems;
+    ArrayAdapter adapter;
     ListView listView;
     ActionBar actionBar;
     String selectedCategory, validatedID, alreadyhas, selectedItem;
@@ -49,19 +51,18 @@ public class PartsCribberSelectTool extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.partscribber_selecttools);
-        actionBar = getSupportActionBar();
-        actionBar.setTitle(Html.fromHtml("<font color='#01579B'>PartsCribber</font>"));
 
         intent = getIntent();
         selectedCategory = intent.getStringExtra("selectedCategory");
         validatedID = intent.getStringExtra("theID");
 
+        actionBar = getSupportActionBar();
+        String categoryHeader = toTitle(selectedCategory.toLowerCase());
+        actionBar.setTitle(Html.fromHtml("<font color='#01579B'>"+categoryHeader+"</font>"));
+
         new ItemInfoBackgroundTasks(this).execute();
 
         listView = (ListView) findViewById(R.id.listview);
-        selectToolsAdapter = new SelectToolsAdapter(this, R.layout.selecttools_rowlayout);
-        listView.setAdapter(selectToolsAdapter);
-
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             @Override
@@ -75,6 +76,13 @@ public class PartsCribberSelectTool extends AppCompatActivity
                 startActivity(intent);
             }
         });
+    }
+
+    static String toTitle(String s)
+    {
+        String s1 = s.substring(0,1).toUpperCase();
+        String sTitle = s1 + s.substring(1);
+        return sTitle;
     }
 
     @Override
@@ -104,8 +112,8 @@ public class PartsCribberSelectTool extends AppCompatActivity
         {
             builder = new AlertDialog.Builder(activity);
             View dialogView = LayoutInflater.from(this.ctx).inflate(R.layout.progress_dialog, null);
-            ((TextView)dialogView.findViewById(R.id.tv_progress_dialog)).setText("Fetching Item Data");
-            loginDialog = builder.setView(dialogView).setCancelable(false).setTitle("Please Wait").show();
+            ((TextView)dialogView.findViewById(R.id.tv_progress_dialog)).setText("Please wait...");
+            loginDialog = builder.setView(dialogView).setCancelable(false).show();
             json_url = "http://partscribdatabase.tech/androidconnect/fetchSelectedCategoryData.php";
         }
 
@@ -160,32 +168,59 @@ public class PartsCribberSelectTool extends AppCompatActivity
         @Override
         protected void onPostExecute(String result)
         {
-            loginDialog.dismiss();
-            jsonstring = result;
-            ArrayList<String> arraylistofitemProperties = new ArrayList<String>();
-
-            try
+             loginDialog.dismiss();
+            if(TextUtils.isEmpty(result))
             {
-                jsonObject = new JSONObject(jsonstring);
-                jsonArray = jsonObject.getJSONArray("server_response");
-                int count = 0;
-
-                String itemName;
-
-                while(count < jsonArray.length())
+                android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+                builder.setMessage("Connection Error.");
+                builder.setCancelable(false);
+                builder.setPositiveButton("Retry", new DialogInterface.OnClickListener()
                 {
-                    JSONObject JO = jsonArray.getJSONObject(count);
-                    itemName = JO.getString("item_name");
-                    arraylistofitemProperties.add(itemName);
-                    selectToolsAdapter.add(itemName);
-                    count++;
-                }
-                availableItems = (TextView) findViewById(R.id.available_items_header);
-                availableItems.setText(selectedCategory+" ("+count+")");
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        dialog.dismiss();
+                        new ItemInfoBackgroundTasks(ctx).execute();
+                    }
+                });
+                builder.setNegativeButton("Exit", new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        dialog.dismiss();
+                        finish();
+                    }
+                });
+                android.support.v7.app.AlertDialog alert = builder.create();
+                alert.show();
             }
-            catch (JSONException e)
+            else
             {
-                e.printStackTrace();
+                jsonstring = result;
+                ArrayList<String> arraylistofitemProperties = new ArrayList<String>();
+
+                try
+                {
+                    jsonObject = new JSONObject(jsonstring);
+                    jsonArray = jsonObject.getJSONArray("server_response");
+                    int count = 0;
+
+                    String itemName;
+
+                    while(count < jsonArray.length())
+                    {
+                        JSONObject JO = jsonArray.getJSONObject(count);
+                        itemName = JO.getString("item_name");
+                        arraylistofitemProperties.add(itemName);
+                        count++;
+                    }
+
+                    adapter = new ArrayAdapter<String>(ctx, R.layout.viewalltools_rowlayout, R.id.viewalltools_itemnametext, arraylistofitemProperties);
+                    listView.setAdapter(adapter);
+                }
+                catch (JSONException e)
+                {
+                    e.printStackTrace();
+                }
             }
         }
     }

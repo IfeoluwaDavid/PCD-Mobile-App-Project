@@ -64,11 +64,4 @@ public class PartsCribberRegisterUser extends AppCompatActivity
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
     }
-
-    @Override
-    protected void onRestart()
-    {
-        super.onRestart();
-        recreate();
-    }
 }
