@@ -3,11 +3,13 @@ package ifeoluwa.partscribber;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +30,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -45,7 +46,6 @@ public class PCViewAllToolsFragment extends Fragment
     ActionBar actionBar;
     Intent intent;
     int count;
-    android.support.v7.app.AlertDialog dialog;
     SearchView editText;
     private PCViewAllToolsFragmentInterface mListener;
 
@@ -66,8 +66,8 @@ public class PCViewAllToolsFragment extends Fragment
     public void onResume()
     {
         super.onResume();
-        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         new fetchAllToolsBackgroundTasks(getActivity()).execute();
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
     class fetchAllToolsBackgroundTasks extends AsyncTask<Void, Void, String>
@@ -78,9 +78,7 @@ public class PCViewAllToolsFragment extends Fragment
         AlertDialog.Builder builder;
         private Activity activity;
         private AlertDialog loginDialog;
-        List<String> arraylistofCategoryObjects = new ArrayList<String>();
-        List<String> listItems = new ArrayList<String>();
-        String[] items;
+        List<String> arraylistOfAllTools = new ArrayList<String>();
 
         public fetchAllToolsBackgroundTasks(Context ctx)
         {
@@ -93,8 +91,8 @@ public class PCViewAllToolsFragment extends Fragment
         {
             builder = new AlertDialog.Builder(activity);
             View dialogView = LayoutInflater.from(this.ctx).inflate(R.layout.progress_dialog, null);
-            ((TextView)dialogView.findViewById(R.id.tv_progress_dialog)).setText("Fetching Server Data");
-            loginDialog = builder.setView(dialogView).setCancelable(false).setTitle("Please Wait").show();
+            ((TextView)dialogView.findViewById(R.id.tv_progress_dialog)).setText("Please wait...");
+            loginDialog = builder.setView(dialogView).setCancelable(false).show();
             json_url = "http://partscribdatabase.tech/androidconnect/fetchAllTools.php";
         }
 
@@ -138,86 +136,103 @@ public class PCViewAllToolsFragment extends Fragment
         protected void onPostExecute(String result)
         {
             loginDialog.dismiss();
-            jsonstring = result;
-            count = 0;
-
-            listView =(ListView) finder.findViewById(R.id.listview);
-            editText = (SearchView)finder.findViewById(R.id.txtsearch);
-            editText.setIconified(false);
-            editText.clearFocus();
-            initList();
-
-            try
+            if(TextUtils.isEmpty(result))
             {
-                jsonObject = new JSONObject(jsonstring);
-                jsonArray = jsonObject.getJSONArray("server_response");
-
-                String itemName;
-
-                while(count < jsonArray.length())
+                android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+                builder.setMessage("Connection Error.");
+                builder.setCancelable(false);
+                builder.setPositiveButton("Retry", new DialogInterface.OnClickListener()
                 {
-                    JSONObject JO = jsonArray.getJSONObject(count);
-                    itemName = JO.getString("item_name");
-                    arraylistofCategoryObjects.add(itemName);
-                    adapter.add(itemName);
-                    count++;
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        dialog.dismiss();
+                        new fetchAllToolsBackgroundTasks(getActivity()).execute();
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        dialog.dismiss();
+                    }
+                });
+                android.support.v7.app.AlertDialog alert = builder.create();
+                alert.show();
+            }
+            else
+            {
+                jsonstring = result;
+                count = 0;
+
+                listView = (ListView) finder.findViewById(R.id.listview);
+                editText = (SearchView) finder.findViewById(R.id.txtsearch);
+                editText.setIconified(false);
+                editText.clearFocus();
+
+                adapter = new ArrayAdapter<String>(ctx, R.layout.viewalltools_rowlayout, R.id.viewalltools_itemnametext, arraylistOfAllTools);
+                listView.setAdapter(adapter);
+
+                try
+                {
+                    jsonObject = new JSONObject(jsonstring);
+                    jsonArray = jsonObject.getJSONArray("server_response");
+
+                    String itemName;
+
+                    while (count < jsonArray.length())
+                    {
+                        JSONObject JO = jsonArray.getJSONObject(count);
+                        itemName = JO.getString("item_name");
+                        arraylistOfAllTools.add(itemName);
+                        count++;
+                    }
+
+                    StringBuilder stringBuilder = new StringBuilder();
+                    for (String item : arraylistOfAllTools)
+                    {
+                        stringBuilder.append(item);
+                        stringBuilder.append(",");
+                    }
+
+                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+                    {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+                        {
+                            String selectedItem = parent.getItemAtPosition(position).toString();
+                            mListener.viewToolData(selectedItem);
+                        }
+                    });
+
+                    editText.setOnQueryTextListener(new SearchView.OnQueryTextListener()
+                    {
+                        @Override
+                        public boolean onQueryTextSubmit(String query) {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onQueryTextChange(String newText)
+                        {
+                            adapter.getFilter().filter(newText);
+                            return false;
+                        }
+                    });
+
+                    editText.setOnSearchClickListener(new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View v)
+                        {
+                            editText.onActionViewExpanded();
+                        }
+                    });
                 }
-
-                //TextView amount = (TextView) finder.findViewById(R.id.all_available_tools);
-                //amount.setText("All Equipments ("+count+")");
-
-                listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+                catch (JSONException e)
                 {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-                    {
-                        // if we had ParentActivity then we can do
-                        String selectedItem = parent.getItemAtPosition(position).toString();
-                        mListener.viewToolData(selectedItem);
-                    }
-                });
-
-                editText.setOnQueryTextListener(new SearchView.OnQueryTextListener()
-                {
-                    @Override
-                    public boolean onQueryTextSubmit(String query)
-                    {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onQueryTextChange(String newText)
-                    {
-                        adapter.getFilter().filter(newText);
-                        return false;
-                    }
-                });
-
-                editText.setOnSearchClickListener(new View.OnClickListener()
-                {
-                    @Override
-                    public void onClick(View v)
-                    {
-                        editText.onActionViewExpanded();
-                    }
-                });
+                    e.printStackTrace();
+                }
             }
-            catch (JSONException e)
-            {
-                e.printStackTrace();
-            }
-        }
-
-        public void initList()
-        {
-            items = new String[arraylistofCategoryObjects.size()];
-            for(int i=0; i < arraylistofCategoryObjects.size(); i++)
-            {
-                items[i] = arraylistofCategoryObjects.get(i);
-            }
-            listItems=new ArrayList<>(Arrays.asList(items));
-            adapter=new ArrayAdapter<String>(ctx, R.layout.viewalltools_rowlayout,R.id.viewalltools_itemnametext, listItems);
-            listView.setAdapter(adapter);
         }
     }
 

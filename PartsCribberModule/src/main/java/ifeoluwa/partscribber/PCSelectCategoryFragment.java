@@ -3,27 +3,25 @@ package ifeoluwa.partscribber;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,7 +30,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
@@ -45,7 +42,6 @@ public class PCSelectCategoryFragment extends Fragment
     String jsonstring;
     JSONObject jsonObject;
     JSONArray jsonArray;
-    SelectCategoryAdapter selectCategoryAdapter;
     ListView listView;
     ActionBar actionBar;
     Intent intent;
@@ -69,25 +65,8 @@ public class PCSelectCategoryFragment extends Fragment
     public void onResume()
     {
         super.onResume();
-        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         new CategoryInfoBackgroundTasks(getActivity()).execute();
-
-        listView = (ListView) finder.findViewById(R.id.listview);
-        selectCategoryAdapter = new SelectCategoryAdapter(getActivity(), R.layout.selectcategory_rowlayout);
-        listView.setAdapter(selectCategoryAdapter);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-            {
-                String selectedCategory = (String) parent.getItemAtPosition(position);
-                mListener.viewCategoryData(selectedCategory);
-                //intent = new Intent(getActivity(), PartsCribberSelectTool.class);
-                //intent.putExtra("selectedCategory", selectedCategory);
-                //startActivity(intent);
-            }
-        });
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
     class CategoryInfoBackgroundTasks extends AsyncTask<Void, Void, String>
@@ -99,10 +78,8 @@ public class PCSelectCategoryFragment extends Fragment
         private Activity activity;
         private AlertDialog loginDialog;
         ArrayAdapter<String> adapter;
-        HashSet<String> arraylistofCategoryObjects = new HashSet<String>();
+        HashSet<String> hashsetofCategoryObjects = new HashSet<String>();
         List<String> list;
-        List<String> listItems = new ArrayList<String>();
-        String[] items;
 
         public CategoryInfoBackgroundTasks(Context ctx)
         {
@@ -115,8 +92,9 @@ public class PCSelectCategoryFragment extends Fragment
         {
             builder = new AlertDialog.Builder(activity);
             View dialogView = LayoutInflater.from(this.ctx).inflate(R.layout.progress_dialog, null);
-            ((TextView)dialogView.findViewById(R.id.tv_progress_dialog)).setText("Fetching Categorized Data");
-            loginDialog = builder.setView(dialogView).setCancelable(false).setTitle("Please Wait").show();
+            ((TextView)dialogView.findViewById(R.id.tv_progress_dialog)).setText("Please Wait...");
+            loginDialog = builder.setView(dialogView).setCancelable(false).show();
+
             json_url = "http://partscribdatabase.tech/androidconnect/fetchCategoryData.php";
         }
 
@@ -160,73 +138,93 @@ public class PCSelectCategoryFragment extends Fragment
         protected void onPostExecute(String result)
         {
             loginDialog.dismiss();
-            jsonstring = result;
-
-            try
+            if(TextUtils.isEmpty(result))
             {
-                jsonObject = new JSONObject(jsonstring);
-                jsonArray = jsonObject.getJSONArray("server_response");
-                int count = 0;
-
-                String itemCategory;
-
-                while(count < jsonArray.length())
+                android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+                builder.setMessage("Connection Error.");
+                builder.setCancelable(false);
+                builder.setPositiveButton("Retry", new DialogInterface.OnClickListener()
                 {
-                    JSONObject JO = jsonArray.getJSONObject(count);
-                    itemCategory = JO.getString("category");
-                    arraylistofCategoryObjects.add(itemCategory.toUpperCase());
-                    count++;
-                }
-
-                list = new ArrayList<String>(arraylistofCategoryObjects);
-                editText = (SearchView)finder.findViewById(R.id.txtsearch);
-                initList();
-
-                for (String item : arraylistofCategoryObjects)
-                {
-                    selectCategoryAdapter.add(item);
-                }
-                editText.setOnQueryTextListener(new SearchView.OnQueryTextListener()
-                {
-                    @Override
-                    public boolean onQueryTextSubmit(String query)
+                    public void onClick(DialogInterface dialog, int which)
                     {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onQueryTextChange(String newText)
-                    {
-                        adapter.getFilter().filter(newText);
-                        return false;
+                        dialog.dismiss();
+                        new CategoryInfoBackgroundTasks(getActivity()).execute();
                     }
                 });
-
-                editText.setOnSearchClickListener(new View.OnClickListener()
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
                 {
-                    @Override
-                    public void onClick(View v)
+                    public void onClick(DialogInterface dialog, int which)
                     {
-                        editText.onActionViewExpanded();
+                        dialog.dismiss();
                     }
                 });
+                android.support.v7.app.AlertDialog alert = builder.create();
+                alert.show();
             }
-            catch (JSONException e)
+            else
             {
-                e.printStackTrace();
-            }
-        }
+                jsonstring = result;
+                try
+                {
+                    jsonObject = new JSONObject(jsonstring);
+                    jsonArray = jsonObject.getJSONArray("server_response");
+                    int count = 0;
 
-        public void initList()
-        {
-            items = new String[list.size()];
-            for(int i=0; i < list.size(); i++)
-            {
-                items[i] = list.get(i);
+                    String itemCategory;
+
+                    while(count < jsonArray.length())
+                    {
+                        JSONObject JO = jsonArray.getJSONObject(count);
+                        itemCategory = JO.getString("category");
+                        hashsetofCategoryObjects.add(itemCategory.toUpperCase());
+                        count++;
+                    }
+
+                    list = new ArrayList<String>(hashsetofCategoryObjects);
+                    listView = (ListView) finder.findViewById(R.id.listview);
+                    adapter=new ArrayAdapter<String>(ctx,R.layout.viewalltools_rowlayout,R.id.viewalltools_itemnametext,list);
+                    listView.setAdapter(adapter);
+                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+                    {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+                        {
+                            String selectedCategory = (String) parent.getItemAtPosition(position);
+                            mListener.viewCategoryData(selectedCategory);
+                        }
+                    });
+
+                    editText = (SearchView)finder.findViewById(R.id.txtsearch);
+                    editText.setOnQueryTextListener(new SearchView.OnQueryTextListener()
+                    {
+                        @Override
+                        public boolean onQueryTextSubmit(String query)
+                        {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onQueryTextChange(String newText)
+                        {
+                            adapter.getFilter().filter(newText);
+                            return false;
+                        }
+                    });
+
+                    editText.setOnSearchClickListener(new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View v)
+                        {
+                            editText.onActionViewExpanded();
+                        }
+                    });
+                }
+                catch (JSONException e)
+                {
+                    e.printStackTrace();
+                }
             }
-            listItems=new ArrayList<>(Arrays.asList(items));
-            adapter=new ArrayAdapter<String>(ctx, R.layout.viewalltools_rowlayout,R.id.viewalltools_itemnametext, listItems);
-            listView.setAdapter(adapter);
         }
     }
 

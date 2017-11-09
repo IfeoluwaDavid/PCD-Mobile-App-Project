@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -241,6 +242,7 @@ public class PartsCribberViewProfile extends AppCompatActivity
     public void logout(View view)
     {
         finish();
+        finish();
         UserSession.getInstance(getApplicationContext()).logout();
     }
 
@@ -262,8 +264,8 @@ public class PartsCribberViewProfile extends AppCompatActivity
         {
             builder = new android.app.AlertDialog.Builder(activity);
             View dialogView = LayoutInflater.from(this.ctx).inflate(R.layout.progress_dialog, null);
-            ((TextView)dialogView.findViewById(R.id.tv_progress_dialog)).setText("Connecting to Server");
-            loginDialog = builder.setView(dialogView).setCancelable(false).setTitle("Please Wait").show();
+            ((TextView)dialogView.findViewById(R.id.tv_progress_dialog)).setText("Please wait...");
+            loginDialog = builder.setView(dialogView).setCancelable(false).show();
         }
 
         @Override
@@ -338,120 +340,138 @@ public class PartsCribberViewProfile extends AppCompatActivity
         protected void onPostExecute(String result)
         {
             loginDialog.dismiss();
-            String code = "";
-            String message = "";
-            String user_id = "";
-            String username = "";
-            String firstname = "";
-            String lastname = "";
-            String email = "";
-            String usertype = "";
-            try
+            if(TextUtils.isEmpty(result))
             {
-                JSONObject jsonObject = new JSONObject(result);
-                JSONArray jsonArray = jsonObject.getJSONArray("server_response");
-                JSONObject JO = jsonArray.getJSONObject(0);
-
-                // Server always responds with this values
-                message = JO.getString("message");
-                code = JO.getString("code");
+                android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+                builder.setMessage("Connection Error.");
+                builder.setCancelable(false);
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        dialog.dismiss();
+                    }
+                });
+                android.support.v7.app.AlertDialog alert = builder.create();
+                alert.show();
+            }
+            else
+            {
+                String code = "";
+                String message = "";
+                String user_id = "";
+                String username = "";
+                String firstname = "";
+                String lastname = "";
+                String email = "";
+                String usertype = "";
                 try
                 {
-                    user_id = JO.getString("userid");
-                    username = JO.getString("username");
-                    firstname = JO.getString("firstname");
-                    lastname = JO.getString("lastname");
-                    email = JO.getString("email");
-                    usertype = JO.getString("usertype");
-                }
-                catch (Exception e)
-                {
-                    // Server did not respond  with these values
-                }
-                if (code.equals("update_true"))
-                {
-                    editable = false;
-                    my_username.setCursorVisible(false);
-                    my_username.setFocusableInTouchMode(false);
-                    my_username.setInputType(InputType.TYPE_CLASS_TEXT);
-                    my_username.requestFocus(); //to trigger the soft input
-                    my_username.setTypeface(null, Typeface.BOLD);
+                    JSONObject jsonObject = new JSONObject(result);
+                    JSONArray jsonArray = jsonObject.getJSONArray("server_response");
+                    JSONObject JO = jsonArray.getJSONObject(0);
 
-                    my_firstname.setCursorVisible(false);
-                    my_firstname.setFocusableInTouchMode(false);
-                    my_firstname.setInputType(InputType.TYPE_CLASS_TEXT);
-                    my_firstname.requestFocus(); //to trigger the soft input
-                    my_firstname.setTypeface(null, Typeface.BOLD);
-
-                    my_lastname.setCursorVisible(false);
-                    my_lastname.setFocusableInTouchMode(false);
-                    my_lastname.setInputType(InputType.TYPE_CLASS_TEXT);
-                    my_lastname.requestFocus(); //to trigger the soft input
-                    my_lastname.setTypeface(null, Typeface.BOLD);
-
-                    my_email.setCursorVisible(false);
-                    my_email.setFocusableInTouchMode(false);
-                    my_email.setInputType(InputType.TYPE_CLASS_TEXT);
-                    my_email.requestFocus(); //to trigger the soft input
-                    my_email.setTypeface(null, Typeface.BOLD);
-
-                    int castedUserID = Integer.valueOf(user_id);
-                    User user = new User(castedUserID, username, firstname, lastname, email, usertype);
-                    UserSession.getInstance(ctx).userLogin(user);
-
-                    android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
-                    builder.setTitle("Successful Profile Update");
-                    builder.setMessage(message);
-                    builder.setCancelable(false);
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                    // Server always responds with this values
+                    message = JO.getString("message");
+                    code = JO.getString("code");
+                    try
                     {
-                        public void onClick(DialogInterface dialog, int which)
-                        {
-                            dialog.dismiss();
-                        }
-                    });
-                    android.support.v7.app.AlertDialog alert = builder.create();
-                    alert.show();
-                }
-                else if (code.equals("update_false"))
-                {
-                    showDialog("Update Failed", message);
-                    User user = UserSession.getInstance(ctx).getUser();
-                    if (user.getUsertype().equals("Admin"))
+                        user_id = JO.getString("userid");
+                        username = JO.getString("username");
+                        firstname = JO.getString("firstname");
+                        lastname = JO.getString("lastname");
+                        email = JO.getString("email");
+                        usertype = JO.getString("usertype");
+                    }
+                    catch (Exception e)
                     {
-                        my_username.setCursorVisible(true);
-                        my_username.setFocusableInTouchMode(true);
+                        // Server did not respond  with these values
+                    }
+                    if (code.equals("update_true"))
+                    {
+                        editable = false;
+                        my_username.setCursorVisible(false);
+                        my_username.setFocusableInTouchMode(false);
                         my_username.setInputType(InputType.TYPE_CLASS_TEXT);
                         my_username.requestFocus(); //to trigger the soft input
-                        my_username.setTypeface(null, Typeface.ITALIC);
+                        my_username.setTypeface(null, Typeface.BOLD);
+
+                        my_firstname.setCursorVisible(false);
+                        my_firstname.setFocusableInTouchMode(false);
+                        my_firstname.setInputType(InputType.TYPE_CLASS_TEXT);
+                        my_firstname.requestFocus(); //to trigger the soft input
+                        my_firstname.setTypeface(null, Typeface.BOLD);
+
+                        my_lastname.setCursorVisible(false);
+                        my_lastname.setFocusableInTouchMode(false);
+                        my_lastname.setInputType(InputType.TYPE_CLASS_TEXT);
+                        my_lastname.requestFocus(); //to trigger the soft input
+                        my_lastname.setTypeface(null, Typeface.BOLD);
+
+                        my_email.setCursorVisible(false);
+                        my_email.setFocusableInTouchMode(false);
+                        my_email.setInputType(InputType.TYPE_CLASS_TEXT);
+                        my_email.requestFocus(); //to trigger the soft input
+                        my_email.setTypeface(null, Typeface.BOLD);
+
+                        int castedUserID = Integer.valueOf(user_id);
+                        User user = new User(castedUserID, username, firstname, lastname, email, usertype);
+                        UserSession.getInstance(ctx).userLogin(user);
+
+                        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+                        builder.setTitle("Successful Profile Update");
+                        builder.setMessage(message);
+                        builder.setCancelable(false);
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                        {
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                dialog.dismiss();
+                            }
+                        });
+                        android.support.v7.app.AlertDialog alert = builder.create();
+                        alert.show();
                     }
-                    my_firstname.setCursorVisible(true);
-                    my_firstname.setFocusableInTouchMode(true);
-                    my_firstname.setInputType(InputType.TYPE_CLASS_TEXT);
-                    my_firstname.requestFocus(); //to trigger the soft input
-                    my_firstname.setTypeface(null, Typeface.ITALIC);
+                    else if (code.equals("update_false"))
+                    {
+                        showDialog("Update Failed", message);
+                        User user = UserSession.getInstance(ctx).getUser();
+                        if (user.getUsertype().equals("Admin"))
+                        {
+                            my_username.setCursorVisible(true);
+                            my_username.setFocusableInTouchMode(true);
+                            my_username.setInputType(InputType.TYPE_CLASS_TEXT);
+                            my_username.requestFocus(); //to trigger the soft input
+                            my_username.setTypeface(null, Typeface.ITALIC);
+                        }
+                        my_firstname.setCursorVisible(true);
+                        my_firstname.setFocusableInTouchMode(true);
+                        my_firstname.setInputType(InputType.TYPE_CLASS_TEXT);
+                        my_firstname.requestFocus(); //to trigger the soft input
+                        my_firstname.setTypeface(null, Typeface.ITALIC);
 
-                    my_lastname.setCursorVisible(true);
-                    my_lastname.setFocusableInTouchMode(true);
-                    my_lastname.setInputType(InputType.TYPE_CLASS_TEXT);
-                    my_lastname.requestFocus(); //to trigger the soft input
-                    my_lastname.setTypeface(null, Typeface.ITALIC);
+                        my_lastname.setCursorVisible(true);
+                        my_lastname.setFocusableInTouchMode(true);
+                        my_lastname.setInputType(InputType.TYPE_CLASS_TEXT);
+                        my_lastname.requestFocus(); //to trigger the soft input
+                        my_lastname.setTypeface(null, Typeface.ITALIC);
 
-                    my_email.setCursorVisible(true);
-                    my_email.setFocusableInTouchMode(true);
-                    my_email.setInputType(InputType.TYPE_CLASS_TEXT);
-                    my_email.requestFocus(); //to trigger the soft input
-                    my_email.setTypeface(null, Typeface.ITALIC);
+                        my_email.setCursorVisible(true);
+                        my_email.setFocusableInTouchMode(true);
+                        my_email.setInputType(InputType.TYPE_CLASS_TEXT);
+                        my_email.requestFocus(); //to trigger the soft input
+                        my_email.setTypeface(null, Typeface.ITALIC);
+                    }
+                    else
+                    {
+                        showDialog("Unknown Error Occured", "Unknown Error");
+                    }
                 }
-                else
+                catch (JSONException e)
                 {
-                    showDialog("Unknown Error Occured", "Unknown Error");
+                    showDialog("Unknown Error Occurred", message);
+                    e.printStackTrace();
                 }
-            }
-            catch (JSONException e)
-            {
-                showDialog("Unknown Error Occurred", message);
-                e.printStackTrace();
             }
         }
 
@@ -572,44 +592,6 @@ public class PartsCribberViewProfile extends AppCompatActivity
         int unwantedCharacters = space + other;
 
         if(sum < 6 || unwantedCharacters > 0)
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
-    }
-
-    public boolean passwordValidation(String x)
-    {
-        char[] ch = x.toCharArray();
-        int letter = 0;
-        int space = 0;
-        int num = 0;
-        int other = 0;
-        for(int i = 0; i < x.length(); i++)
-        {
-            if(Character.isLetter(ch[i]))
-            {
-                letter ++ ;
-            }
-            else if(Character.isDigit(ch[i]))
-            {
-                num ++ ;
-            }
-            else if(Character.isSpaceChar(ch[i]))
-            {
-                space ++ ;
-            }
-            else
-            {
-                other ++;
-            }
-        }
-        int sum = letter + num + other;
-
-        if(sum < 8 || sum > 15 || space > 0)
         {
             return false;
         }
