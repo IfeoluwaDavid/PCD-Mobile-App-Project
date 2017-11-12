@@ -34,7 +34,7 @@ implements PCViewAllToolsFragment.PCViewAllToolsFragmentInterface, PCSelectCateg
         setContentView(R.layout.partscribber_studentmenu);
         
         actionBar = getSupportActionBar();
-        actionBar.setTitle(Html.fromHtml("<font color='#01579B'>PartsCribber</font>"));
+        actionBar.setTitle(Html.fromHtml("<font color='#ffffff'>PartsCribber</font>"));
 
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         viewPager = (ViewPager) findViewById(R.id.viewPager);
@@ -118,8 +118,32 @@ implements PCViewAllToolsFragment.PCViewAllToolsFragmentInterface, PCSelectCateg
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        Intent profile = new Intent(this, PartsCribberViewProfile.class);
-        startActivity(profile);
-        return super.onOptionsItemSelected(item);
+        switch (item.getItemId())
+        {
+            case R.id.home:
+                //Do not respond.
+                break;
+
+            case R.id.profile:
+                Intent profileActivity = new Intent(this, PartsCribberViewProfile.class);
+                startActivity(profileActivity);
+                break;
+
+            case R.id.password:
+                Intent passwordActivity = new Intent(this, PartsCribberChangePassword.class);
+                startActivity(passwordActivity);
+                break;
+
+            case R.id.log_out:
+                finish();
+                UserSession.getInstance(getApplicationContext()).logout();
+                Intent login = new Intent(this, PartsCribberLogin.class);
+                login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(login);
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return true;
     }
 }

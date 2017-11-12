@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:background="#81D4FA"
+    android:background="@color/supportingColor"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -13,7 +13,7 @@
         android:typeface="serif"
         android:textStyle="bold"
         android:textSize="20sp"
-        android:textColor="#01579B"
+        android:textColor="@color/textColor"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
         android:text="@string/adminmenuparenttext"

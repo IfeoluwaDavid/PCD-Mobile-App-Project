@@ -13,6 +13,9 @@ import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -56,7 +59,8 @@ public class PartsCribberUpdateItem extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.partscribber_updateitem);
         actionBar = getSupportActionBar();
-        actionBar.setTitle(Html.fromHtml("<font color='#01579B'>PartsCribber</font>"));
+        actionBar.setTitle(Html.fromHtml("<font color='#ffffff'>Update Item Info</font>"));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         intent = getIntent();
         selectedItem = intent.getStringExtra("selectedItem");
@@ -71,6 +75,68 @@ public class PartsCribberUpdateItem extends AppCompatActivity
 
         new ToolDataBackgroundTasks(this).execute();
         new fetchCategoryBackgroundTasks(this).execute();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                onBackPressed();
+                break;
+
+            case R.id.home:
+                User user = UserSession.getInstance(this).getUser();
+                if (user.getUsertype().equals("Admin"))
+                {
+                    Intent adminhome = new Intent(this, PartsCribberAdminMenu.class);
+                    adminhome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    redirect(adminhome);
+                    break;
+                }
+                else if(user.getUsertype().equals("Student"))
+                {
+                    Intent studenthome = new Intent(this, PartsCribberStudentMenu.class);
+                    studenthome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    redirect(studenthome);
+                    break;
+                }
+                else
+                {
+                    //Do not respond.
+                    break;
+                }
+
+            case R.id.profile:
+                Intent profileActivity = new Intent(this, PartsCribberViewProfile.class);
+                redirect(profileActivity);
+                break;
+
+            case R.id.password:
+                Intent passwordActivity = new Intent(this, PartsCribberChangePassword.class);
+                redirect(passwordActivity);
+                break;
+
+            case R.id.log_out:
+                finish();
+                UserSession.getInstance(getApplicationContext()).logout();
+                Intent login = new Intent(this, PartsCribberLogin.class);
+                login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(login);
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return true;
     }
 
     public void saveChanges(View view)
@@ -712,6 +778,31 @@ public class PartsCribberUpdateItem extends AppCompatActivity
             {
                 dialog.dismiss();
                 finish();
+            }
+        });
+        builder.setNegativeButton("NO", new DialogInterface.OnClickListener()
+        {
+            @Override
+            public void onClick(DialogInterface dialog, int which)
+            {
+                dialog.dismiss();
+            }
+        });
+        android.support.v7.app.AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    public void redirect(final Intent newscreen)
+    {
+        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
+        builder.setMessage("Are you sure you want to exit this page? Unsaved changes will be lost.");
+
+        builder.setPositiveButton("YES", new DialogInterface.OnClickListener()
+        {
+            public void onClick(DialogInterface dialog, int which)
+            {
+                dialog.dismiss();
+                startActivity(newscreen);
             }
         });
         builder.setNegativeButton("NO", new DialogInterface.OnClickListener()

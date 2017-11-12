@@ -26,11 +26,6 @@ public class AdminMenuDataProvider
         profile_settings.add("View/Edit My Profile");
         profile_settings.add("Change My Password");
 
-        //List<String> inventory = new ArrayList<String>();
-        //inventory.add("Add New Equipment");
-        //inventory.add("Search User/Tool");
-        //Admin_Menu.put("INVENTORY", inventory);
-
         Admin_Menu.put("ADD & SEARCH", users_and_tools);
         Admin_Menu.put("RENTALS & RETURNS", rentals_and_returns);
         Admin_Menu.put("PROFILE SETTINGS", profile_settings);

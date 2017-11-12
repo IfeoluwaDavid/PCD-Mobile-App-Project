@@ -28,7 +28,7 @@
         android:layout_below="@+id/searchView"
         android:layout_centerHorizontal="true"
         android:layout_margin="10dp"
-        android:divider="#0277BD"
+        android:divider="@color/mainBackgroundcolor"
         android:dividerHeight="3dp" />
 
     </RelativeLayout>

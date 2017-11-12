@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/supportingColor"
+    android:background="@color/mainBackgroundcolor"
     android:orientation="vertical"
     android:padding="5dp">
 
@@ -18,8 +18,7 @@
         android:focusable="false"
         android:inputType="textPersonName"
         android:padding="9dp"
-        android:text="Name"
-        android:textColor="#000000"
+        android:textColor="@color/supportingColor"
         android:textStyle="bold"
         android:layout_marginTop="7dp"
         android:layout_below="@+id/textView3"
@@ -39,7 +38,7 @@
         android:focusable="false"
         android:inputType="textPersonName"
         android:padding="9dp"
-        android:textColor="#000000"
+        android:textColor="@color/supportingColor"
         android:textStyle="bold" />
 
     <EditText
@@ -56,7 +55,7 @@
         android:focusable="false"
         android:inputType="textPersonName"
         android:padding="9dp"
-        android:textColor="#000000"
+        android:textColor="@color/supportingColor"
         android:textStyle="bold" />
 
     <EditText
@@ -73,20 +72,20 @@
         android:focusable="false"
         android:inputType="textPersonName"
         android:padding="9dp"
-        android:textColor="#000000"
+        android:textColor="@color/supportingColor"
         android:textStyle="bold" />
 
     <Button
         android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/mainBackgroundcolor"
+        android:background="@color/supportingColor"
         android:text="@string/view_rental_info"
         android:textSize="16sp"
         android:textStyle="bold"
         android:onClick="rentalInfo"
         android:layout_marginTop="5dp"
-        android:textColor="@color/supportingColor"
+        android:textColor="@color/textColor"
         android:layout_below="@+id/editText4"
         android:layout_alignStart="@+id/editText4"
         android:layout_alignEnd="@+id/editText4" />
@@ -95,13 +94,13 @@
         android:id="@+id/button3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/mainBackgroundcolor"
+        android:background="@color/supportingColor"
         android:text="@string/cancel_button"
         android:textSize="16sp"
         android:textStyle="bold"
         android:onClick="cancelBtn"
         android:layout_marginTop="5dp"
-        android:textColor="@color/supportingColor"
+        android:textColor="@color/textColor"
         android:layout_below="@+id/button2"
         android:layout_alignStart="@+id/button2"
         android:layout_alignEnd="@+id/button2" />
@@ -111,7 +110,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
-        android:textColor="@color/mainBackgroundcolor"
+        android:textColor="@color/supportingColor"
         android:textSize="25sp"
         android:textStyle="bold"
         android:typeface="serif"

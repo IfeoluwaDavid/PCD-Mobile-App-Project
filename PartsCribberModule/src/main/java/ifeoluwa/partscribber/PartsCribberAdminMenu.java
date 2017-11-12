@@ -8,6 +8,9 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
@@ -30,7 +33,7 @@ public class PartsCribberAdminMenu extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.partscribber_adminmenu);
         actionBar = getSupportActionBar();
-        actionBar.setTitle(Html.fromHtml("<font color='#01579B'>PartsCribber</font>"));
+        actionBar.setTitle(Html.fromHtml("<font color='#ffffff'>PartsCribber</font>"));
 
         TextView username = (TextView) findViewById(R.id.welcomeusername);
         User user = UserSession.getInstance(this).getUser();
@@ -89,6 +92,46 @@ public class PartsCribberAdminMenu extends AppCompatActivity
                 return false;
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case R.id.home:
+                //Do not respond.
+                break;
+
+            case R.id.profile:
+                Intent profileActivity = new Intent(this, PartsCribberViewProfile.class);
+                startActivity(profileActivity);
+                break;
+
+            case R.id.password:
+                Intent passwordActivity = new Intent(this, PartsCribberChangePassword.class);
+                startActivity(passwordActivity);
+                break;
+
+            case R.id.log_out:
+                finish();
+                UserSession.getInstance(getApplicationContext()).logout();
+                Intent login = new Intent(this, PartsCribberLogin.class);
+                login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(login);
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return true;
     }
 
     public void onBackPressed()

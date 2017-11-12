@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ifeoluwa.partscribber">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -32,6 +32,7 @@
         <activity android:name=".PartsCribberRentEquipment" />
         <activity android:name=".PartsCribberStudentCart" />
         <activity android:name=".PartsCribberReturnEquipment" />
+        <activity android:name=".PartsCribberStudentHolds"></activity>
     </application>
 
 </manifest>

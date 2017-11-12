@@ -3,6 +3,7 @@ package ifeoluwa.partscribber;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBar;
@@ -13,6 +14,9 @@ import android.text.Html;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -46,7 +50,9 @@ public class PartsCribberViewProfile extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.partscribber_viewprofile);
         actionBar = getSupportActionBar();
-        actionBar.setTitle(Html.fromHtml("<font color='#01579B'>PartsCribber</font>"));
+        actionBar.setTitle(Html.fromHtml("<font color='#ffffff'>Edit Profile Info</font>"));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         my_username = (EditText) findViewById(R.id.edit_profile_username);
         my_firstname = (EditText) findViewById(R.id.edit_profile_firstname);
@@ -61,6 +67,67 @@ public class PartsCribberViewProfile extends AppCompatActivity
         my_lastname.setText(user.getLastname());
         my_email.setText(user.getEmail());
         my_usertype.setText(user.getUsertype());
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                onBackPressed();
+                break;
+
+            case R.id.home:
+                User user = UserSession.getInstance(this).getUser();
+                if (user.getUsertype().equals("Admin"))
+                {
+                    Intent adminhome = new Intent(this, PartsCribberAdminMenu.class);
+                    adminhome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    redirect(adminhome);
+                    break;
+                }
+                else if(user.getUsertype().equals("Student"))
+                {
+                    Intent studenthome = new Intent(this, PartsCribberStudentMenu.class);
+                    studenthome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    redirect(studenthome);
+                    break;
+                }
+                else
+                {
+                    //Do not respond.
+                    break;
+                }
+
+            case R.id.profile:
+                //Do not respond here.
+                break;
+
+            case R.id.password:
+                Intent passwordActivity = new Intent(this, PartsCribberChangePassword.class);
+                redirect(passwordActivity);
+                break;
+
+            case R.id.log_out:
+                finish();
+                UserSession.getInstance(getApplicationContext()).logout();
+                Intent login = new Intent(this, PartsCribberLogin.class);
+                login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(login);
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return true;
     }
 
     public void editProfileInfo(View view)
@@ -99,106 +166,95 @@ public class PartsCribberViewProfile extends AppCompatActivity
             my_email.setTypeface(null, Typeface.ITALIC);
 
             editable = true;
-            Toast.makeText(getBaseContext(), "Edit Mode Activated",Toast.LENGTH_LONG).show();
+            Toast.makeText(getBaseContext(), "Edit Mode Activated",Toast.LENGTH_SHORT).show();
         }
     }
 
     public void saveProfileInfo(View view)
     {
-        clearance = true;
-        User user = UserSession.getInstance(this).getUser();
-        String userid = String.valueOf(user.getUserID());
-        username = my_username.getText().toString();
-        first_name = my_firstname.getText().toString();
-        last_name = my_lastname.getText().toString();
-        email = my_email.getText().toString();
-
-        if (username.equals("") && first_name.equals("") && last_name.equals("") && email.equals(""))
+        if (editable == false)
         {
-            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
-            builder.setTitle("Empty Update Request");
-            builder.setMessage("All fields are required.");
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
-            {
-                public void onClick(DialogInterface dialog, int which)
-                {
-                    dialog.dismiss();
-                }
-            });
-            android.support.v7.app.AlertDialog alert = builder.create();
-            alert.show();
+            Toast.makeText(getBaseContext(), "No changes made.",Toast.LENGTH_SHORT).show();
         }
         else
         {
-            if(user.getUsertype().equals("Admin"))
+            clearance = true;
+            User user = UserSession.getInstance(this).getUser();
+            String userid = String.valueOf(user.getUserID());
+            username = my_username.getText().toString();
+            first_name = my_firstname.getText().toString();
+            last_name = my_lastname.getText().toString();
+            email = my_email.getText().toString();
+
+            if (username.equals("") && first_name.equals("") && last_name.equals("") && email.equals(""))
             {
-                if(username.equals("") || !adminUsernameValidation(username))
+                android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
+                builder.setTitle("Empty Update Request");
+                builder.setMessage("All fields are required.");
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
                 {
-                    clearance = false;
-                    android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
-                    builder.setTitle("Something went wrong");
-                    builder.setMessage("Your Admin ID is INVALID.");
-                    builder.setCancelable(false);
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                    public void onClick(DialogInterface dialog, int which)
                     {
-                        public void onClick(DialogInterface dialog, int which)
-                        {
-                            dialog.dismiss();
-                        }
-                    });
-                    android.support.v7.app.AlertDialog alert = builder.create();
-                    alert.show();
-                }
+                        dialog.dismiss();
+                    }
+                });
+                android.support.v7.app.AlertDialog alert = builder.create();
+                alert.show();
             }
             else
             {
-                if (username.equals("") || !studentUserNameValidation(username))
+                if(user.getUsertype().equals("Admin"))
                 {
-                    clearance = false;
-                    android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
-                    builder.setTitle("Something went wrong");
-                    builder.setCancelable(false);
-                    builder.setMessage("Your Student ID is INVALID.");
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                    if(username.equals("") || !adminUsernameValidation(username))
                     {
-                        public void onClick(DialogInterface dialog, int which)
+                        clearance = false;
+                        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
+                        builder.setTitle("Something went wrong");
+                        builder.setMessage("Your Admin ID is INVALID.");
+                        builder.setCancelable(false);
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
                         {
-                            dialog.dismiss();
-                        }
-                    });
-                    android.support.v7.app.AlertDialog alert = builder.create();
-                    alert.show();
-                }
-            }
-
-            if(!clearance) //if clearance is false
-            {
-                //just be looking
-            }
-            else //if clearance = true
-            {
-                if (!namesValidation(first_name))
-                {
-                    android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
-                    builder.setTitle("Something went wrong");
-                    builder.setMessage("First name should be more than 2 characters with letters only");
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
-                    {
-                        public void onClick(DialogInterface dialog, int which)
-                        {
-                            dialog.dismiss();
-                        }
-                    });
-                    android.support.v7.app.AlertDialog alert = builder.create();
-                    alert.show();
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                dialog.dismiss();
+                            }
+                        });
+                        android.support.v7.app.AlertDialog alert = builder.create();
+                        alert.show();
+                    }
                 }
                 else
                 {
-                    if (!namesValidation(last_name))
+                    if (username.equals("") || !studentUserNameValidation(username))
+                    {
+                        clearance = false;
+                        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
+                        builder.setTitle("Something went wrong");
+                        builder.setCancelable(false);
+                        builder.setMessage("Your Student ID is INVALID.");
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                        {
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                dialog.dismiss();
+                            }
+                        });
+                        android.support.v7.app.AlertDialog alert = builder.create();
+                        alert.show();
+                    }
+                }
+
+                if(!clearance) //if clearance is false
+                {
+                    //just be looking
+                }
+                else //if clearance = true
+                {
+                    if (!namesValidation(first_name))
                     {
                         android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
                         builder.setTitle("Something went wrong");
-                        builder.setMessage("Last name should be more than 2 characters with letters only");
+                        builder.setMessage("First name should be more than 2 characters with letters only");
                         builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
                         {
                             public void onClick(DialogInterface dialog, int which)
@@ -211,12 +267,11 @@ public class PartsCribberViewProfile extends AppCompatActivity
                     }
                     else
                     {
-                        String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
-                        if (!email.matches(emailPattern))
+                        if (!namesValidation(last_name))
                         {
                             android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
                             builder.setTitle("Something went wrong");
-                            builder.setMessage("Email Address is Invalid");
+                            builder.setMessage("Last name should be more than 2 characters with letters only");
                             builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
                             {
                                 public void onClick(DialogInterface dialog, int which)
@@ -229,9 +284,28 @@ public class PartsCribberViewProfile extends AppCompatActivity
                         }
                         else
                         {
-                            String method = "update_user";
-                            new UserInfoBackgroundTasks(this).execute(method,userid,username,first_name,last_name,email);
-                            //finish();
+                            String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+                            if (!email.matches(emailPattern))
+                            {
+                                android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
+                                builder.setTitle("Something went wrong");
+                                builder.setMessage("Email Address is Invalid");
+                                builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                                {
+                                    public void onClick(DialogInterface dialog, int which)
+                                    {
+                                        dialog.dismiss();
+                                    }
+                                });
+                                android.support.v7.app.AlertDialog alert = builder.create();
+                                alert.show();
+                            }
+                            else
+                            {
+                                String method = "update_user";
+                                new UserInfoBackgroundTasks(this).execute(method,userid,username,first_name,last_name,email);
+                                //finish();
+                            }
                         }
                     }
                 }
@@ -242,8 +316,10 @@ public class PartsCribberViewProfile extends AppCompatActivity
     public void logout(View view)
     {
         finish();
-        finish();
         UserSession.getInstance(getApplicationContext()).logout();
+        Intent login = new Intent(this, PartsCribberLogin.class);
+        login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(login);
     }
 
     class UserInfoBackgroundTasks extends AsyncTask<String, Void, String>
@@ -518,6 +594,38 @@ public class PartsCribberViewProfile extends AppCompatActivity
         else
         {
             finish();
+        }
+    }
+
+    public void redirect(final Intent newscreen)
+    {
+        if(editable == true)
+        {
+            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
+            builder.setMessage("Are you sure you want to exit this page? Unsaved changes will be lost.");
+
+            builder.setPositiveButton("YES", new DialogInterface.OnClickListener()
+            {
+                public void onClick(DialogInterface dialog, int which)
+                {
+                    dialog.dismiss();
+                    startActivity(newscreen);
+                }
+            });
+            builder.setNegativeButton("NO", new DialogInterface.OnClickListener()
+            {
+                @Override
+                public void onClick(DialogInterface dialog, int which)
+                {
+                    dialog.dismiss();
+                }
+            });
+            android.support.v7.app.AlertDialog alert = builder.create();
+            alert.show();
+        }
+        else
+        {
+            startActivity(newscreen);
         }
     }
 

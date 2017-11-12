@@ -14,6 +14,9 @@ import android.os.Bundle;
 import android.text.Html;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -66,7 +69,8 @@ implements PCViewAllToolsFragment.PCViewAllToolsFragmentInterface, PCSelectCateg
         super.onCreate(savedInstanceState);
         setContentView(R.layout.partscribber_viewequipments);
         actionBar = getSupportActionBar();
-        actionBar.setTitle(Html.fromHtml("<font color='#01579B'>PartsCribber</font>"));
+        actionBar.setTitle(Html.fromHtml("<font color='#ffffff'>Add/Search Tools</font>"));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         viewPager = (ViewPager) findViewById(R.id.viewPager);
@@ -306,6 +310,68 @@ implements PCViewAllToolsFragment.PCViewAllToolsFragmentInterface, PCSelectCateg
         {
             return true;
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                finish();
+                break;
+
+            case R.id.home:
+                User user = UserSession.getInstance(this).getUser();
+                if (user.getUsertype().equals("Admin"))
+                {
+                    Intent adminhome = new Intent(this, PartsCribberAdminMenu.class);
+                    adminhome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(adminhome);
+                    break;
+                }
+                else if(user.getUsertype().equals("Student"))
+                {
+                    Intent studenthome = new Intent(this, PartsCribberStudentMenu.class);
+                    studenthome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(studenthome);
+                    break;
+                }
+                else
+                {
+                    //Do not respond.
+                    break;
+                }
+
+            case R.id.profile:
+                Intent profileActivity = new Intent(this, PartsCribberViewProfile.class);
+                startActivity(profileActivity);
+                break;
+
+            case R.id.password:
+                Intent passwordActivity = new Intent(this, PartsCribberChangePassword.class);
+                startActivity(passwordActivity);
+                break;
+
+            case R.id.log_out:
+                finish();
+                UserSession.getInstance(getApplicationContext()).logout();
+                Intent login = new Intent(this, PartsCribberLogin.class);
+                login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(login);
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return true;
     }
 
     class fetchCategoryBackgroundTasks extends AsyncTask<Void, Void, String>
