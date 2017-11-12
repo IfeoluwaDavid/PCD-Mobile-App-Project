@@ -1,11 +1,15 @@
 package ifeoluwa.partscribber;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
@@ -21,12 +25,74 @@ public class PartsCribberChangePassword extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.partscribber_changepassword);
         actionBar = getSupportActionBar();
-        actionBar.setTitle(Html.fromHtml("<font color='#01579B'>PartsCribber</font>"));
+        actionBar.setTitle(Html.fromHtml("<font color='#ffffff'>Change Password</font>"));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         currentPassword = (EditText) findViewById(R.id.current_password);
         confirmCurrentPassword = (EditText) findViewById(R.id.confirm_current_password);
         newPassword = (EditText) findViewById(R.id.new_password);
         confirmNewPassword = (EditText) findViewById(R.id.confirm_new_password);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                onBackPressed();
+                break;
+
+            case R.id.home:
+                User user = UserSession.getInstance(this).getUser();
+                if (user.getUsertype().equals("Admin"))
+                {
+                    Intent adminhome = new Intent(this, PartsCribberAdminMenu.class);
+                    adminhome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    redirect(adminhome);
+                    break;
+                }
+                else if(user.getUsertype().equals("Student"))
+                {
+                    Intent studenthome = new Intent(this, PartsCribberStudentMenu.class);
+                    studenthome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    redirect(studenthome);
+                    break;
+                }
+                else
+                {
+                    //Do not respond.
+                    break;
+                }
+
+            case R.id.profile:
+                Intent profileActivity = new Intent(this, PartsCribberViewProfile.class);
+                redirect(profileActivity);
+                break;
+
+            case R.id.password:
+                //Do Nothing Here
+                break;
+
+            case R.id.log_out:
+                finish();
+                UserSession.getInstance(getApplicationContext()).logout();
+                Intent login = new Intent(this, PartsCribberLogin.class);
+                login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(login);
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return true;
     }
 
     public void savePasswordChanges (View view)
@@ -131,6 +197,31 @@ public class PartsCribberChangePassword extends AppCompatActivity
                 }
             }
         }
+    }
+
+    public void redirect(final Intent newscreen)
+    {
+        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
+        builder.setMessage("Do you wish to leave your password unchanged? Unsaved changes will be lost.");
+
+        builder.setPositiveButton("YES", new DialogInterface.OnClickListener()
+        {
+            public void onClick(DialogInterface dialog, int which)
+            {
+                dialog.dismiss();
+                startActivity(newscreen);
+            }
+        });
+        builder.setNegativeButton("NO", new DialogInterface.OnClickListener()
+        {
+            @Override
+            public void onClick(DialogInterface dialog, int which)
+            {
+                dialog.dismiss();
+            }
+        });
+        android.support.v7.app.AlertDialog alert = builder.create();
+        alert.show();
     }
 
     public boolean passwordValidation(String x)

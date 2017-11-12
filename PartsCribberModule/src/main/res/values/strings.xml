@@ -150,7 +150,9 @@
     <string name="view_info">View Info</string>
 
     <!-- MENU DROPDOWN -->
-    <string name="profile">My Profile</string>
+    <string name="home">Home</string>
+    <string name="profile">Edit Profile Info</string>
+    <string name="password">Password Settings</string>
     <string name="log_out">Log Out</string>
 
     <!-- TODO: Remove or change this placeholder text -->

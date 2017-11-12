@@ -12,6 +12,9 @@ import android.os.Bundle;
 import android.text.Html;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -59,21 +62,15 @@ public class PartsCribberViewToolData extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.partscribber_viewtooldata);
-        actionBar = getSupportActionBar();
-        actionBar.setTitle(Html.fromHtml("<font color='#01579B'>PartsCribber</font>"));
 
         intent = getIntent();
         selectedItem = intent.getStringExtra("selectedItem");
         alreadyhas = intent.getStringExtra("alreadyhas");
         validatedID = intent.getStringExtra("theID");
 
-        User user = UserSession.getInstance(this).getUser();
-        if(user.getUsertype().equals("Student"))
-        {
-            validatedID = user.getUsername();
-            updateItem = (Button) findViewById(R.id.update_this_item_data);
-            updateItem.setVisibility(View.INVISIBLE);
-        }
+        actionBar = getSupportActionBar();
+        actionBar.setTitle(Html.fromHtml("<font color='#ffffff'>"+selectedItem+"</font>"));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         ((Button)findViewById(R.id.add_item_to_cart)).setText(TextUtils.isEmpty(validatedID) ? R.string.rent_item : R.string.add_item_to_cart);
         viewCart = (Button) findViewById(R.id.view_cart_button);
@@ -82,6 +79,82 @@ public class PartsCribberViewToolData extends AppCompatActivity
         {
             viewCart.setVisibility(View.VISIBLE);
         }
+
+        /*updateItem = (Button) findViewById(R.id.update_this_item_data);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 150);
+        params.addRule(RelativeLayout.BELOW, R.id.view_cart_button);
+        params.setMargins(15, 15, 15, 0);
+        updateItem.setLayoutParams(params);*/
+
+        User user = UserSession.getInstance(this).getUser();
+        if(user.getUsertype().equals("Student"))
+        {
+            validatedID = user.getUsername();
+            updateItem = (Button) findViewById(R.id.update_this_item_data);
+            updateItem.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                finish();
+                break;
+
+            case R.id.home:
+                User user = UserSession.getInstance(this).getUser();
+                if (user.getUsertype().equals("Admin"))
+                {
+                    Intent adminhome = new Intent(this, PartsCribberAdminMenu.class);
+                    adminhome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(adminhome);
+                    break;
+                }
+                else if(user.getUsertype().equals("Student"))
+                {
+                    Intent studenthome = new Intent(this, PartsCribberStudentMenu.class);
+                    studenthome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(studenthome);
+                    break;
+                }
+                else
+                {
+                    //Do not respond.
+                    break;
+                }
+
+            case R.id.profile:
+                Intent profileActivity = new Intent(this, PartsCribberViewProfile.class);
+                startActivity(profileActivity);
+                break;
+
+            case R.id.password:
+                Intent passwordActivity = new Intent(this, PartsCribberChangePassword.class);
+                startActivity(passwordActivity);
+                break;
+
+            case R.id.log_out:
+                finish();
+                UserSession.getInstance(getApplicationContext()).logout();
+                Intent login = new Intent(this, PartsCribberLogin.class);
+                login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(login);
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return true;
     }
 
     public void updateItem (View view)

@@ -82,6 +82,5 @@ public class UserSession
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
         editor.apply();
-        mCtx.startActivity(new Intent(mCtx, PartsCribberLogin.class));
     }
 }

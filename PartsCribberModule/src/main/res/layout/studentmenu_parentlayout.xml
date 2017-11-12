@@ -9,6 +9,6 @@
     android:textStyle="bold"
     android:textSize="20sp"
     android:paddingTop="10dp"
-    android:textColor="#01579B"
+    android:textColor="@color/textColor"
     android:text="@string/studentmenutext" />
 

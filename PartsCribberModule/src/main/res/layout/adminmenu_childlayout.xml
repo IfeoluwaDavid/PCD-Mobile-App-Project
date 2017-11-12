@@ -11,11 +11,11 @@ android:layout_height="match_parent">
     android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft"
     android:typeface="serif"
     android:textSize="20sp"
-    android:textColor="#01579B"
-    android:background="#29B6F6"
+    android:textStyle="bold"
+    android:textColor="@color/supportingColor"
+    android:background="#4FC3F7"
     android:paddingTop="10dp"
     android:paddingBottom="10dp"
-    android:text="@string/adminmenuchildtext"
-    />
+    android:text="@string/adminmenuchildtext"/>
 
 </LinearLayout>
