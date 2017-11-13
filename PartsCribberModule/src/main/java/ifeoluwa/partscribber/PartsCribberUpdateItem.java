@@ -40,10 +40,10 @@ import java.util.HashSet;
 
 public class PartsCribberUpdateItem extends AppCompatActivity
 {
-    EditText et_itemName, et_itemSerialNo, et_qtyTotal;
+    EditText et_itemName, et_itemSerialNo, et_qtyTotal, et_qtyAvailable;
     AutoCompleteTextView ac_category;
-    String itemID, newItemName, newSerialNo, newQtyTotal, newCategory;
-    String previousItemName, previousSerialNo, previousTotalQty, previousCategory;
+    String itemID, newItemName, newSerialNo, newQtyTotal, newCategory, newAvailableQty;
+    String previousItemName, previousSerialNo, previousTotalQty, previousCategory, previousAvailableQty;
     String jsonstring;
     String selectedItem;
     ArrayAdapter<String> adapter;
@@ -63,15 +63,17 @@ public class PartsCribberUpdateItem extends AppCompatActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         intent = getIntent();
-        selectedItem = intent.getStringExtra("selectedItem");
+        itemID = intent.getStringExtra("itemID");
 
         et_itemName = (EditText) findViewById(R.id.item_name);
         et_itemSerialNo = (EditText) findViewById(R.id.serial_number);
         et_qtyTotal = (EditText) findViewById(R.id.total_quantity);
+        et_qtyAvailable = (EditText) findViewById(R.id.available_quantity);
 
         previousItemName = et_itemName.getText().toString();
         previousSerialNo = et_itemSerialNo.getText().toString();
         previousTotalQty = et_qtyTotal.getText().toString();
+        previousAvailableQty = et_qtyAvailable.getText().toString();
 
         new ToolDataBackgroundTasks(this).execute();
         new fetchCategoryBackgroundTasks(this).execute();
@@ -145,11 +147,13 @@ public class PartsCribberUpdateItem extends AppCompatActivity
         newSerialNo = et_itemSerialNo.getText().toString();
         newQtyTotal = et_qtyTotal.getText().toString();
         newCategory = ac_category.getText().toString();
+        newAvailableQty = et_qtyAvailable.getText().toString();
 
         if (previousItemName.equals(et_itemName.getText().toString()) &&
             previousSerialNo.equals(et_itemSerialNo.getText().toString()) &&
             previousTotalQty.equals(et_qtyTotal.getText().toString()) &&
-            previousCategory.equals(ac_category.getText().toString()))
+            previousCategory.equals(ac_category.getText().toString()) &&
+            previousAvailableQty.equals(et_qtyAvailable.getText().toString()))
         {
             android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
             builder.setMessage("We noticed you haven't made any changes.");
@@ -197,26 +201,16 @@ public class PartsCribberUpdateItem extends AppCompatActivity
                 }
                 else
                 {
-                    if (newQtyTotal.equals("") || !digitValidation(newQtyTotal))
+                    if(newAvailableQty.equals("") || !digitValidation(newAvailableQty))
                     {
-                        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
-                        builder.setMessage("Stock quantity has to be at least 1.");
-                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
-                        {
-                            public void onClick(DialogInterface dialog, int which)
-                            {
-                                dialog.dismiss();
-                            }
-                        });
-                        android.support.v7.app.AlertDialog alert = builder.create();
-                        alert.show();
+
                     }
                     else
                     {
-                        if (newCategory.equals("") || !lengthValidation(newCategory))
+                        if (newQtyTotal.equals("") || !digitValidation(newQtyTotal))
                         {
                             android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
-                            builder.setMessage("Item Category is required and should be 3 or more characters.");
+                            builder.setMessage("Stock quantity has to be at least 1.");
                             builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
                             {
                                 public void onClick(DialogInterface dialog, int which)
@@ -229,7 +223,24 @@ public class PartsCribberUpdateItem extends AppCompatActivity
                         }
                         else
                         {
-                            new UpdateItemInfoBackgroundTasks(this).execute();
+                            if (newCategory.equals("") || !lengthValidation(newCategory))
+                            {
+                                android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
+                                builder.setMessage("Item Category is required and should be 3 or more characters.");
+                                builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                                {
+                                    public void onClick(DialogInterface dialog, int which)
+                                    {
+                                        dialog.dismiss();
+                                    }
+                                });
+                                android.support.v7.app.AlertDialog alert = builder.create();
+                                alert.show();
+                            }
+                            else
+                            {
+                                new UpdateItemInfoBackgroundTasks(this).execute();
+                            }
                         }
                     }
                 }
@@ -477,7 +488,7 @@ public class PartsCribberUpdateItem extends AppCompatActivity
             View dialogView = LayoutInflater.from(this.ctx).inflate(R.layout.progress_dialog, null);
             ((TextView)dialogView.findViewById(R.id.tv_progress_dialog)).setText("Please wait...");
             loginDialog = builder.setView(dialogView).setCancelable(false).show();
-            json_url = "http://partscribdatabase.tech/androidconnect/fetchSelectedItemData.php";
+            json_url = "http://partscribdatabase.tech/androidconnect/fetchSelectedIDData.php";
         }
 
         @Override
@@ -493,7 +504,7 @@ public class PartsCribberUpdateItem extends AppCompatActivity
                 OutputStream os = httpURLConnection.getOutputStream();
                 BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
 
-                String data = URLEncoder.encode("item_name", "UTF-8") + "=" + URLEncoder.encode(selectedItem, "UTF-8");
+                String data = URLEncoder.encode("item_id", "UTF-8") + "=" + URLEncoder.encode(itemID, "UTF-8");
 
                 bufferedWriter.write(data);
                 bufferedWriter.flush();
@@ -565,21 +576,23 @@ public class PartsCribberUpdateItem extends AppCompatActivity
                     jsonArray = jsonObject.getJSONArray("server_response");
                     JSONObject JO = jsonArray.getJSONObject(0);
 
-                    String itemName, serialNo, qtyTotal, itemCategory;
+                    String itemName, serialNo, qtyAvailable, qtyTotal, itemCategory;
 
-                    itemID = JO.getString("item_id");
                     itemName = JO.getString("item_name");
                     serialNo = JO.getString("serial_no");
+                    qtyAvailable = JO.getString("available_qty");
                     qtyTotal = JO.getString("total_qty");
                     itemCategory = JO.getString("category");
 
                     et_itemName = (EditText) findViewById(R.id.item_name);
                     et_itemSerialNo = (EditText) findViewById(R.id.serial_number);
+                    et_qtyAvailable = (EditText) findViewById(R.id.available_quantity);
                     et_qtyTotal = (EditText) findViewById(R.id.total_quantity);
                     ac_category = (AutoCompleteTextView) findViewById(R.id.category_name);
 
                     et_itemName.setText(itemName);
                     et_itemSerialNo.setText(serialNo);
+                    et_qtyAvailable.setText(qtyAvailable);
                     et_qtyTotal.setText(qtyTotal);
                     ac_category.setText(itemCategory);
                 }
@@ -638,6 +651,8 @@ public class PartsCribberUpdateItem extends AppCompatActivity
                         URLEncoder.encode(newSerialNo, "UTF-8") + "&" +
                         URLEncoder.encode("total_qty", "UTF-8") + "=" +
                         URLEncoder.encode(newQtyTotal, "UTF-8") + "&" +
+                        URLEncoder.encode("available_qty", "UTF-8") + "=" +
+                        URLEncoder.encode(newAvailableQty, "UTF-8") + "&" +
                         URLEncoder.encode("category", "UTF-8") + "=" +
                         URLEncoder.encode(newCategory, "UTF-8");
 
@@ -718,7 +733,7 @@ public class PartsCribberUpdateItem extends AppCompatActivity
                     if (code.equals("update_true"))
                     {
                         android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
-                        builder.setTitle("Successfully Added");
+                        builder.setTitle("Successful Update");
                         builder.setMessage(message);
                         builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
                         {

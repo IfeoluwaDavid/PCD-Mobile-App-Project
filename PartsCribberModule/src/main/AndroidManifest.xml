@@ -32,7 +32,8 @@
         <activity android:name=".PartsCribberRentEquipment" />
         <activity android:name=".PartsCribberStudentCart" />
         <activity android:name=".PartsCribberReturnEquipment" />
-        <activity android:name=".PartsCribberStudentHolds"></activity>
+        <activity android:name=".PartsCribberStudentHolds" />
+        <activity android:name=".PartsCribberActualHolders"></activity>
     </application>
 
 </manifest>

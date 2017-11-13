@@ -16,7 +16,7 @@
         android:typeface="serif"
         android:textColor="@color/supportingColor"
         android:textSize="25sp"
-        android:layout_marginTop="68dp"
+        android:layout_marginTop="40dp"
         android:text="@string/update_item_header"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
@@ -61,6 +61,22 @@
         android:ems="10"
         android:inputType="number"
         android:hint="@string/total_quantity"
+        android:textStyle="bold"
+        android:textColor="@color/supportingColor"
+        android:padding="9dp"
+        android:background="#E1F5FE"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/available_quantity"
+        android:layout_alignStart="@+id/available_quantity"
+        android:layout_alignEnd="@+id/available_quantity" />
+
+    <EditText
+        android:id="@+id/available_quantity"
+        android:layout_width="170dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="number"
+        android:hint="@string/qty_available"
         android:textStyle="bold"
         android:textColor="@color/supportingColor"
         android:padding="9dp"

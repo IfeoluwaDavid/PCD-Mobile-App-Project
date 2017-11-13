@@ -1209,27 +1209,35 @@ public class PartsCribberReturnEquipment extends AppCompatActivity
 
     public void onBackPressed()
     {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Confirm");
-        builder.setMessage("Are you sure you want to exit this return process?");
-        builder.setPositiveButton("YES", new DialogInterface.OnClickListener()
+        User user = UserSession.getInstance(this).getUser();
+        if (user.getUsertype().equals("Admin"))
         {
-            public void onClick(DialogInterface dialog, int which)
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Confirm");
+            builder.setMessage("Are you sure you want to exit this return process?");
+            builder.setPositiveButton("YES", new DialogInterface.OnClickListener()
             {
-                dialog.dismiss();
-                finish();
-            }
-        });
-        builder.setNegativeButton("NO", new DialogInterface.OnClickListener()
+                public void onClick(DialogInterface dialog, int which)
+                {
+                    dialog.dismiss();
+                    finish();
+                }
+            });
+            builder.setNegativeButton("NO", new DialogInterface.OnClickListener()
+            {
+                @Override
+                public void onClick(DialogInterface dialog, int which)
+                {
+                    dialog.dismiss();
+                }
+            });
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
+        else
         {
-            @Override
-            public void onClick(DialogInterface dialog, int which)
-            {
-                dialog.dismiss();
-            }
-        });
-        AlertDialog alert = builder.create();
-        alert.show();
+            finish();
+        }
     }
 
 }

@@ -75,7 +75,8 @@
     <string name="viewtools_itemnametext">Item Name</string>
 
     <!-- TOOLS DATA ACTIVITY -->
-    <string name="item_name_header">Item Name</string>
+    <string name="view_holders">View Holders</string>
+    <string name="delete_item">Delete Item</string>
     <string name="serial_no">Serial Number</string>
     <string name="qty_available">Qty Available</string>
     <string name="qty_rented">Qty Rented</string>
@@ -107,7 +108,7 @@
     <string name="serial_number">Serial No.</string>
     <string name="available_quantity">Available Qty</string>
     <string name="rented_quantity">Rented Qty</string>
-    <string name="total_quantity">Total Qty</string>
+    <string name="total_quantity">Total Stock Qty</string>
     <string name="category_name">Category</string>
     <string name="save_item_changes">Save Changes</string>
 
