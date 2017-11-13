@@ -84,9 +84,10 @@ public class PartsCribberLogin extends AppCompatActivity
             public void onClick(DialogInterface dialog, int which)
             {
                 dialog.dismiss();
-                int id = android.os.Process.myPid();
-                android.os.Process.killProcess(id);
-                System.exit(0);
+                //int id = android.os.Process.myPid();
+                //android.os.Process.killProcess(id);
+                finishAffinity();
+                //System.exit(0);
             }
         });
         builder.setNegativeButton("NO", new DialogInterface.OnClickListener()

@@ -1,26 +1,28 @@
 package ifeoluwa.partscribber;
 
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.text.Html;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,48 +38,34 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- */
-
-public class PCViewAllUsers extends Fragment
+public class PartsCribberActualHolders extends AppCompatActivity
 {
-    View finder;
-    String jsonstring,selectedID;
     JSONObject jsonObject;
     JSONArray jsonArray;
-    ArrayAdapter<String> adapter;
-    ListView listView;
-    SearchView searchView;
-    ActionBar actionBar;
+    String selectedItem, selectedID, jsonstring;
     Intent intent;
-    int count;
-    android.support.v7.app.AlertDialog dialog;
-
-    String fname, lname, possessionqty, email, status;
-    android.support.v7.app.AlertDialog.Builder mBuilder, builder;
-    View mView;
-    TextView studentIDheader;
-    EditText studentfullname, studentpossessionqty, studentemail, studentstatus;
-
-    public PCViewAllUsers()
-    {
-        // Required empty public constructor
-    }
+    ListView listView;
+    ActionBar actionBar;
+    StudentHoldsAdapter studentHoldsAdapter;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    protected void onCreate(Bundle savedInstanceState)
     {
-        // Inflate the layout for this fragment
-        finder = inflater.inflate(R.layout.pcviewallusers_fragment, container, false);
-        new fetchAllStudentsBackgroundTasks(getActivity()).execute();
-        return finder;
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.partscribber_actualholders);
+
+        intent = getIntent();
+        selectedItem = intent.getStringExtra("selectedItem");
+
+        actionBar = getSupportActionBar();
+        actionBar.setTitle(Html.fromHtml("<font color='#ffffff'>"+selectedItem+"</font>"));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        new ItemInfoBackgroundTasks(this).execute();
     }
 
-    class fetchAllStudentsBackgroundTasks extends AsyncTask<Void, Void, String>
+    class ItemInfoBackgroundTasks extends AsyncTask<Void, Void, String>
     {
         String json_url;
         String JSON_STRING;
@@ -85,9 +73,8 @@ public class PCViewAllUsers extends Fragment
         AlertDialog.Builder builder;
         private Activity activity;
         private AlertDialog loginDialog;
-        List<String> arraylistofStudentObjects = new ArrayList<String>();
 
-        public fetchAllStudentsBackgroundTasks(Context ctx)
+        public ItemInfoBackgroundTasks(Context ctx)
         {
             this.ctx = ctx;
             activity = (Activity)ctx;
@@ -100,7 +87,7 @@ public class PCViewAllUsers extends Fragment
             View dialogView = LayoutInflater.from(this.ctx).inflate(R.layout.progress_dialog, null);
             ((TextView)dialogView.findViewById(R.id.tv_progress_dialog)).setText("Please wait...");
             loginDialog = builder.setView(dialogView).setCancelable(false).show();
-            json_url = "http://partscribdatabase.tech/androidconnect/fetchAllStudents.php";
+            json_url = "http://partscribdatabase.tech/androidconnect/studentholds.php";
         }
 
         @Override
@@ -110,6 +97,18 @@ public class PCViewAllUsers extends Fragment
             {
                 URL url = new URL(json_url);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setDoOutput(true);
+                httpURLConnection.setDoInput(true);
+                OutputStream os = httpURLConnection.getOutputStream();
+                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+
+                String data = URLEncoder.encode("item_name", "UTF-8") + "=" + URLEncoder.encode(selectedItem, "UTF-8");
+
+                bufferedWriter.write(data);
+                bufferedWriter.flush();
+                bufferedWriter.close();
+                os.close();
                 InputStream is = httpURLConnection.getInputStream();
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is));
                 StringBuilder stringBuilder = new StringBuilder();
@@ -153,14 +152,15 @@ public class PCViewAllUsers extends Fragment
                     public void onClick(DialogInterface dialog, int which)
                     {
                         dialog.dismiss();
-                        new fetchAllStudentsBackgroundTasks(ctx).execute();
+                        new ItemInfoBackgroundTasks(ctx).execute();
                     }
                 });
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
+                builder.setNegativeButton("Exit", new DialogInterface.OnClickListener()
                 {
                     public void onClick(DialogInterface dialog, int which)
                     {
                         dialog.dismiss();
+                        finish();
                     }
                 });
                 android.support.v7.app.AlertDialog alert = builder.create();
@@ -168,66 +168,67 @@ public class PCViewAllUsers extends Fragment
             }
             else
             {
-                jsonstring = result;
-                count = 0;
 
-                listView =(ListView) finder.findViewById(R.id.listview);
-                searchView = (SearchView) finder.findViewById(R.id.searchView);
-                searchView.setIconified(false);
-                searchView.clearFocus();
+                jsonstring = result;
+                ArrayList<String> usernameList = new ArrayList<String>();
+                ArrayList<String> quantityHeldList = new ArrayList<String>();
+                ArrayList<HoldObjects> holdList = new ArrayList<HoldObjects>();
+                final ArrayList<String> adapterCopy = new ArrayList<String>();
 
                 try
                 {
                     jsonObject = new JSONObject(jsonstring);
                     jsonArray = jsonObject.getJSONArray("server_response");
+                    JSONObject JO = jsonArray.getJSONObject(0);
 
-                    String username;
+                    String username, quantityheld;
 
-                    while(count < jsonArray.length())
+                    listView = (ListView) findViewById(R.id.listview);
+                    studentHoldsAdapter = new StudentHoldsAdapter(ctx, R.layout.studentholds_rowlayout);
+                    listView.setAdapter(studentHoldsAdapter);
+
+                    username = JO.getString("allstudents");
+                    quantityheld = JO.getString("quantityheld");
+
+                    String[] usernameArray = username.split(",");
+                    for(int i = 0; i < usernameArray.length; i++)
                     {
-                        JSONObject JO = jsonArray.getJSONObject(count);
-                        username = JO.getString("username");
-                        arraylistofStudentObjects.add(username.toUpperCase());
-                        count++;
+                        usernameList.add(usernameArray[i]);
                     }
 
-                    adapter=new ArrayAdapter<String>(ctx, R.layout.viewalltools_rowlayout,R.id.viewalltools_itemnametext, arraylistofStudentObjects);
-                    listView.setAdapter(adapter);
+                    String[] quantityArray = quantityheld.split(",");
+                    for(int i = 0; i < quantityArray.length; i++)
+                    {
+                        quantityHeldList.add(quantityArray[i]);
+                    }
+
+                    for(int i = 0; i < usernameList.size(); i++)
+                    {
+                        if(Integer.valueOf(quantityHeldList.get(i)) > 0)
+                        {
+                            String theUsername = usernameList.get(i);
+                            String theQuantityHeld = quantityHeldList.get(i);
+
+                            HoldObjects user = new HoldObjects(theUsername.toUpperCase(), theQuantityHeld);
+                            adapterCopy.add(theUsername.toUpperCase());
+                            holdList.add(user);
+                            studentHoldsAdapter.add(user);
+                        }
+                    }
 
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
                     {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id)
                         {
-                            selectedID = parent.getItemAtPosition(position).toString();
-                            new UserInfoBackgroundTasks(getActivity()).execute();
+                            String selectedStudent = adapterCopy.get(position);
+                            selectedID = selectedStudent;
+                            new UserInfoBackgroundTasks(ctx).execute();
+                            //Toast.makeText(getBaseContext(), "("+selectedID+")",Toast.LENGTH_LONG).show();
                         }
                     });
-
-                    searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener()
-                    {
-                        @Override
-                        public boolean onQueryTextSubmit(String query)
-                        {
-                            return false;
-                        }
-
-                        @Override
-                        public boolean onQueryTextChange(String newText)
-                        {
-                            adapter.getFilter().filter(newText);
-                            return false;
-                        }
-                    });
-
-                    searchView.setOnSearchClickListener(new View.OnClickListener()
-                    {
-                        @Override
-                        public void onClick(View v)
-                        {
-                            searchView.onActionViewExpanded();
-                        }
-                    });
+                    //Log.d("Debug", usernameList.toString());
+                    //Log.d("Debug", quantityHeldList.toString());
                 }
                 catch (JSONException e)
                 {
@@ -241,9 +242,13 @@ public class PCViewAllUsers extends Fragment
     {
         Context ctx;
         String json_url, JSON_STRING;
-        android.app.AlertDialog.Builder builder;
+        AlertDialog.Builder builder, mBuilder;
         private Activity activity;
-        private android.app.AlertDialog loginDialog;
+        private android.app.AlertDialog loginDialog, dialog;
+        View mView;
+        TextView studentIDheader;
+        String fname, lname, possessionqty, email, status;
+        EditText studentfullname, studentpossessionqty, studentemail, studentstatus;
 
         public UserInfoBackgroundTasks(Context ctx)
         {
@@ -254,7 +259,7 @@ public class PCViewAllUsers extends Fragment
         @Override
         protected void onPreExecute()
         {
-            builder = new android.app.AlertDialog.Builder(activity);
+            builder = new AlertDialog.Builder(activity);
             View dialogView = LayoutInflater.from(this.ctx).inflate(R.layout.progress_dialog, null);
             ((TextView) dialogView.findViewById(R.id.tv_progress_dialog)).setText("Please wait...");
             loginDialog = builder.setView(dialogView).setCancelable(false).show();
@@ -350,9 +355,9 @@ public class PCViewAllUsers extends Fragment
                     email = JO.getString("email");
                     status = JO.getString("status");
 
-                    mBuilder = new android.support.v7.app.AlertDialog.Builder(activity);
+                    mBuilder = new AlertDialog.Builder(activity);
 
-                    LayoutInflater inflater = LayoutInflater.from(getContext());
+                    LayoutInflater inflater = LayoutInflater.from(ctx);
                     mView = inflater.inflate(R.layout.studentinfo_alertdialog, null);
 
                     studentIDheader = (TextView) mView.findViewById(R.id.textView3);
@@ -389,7 +394,7 @@ public class PCViewAllUsers extends Fragment
                         @Override
                         public void onClick(final View v)
                         {
-                            Intent intent = new Intent(getActivity(), PartsCribberReturnEquipment.class);
+                            Intent intent = new Intent(ctx, PartsCribberReturnEquipment.class);
                             intent.putExtra("theID", selectedID);
                             startActivity(intent);
                         }
@@ -401,5 +406,88 @@ public class PCViewAllUsers extends Fragment
                 }
             }
         }
+    }
+
+    public class HoldObjects
+    {
+        private String username, quantityHeld;
+
+        public HoldObjects(String username, String quantityHeld)
+        {
+            this.username = username;
+            this.quantityHeld = quantityHeld;
+        }
+
+        public String getUsername()
+        {
+            return username;
+        }
+
+        public String getQuantityHeld()
+        {
+            return quantityHeld;
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                finish();
+                break;
+
+            case R.id.home:
+                User user = UserSession.getInstance(this).getUser();
+                if (user.getUsertype().equals("Admin"))
+                {
+                    Intent adminhome = new Intent(this, PartsCribberAdminMenu.class);
+                    adminhome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(adminhome);
+                    break;
+                }
+                else if(user.getUsertype().equals("Student"))
+                {
+                    Intent studenthome = new Intent(this, PartsCribberStudentMenu.class);
+                    studenthome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(studenthome);
+                    break;
+                }
+                else
+                {
+                    //Do not respond.
+                    break;
+                }
+
+            case R.id.profile:
+                Intent profileActivity = new Intent(this, PartsCribberViewProfile.class);
+                startActivity(profileActivity);
+                break;
+
+            case R.id.password:
+                Intent passwordActivity = new Intent(this, PartsCribberChangePassword.class);
+                startActivity(passwordActivity);
+                break;
+
+            case R.id.log_out:
+                finish();
+                UserSession.getInstance(getApplicationContext()).logout();
+                Intent login = new Intent(this, PartsCribberLogin.class);
+                login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(login);
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return true;
     }
 }

@@ -49,13 +49,12 @@ public class PartsCribberViewToolData extends AppCompatActivity
     JSONObject jsonObject;
     JSONArray jsonArray;
     ActionBar actionBar;
-    String validatedID, validItemQuantity, studentIDvalue, globalSelectedItemAvailableQuantity;
+    String validatedID, validItemQuantity, studentIDvalue, globalSelectedItemAvailableQuantity, itemID;
     AlertDialog.Builder mBuilder;
     AlertDialog dialog;
     View mView;
     EditText et_itemSerialNo, et_qtyAvailable, et_qtyRented, et_qtyTotal, et_category, studentID, itemQuantity;
-    TextView tv_itemName;
-    Button viewCart, updateItem;
+    Button viewCart, updateItem, addToCart, viewHolders, deleteItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -72,27 +71,43 @@ public class PartsCribberViewToolData extends AppCompatActivity
         actionBar.setTitle(Html.fromHtml("<font color='#ffffff'>"+selectedItem+"</font>"));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        ((Button)findViewById(R.id.add_item_to_cart)).setText(TextUtils.isEmpty(validatedID) ? R.string.rent_item : R.string.add_item_to_cart);
+        User user = UserSession.getInstance(this).getUser();
+        addToCart = (Button) findViewById(R.id.add_item_to_cart);
         viewCart = (Button) findViewById(R.id.view_cart_button);
+        viewHolders = (Button) findViewById(R.id.view_holders);
+        deleteItem = (Button) findViewById(R.id.delete_item);
+        updateItem = (Button) findViewById(R.id.update_this_item_data);
 
         if(!TextUtils.isEmpty(validatedID))
         {
+            addToCart.setText(R.string.add_item_to_cart);
             viewCart.setVisibility(View.VISIBLE);
+
+            if(user.getUsertype().equals("Admin"))
+            {
+                updateItem = (Button) findViewById(R.id.update_this_item_data);
+                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 150);
+                params.addRule(RelativeLayout.BELOW, R.id.delete_item);
+                params.setMargins(15, 15, 15, 0);
+                updateItem.setLayoutParams(params);
+            }
+        }
+        else
+        {
+            addToCart.setText(R.string.rent_item);
         }
 
-        /*updateItem = (Button) findViewById(R.id.update_this_item_data);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 150);
-        params.addRule(RelativeLayout.BELOW, R.id.view_cart_button);
-        params.setMargins(15, 15, 15, 0);
-        updateItem.setLayoutParams(params);*/
-
-        User user = UserSession.getInstance(this).getUser();
         if(user.getUsertype().equals("Student"))
         {
             validatedID = user.getUsername();
-            updateItem = (Button) findViewById(R.id.update_this_item_data);
+            addToCart.setText(R.string.add_item_to_cart);
+            viewCart.setVisibility(View.VISIBLE);
             updateItem.setVisibility(View.INVISIBLE);
+            viewHolders.setVisibility(View.INVISIBLE);
+            deleteItem.setVisibility(View.INVISIBLE);
         }
+
+        new ToolDataBackgroundTasks(this).execute();
     }
 
     @Override
@@ -148,7 +163,6 @@ public class PartsCribberViewToolData extends AppCompatActivity
                 finish();
                 UserSession.getInstance(getApplicationContext()).logout();
                 Intent login = new Intent(this, PartsCribberLogin.class);
-                login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(login);
 
             default:
@@ -157,10 +171,40 @@ public class PartsCribberViewToolData extends AppCompatActivity
         return true;
     }
 
+    public void deleteItem(View view)
+    {
+        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
+        builder.setMessage("Are you sure you want to delete this item?");
+        builder.setPositiveButton("YES", new DialogInterface.OnClickListener()
+        {
+            public void onClick(DialogInterface dialog, int which)
+            {
+                dialog.dismiss();
+                new DeleteItemBackgroundTasks(PartsCribberViewToolData.this).execute();
+            }
+        });
+        builder.setNegativeButton("NO", new DialogInterface.OnClickListener()
+        {
+            public void onClick(DialogInterface dialog, int which)
+            {
+                dialog.dismiss();
+            }
+        });
+        android.support.v7.app.AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    public void viewHolders(View view)
+    {
+        Intent intent = new Intent(PartsCribberViewToolData.this, PartsCribberActualHolders.class);
+        intent.putExtra("selectedItem", String.valueOf(selectedItem));
+        startActivity(intent);
+    }
+
     public void updateItem (View view)
     {
         Intent intent = new Intent(PartsCribberViewToolData.this, PartsCribberUpdateItem.class);
-        intent.putExtra("selectedItem", String.valueOf(selectedItem));
+        intent.putExtra("itemID", itemID);
         startActivity(intent);
     }
 
@@ -286,10 +330,10 @@ public class PartsCribberViewToolData extends AppCompatActivity
     }
 
     @Override
-    protected void onResume()
+    protected void onRestart()
     {
-        super.onResume();
-        new ToolDataBackgroundTasks(this).execute();
+        super.onRestart();
+        new ToolDatabyIDBackgroundTasks(this).execute();
     }
 
     class ToolDataBackgroundTasks extends AsyncTask<Void, Void, String>
@@ -402,23 +446,21 @@ public class PartsCribberViewToolData extends AppCompatActivity
                     jsonArray = jsonObject.getJSONArray("server_response");
                     JSONObject JO = jsonArray.getJSONObject(0);
 
-                    String itemName, serialNo, qtyAvailable, qtyRented, qtyTotal, itemCategory;
+                    String serialNo, qtyAvailable, qtyRented, qtyTotal, itemCategory;
 
-                    itemName = JO.getString("item_name");
+                    itemID = JO.getString("item_id");
                     serialNo = JO.getString("serial_no");
                     qtyAvailable = JO.getString("available_qty");
                     qtyRented = JO.getString("rented_qty");
                     qtyTotal = JO.getString("total_qty");
                     itemCategory = JO.getString("category");
 
-                    tv_itemName = (TextView) findViewById(R.id.item_name_header);
                     et_itemSerialNo = (EditText) findViewById(R.id.serial_no);
                     et_qtyAvailable = (EditText) findViewById(R.id.qty_available);
                     et_qtyRented = (EditText) findViewById(R.id.qty_rented);
                     et_qtyTotal = (EditText) findViewById(R.id.qty_total);
                     et_category = (EditText) findViewById(R.id.item_category);
 
-                    tv_itemName.setText(itemName);
                     et_itemSerialNo.setText("Serial Number: " + serialNo);
                     et_qtyAvailable.setText("Available Quantity: " + qtyAvailable);
                     et_qtyRented.setText("Rented Quantity: " + qtyRented);
@@ -570,7 +612,7 @@ public class PartsCribberViewToolData extends AppCompatActivity
                                 {
                                     updateItem = (Button) findViewById(R.id.update_this_item_data);
                                     RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 150);
-                                    params.addRule(RelativeLayout.BELOW, R.id.view_cart_button);
+                                    params.addRule(RelativeLayout.BELOW, R.id.delete_item);
                                     params.setMargins(15, 15, 15, 0);
                                     updateItem.setLayoutParams(params);
                                 }
@@ -754,7 +796,7 @@ public class PartsCribberViewToolData extends AppCompatActivity
                     if (code.equals("update_true"))
                     {
                         android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
-                        builder.setTitle("Successfully Added");
+                        builder.setTitle("Done! Added to Cart");
                         builder.setMessage(message);
                         builder.setCancelable(true);
                         builder.setPositiveButton("YES", new DialogInterface.OnClickListener()
@@ -815,6 +857,316 @@ public class PartsCribberViewToolData extends AppCompatActivity
                 }
                 catch (JSONException e)
                 {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    class ToolDatabyIDBackgroundTasks extends AsyncTask<Void, Void, String>
+    {
+        String json_url;
+        String JSON_STRING;
+        Context ctx;
+        AlertDialog.Builder builder;
+        private Activity activity;
+        private AlertDialog loginDialog;
+
+        public ToolDatabyIDBackgroundTasks(Context ctx)
+        {
+            this.ctx = ctx;
+            activity = (Activity)ctx;
+        }
+
+        @Override
+        protected void onPreExecute()
+        {
+            builder = new AlertDialog.Builder(activity);
+            View dialogView = LayoutInflater.from(this.ctx).inflate(R.layout.progress_dialog, null);
+            ((TextView)dialogView.findViewById(R.id.tv_progress_dialog)).setText("Please wait...");
+            loginDialog = builder.setView(dialogView).setCancelable(false).show();
+            json_url = "http://partscribdatabase.tech/androidconnect/fetchSelectedIDData.php";
+        }
+
+        @Override
+        protected String doInBackground(Void... voids)
+        {
+            try
+            {
+                URL url = new URL(json_url);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setDoOutput(true);
+                httpURLConnection.setDoInput(true);
+                OutputStream os = httpURLConnection.getOutputStream();
+                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+
+                String data = URLEncoder.encode("item_id", "UTF-8") + "=" + URLEncoder.encode(itemID, "UTF-8");
+
+                bufferedWriter.write(data);
+                bufferedWriter.flush();
+                bufferedWriter.close();
+                os.close();
+                InputStream is = httpURLConnection.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is));
+                StringBuilder stringBuilder = new StringBuilder();
+                while ((JSON_STRING = bufferedReader.readLine()) != null)
+                {
+                    stringBuilder.append(JSON_STRING + "\n");
+                }
+                bufferedReader.close();
+                is.close();
+                httpURLConnection.disconnect();
+                return stringBuilder.toString().trim();
+            }
+            catch (MalformedURLException e)
+            {
+                e.printStackTrace();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values)
+        {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected void onPostExecute(String result)
+        {
+            loginDialog.dismiss();
+            if(TextUtils.isEmpty(result))
+            {
+                android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+                builder.setMessage("Connection Error.");
+                builder.setCancelable(false);
+                builder.setPositiveButton("Retry", new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        dialog.dismiss();
+                        new ToolDataBackgroundTasks(ctx).execute();
+                    }
+                });
+                builder.setNegativeButton("Exit", new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        dialog.dismiss();
+                        finish();
+                    }
+                });
+                android.support.v7.app.AlertDialog alert = builder.create();
+                alert.show();
+            }
+            else
+            {
+                jsonstring = result;
+                try
+                {
+                    jsonObject = new JSONObject(jsonstring);
+                    jsonArray = jsonObject.getJSONArray("server_response");
+                    JSONObject JO = jsonArray.getJSONObject(0);
+
+                    String itemName, serialNo, qtyAvailable, qtyRented, qtyTotal, itemCategory;
+
+                    itemName = JO.getString("item_name");
+                    serialNo = JO.getString("serial_no");
+                    qtyAvailable = JO.getString("available_qty");
+                    qtyRented = JO.getString("rented_qty");
+                    qtyTotal = JO.getString("total_qty");
+                    itemCategory = JO.getString("category");
+
+                    et_itemSerialNo = (EditText) findViewById(R.id.serial_no);
+                    et_qtyAvailable = (EditText) findViewById(R.id.qty_available);
+                    et_qtyRented = (EditText) findViewById(R.id.qty_rented);
+                    et_qtyTotal = (EditText) findViewById(R.id.qty_total);
+                    et_category = (EditText) findViewById(R.id.item_category);
+
+                    et_itemSerialNo.setText("Serial Number: " + serialNo);
+                    et_qtyAvailable.setText("Available Quantity: " + qtyAvailable);
+                    et_qtyRented.setText("Rented Quantity: " + qtyRented);
+                    et_qtyTotal.setText("Total Quantity: " + qtyTotal);
+                    et_category.setText("Item Category: " + itemCategory);
+
+                    globalSelectedItemAvailableQuantity = qtyAvailable;
+
+                    actionBar.setTitle(Html.fromHtml("<font color='#ffffff'>"+itemName+"</font>"));
+                }
+                catch (JSONException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    class DeleteItemBackgroundTasks extends AsyncTask<Void, Void, String>
+    {
+        String json_url;
+        String JSON_STRING;
+        Context ctx;
+        AlertDialog.Builder builder;
+        private Activity activity;
+        private AlertDialog loginDialog;
+
+        public DeleteItemBackgroundTasks(Context ctx)
+        {
+            this.ctx = ctx;
+            activity = (Activity)ctx;
+        }
+
+        @Override
+        protected void onPreExecute()
+        {
+            builder = new AlertDialog.Builder(activity);
+            View dialogView = LayoutInflater.from(this.ctx).inflate(R.layout.progress_dialog, null);
+            ((TextView)dialogView.findViewById(R.id.tv_progress_dialog)).setText("Please wait...");
+            loginDialog = builder.setView(dialogView).setCancelable(false).show();
+            json_url = "http://partscribdatabase.tech/androidconnect/deleteItem.php";
+        }
+
+        @Override
+        protected String doInBackground(Void... voids)
+        {
+            try
+            {
+                URL url = new URL(json_url);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setDoOutput(true);
+                httpURLConnection.setDoInput(true);
+                OutputStream os = httpURLConnection.getOutputStream();
+                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+
+                String data = URLEncoder.encode("item_id", "UTF-8") + "=" + URLEncoder.encode(itemID, "UTF-8");
+
+                bufferedWriter.write(data);
+                bufferedWriter.flush();
+                bufferedWriter.close();
+                os.close();
+                InputStream is = httpURLConnection.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is));
+                StringBuilder stringBuilder = new StringBuilder();
+                while ((JSON_STRING = bufferedReader.readLine()) != null)
+                {
+                    stringBuilder.append(JSON_STRING + "\n");
+                }
+                bufferedReader.close();
+                is.close();
+                httpURLConnection.disconnect();
+                return stringBuilder.toString().trim();
+            }
+            catch (MalformedURLException e)
+            {
+                e.printStackTrace();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values)
+        {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected void onPostExecute(String result)
+        {
+            loginDialog.dismiss();
+            if(TextUtils.isEmpty(result))
+            {
+                android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+                builder.setMessage("Connection Error.");
+                builder.setCancelable(false);
+                builder.setPositiveButton("Retry", new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        dialog.dismiss();
+                        new ToolDataBackgroundTasks(ctx).execute();
+                    }
+                });
+                builder.setNegativeButton("Exit", new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        dialog.dismiss();
+                        finish();
+                    }
+                });
+                android.support.v7.app.AlertDialog alert = builder.create();
+                alert.show();
+            }
+            else
+            {
+                String code = "";
+                String message = "";
+                try
+                {
+                    JSONObject jsonObject = new JSONObject(result);
+                    JSONArray jsonArray = jsonObject.getJSONArray("server_response");
+                    JSONObject JO = jsonArray.getJSONObject(0);
+
+                    // Server always responds with this values
+                    message = JO.getString("message");
+                    code = JO.getString("code");
+
+                    if (code.equals("update_true"))
+                    {
+                        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+                        builder.setTitle("Successful Update");
+                        builder.setMessage(message);
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                        {
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                dialog.dismiss();
+                                activity.finish();
+                            }
+                        });
+                        android.support.v7.app.AlertDialog alert = builder.create();
+                        alert.show();
+                    }
+                    else if(code.equals("update_false"))
+                    {
+                        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+                        builder.setTitle("Something went wrong!");
+                        builder.setMessage(message);
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                        {
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                dialog.dismiss();
+                            }
+                        });
+                        android.support.v7.app.AlertDialog alert = builder.create();
+                        alert.show();
+                    }
+                }
+                catch (JSONException e)
+                {
+                    android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
+                    builder.setTitle("Unknown error occured");
+                    builder.setMessage("Unknown Error Occurred, Please Try Again.");
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                    {
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+                            dialog.dismiss();
+                        }
+                    });
+                    android.support.v7.app.AlertDialog alert = builder.create();
+                    alert.show();
                     e.printStackTrace();
                 }
             }
