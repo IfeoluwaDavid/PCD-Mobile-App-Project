@@ -1,61 +1,41 @@
 <resources>
+
     <string name="app_name">PartsCribber</string>
 
     <!-- LOGIN ACTIVITY -->
-    <string name="login_header">LOGIN</string>
+    <string name="login">LOGIN</string>
     <string name="login_username">Username (ID)</string>
-    <string name="login_password">Password</string>
-    <string name="login_button">LOGIN</string>
     <string name="open_registerpage_button">REGISTER</string>
-    <string name="forgot_password">Forgot Password?</string>
 
     <!-- REGISTER NEW STUDENT/ADMIN ACTIVITY -->
-    <string name="register_singlestudent_header">REGISTER STUDENT</string>
-    <string name="register_username_hint">Student Username</string>
-    <string name="register_firstname_hint">First Name </string>
-    <string name="register_lastname_hint">Last Name</string>
-    <string name="register_email_hint">Email Address</string>
-    <string name="register_password_hint">Password</string>
-    <string name="register_confirmpassword_hint">Confirm Password</string>
+    <string name="username_hint">Student Username</string>
+    <string name="firstname_hint">First Name </string>
+    <string name="lastname_hint">Last Name</string>
+    <string name="email_hint">Email Address</string>
+    <string name="password_hint">Password</string>
+    <string name="confirmpassword_hint">Confirm Password</string>
     <string name="register_singlestudent_button">REGISTER STUDENT</string>
-
-    <!-- USER PROFILE ACTIVITY -->
-    <string name="myUsername">My Username (ID)</string>
-    <string name="myFirstname">My First Name</string>
-    <string name="myLastname">My Last Name</string>
-    <string name="myEmail">My Email</string>
-    <string name="myUsertype">My User Type</string>
-    <string name="logout_button">Log Out</string>
+    <string name="register_newadmin_button">REGISTER ADMIN</string>
 
     <!-- ADMIN MENU ACTIVITY -->
-    <string name="adminmenuparenttext">Admin Menu Parent Text</string>
-    <string name="adminmenuchildtext">Admin Menu Child Text</string>
-    <string name="welcomeusername">Firstname Lastname</string>
+    <string name="adminmenuparenttext"> </string>
+    <string name="adminmenuchildtext"> </string>
+    <string name="welcomeusername"> </string>
 
     <!-- STUDENT MENU ACTIVITY -->
-    <string name="studentmenutext">Student Menu Text</string>
     <string name="my_possessions_button">Possessions</string>
     <string name="my_cart_button">My Cart</string>
 
-    <!-- REGISTER NEW ADMIN ACTIVITY -->
-    <string name="register_newadmin_header">REGISTER ADMIN</string>
-    <string name="newadmin_username">Admin Username</string>
-    <string name="newadmin_password">Password</string>
-    <string name="newadmin_confirmpassword">Confirm Password</string>
-    <string name="newadmin_firstname">First Name</string>
-    <string name="newadmin_lastname">Last Name</string>
-    <string name="newadmin_email">Email Address</string>
-    <string name="register_newadmin_button">REGISTER ADMIN</string>
-
     <!-- VIEW/EDIT PROFILE ACTIVITY -->
     <string name="edit_profile_header">Profile Information</string>
-    <string name="edit_profile_username">Edit Username</string>
-    <string name="edit_profile_firstname">Edit Firstname</string>
-    <string name="edit_profile_lastname">Edit Lastname</string>
-    <string name="edit_profile_email">Edit Email</string>
+    <string name="edit_profile_username">Your Username</string>
+    <string name="edit_profile_firstname">Your Firstname</string>
+    <string name="edit_profile_lastname">Your Lastname</string>
+    <string name="edit_profile_email">Your Email</string>
     <string name="user_status">Admin/Student</string>
     <string name="edit_button">EDIT INFORMATION</string>
     <string name="save_button">SAVE INFORMATION</string>
+    <string name="logout_button">Log Out</string>
 
     <!-- CHANGE PASSWORD ACTIVITY -->
     <string name="change_password_header">Change Password</string>
@@ -64,53 +44,38 @@
     <string name="new_password">New Password</string>
     <string name="confirm_new_password">Confirm New Password</string>
     <string name="save_password_button">SAVE PASSWORD CHANGES</string>
-    <string name="forgot_password_button">FORGOT CURRENT PASSWORD</string>
 
-    <!-- SELECT CATEGORY ACTIVITY -->
-    <string name="select_category_header">Select Category</string>
-    <string name="viewcategory_categoryname">Item Category</string>
-
-    <!-- SELECT TOOLS ACTIVITY -->
-    <string name="available_items_header">Available Items</string>
-    <string name="viewtools_itemnametext">Item Name</string>
+    <!-- ROW LAYOUT & SEARCHVIEW HINTS -->
+    <string name="search_equipment_hint">Search Equipment</string>
+    <string name="search_category_hint">Search Category</string>
 
     <!-- TOOLS DATA ACTIVITY -->
     <string name="view_holders">View Holders</string>
     <string name="delete_item">Delete Item</string>
     <string name="serial_no">Serial Number</string>
-    <string name="qty_available">Qty Available</string>
-    <string name="qty_rented">Qty Rented</string>
-    <string name="qty_total">Total Qty</string>
+    <string name="qty_available">Available Quantity </string>
+    <string name="qty_rented">Rented Quantity</string>
+    <string name="qty_total">Total Quantity</string>
     <string name="item_category">Category</string>
     <string name="update_this_item_data">Update Item Info</string>
     <string name="rent_item">Rent Item</string>
     <string name="add_item_to_cart">Add to Cart</string>
     <string name="view_cart_button">View Cart</string>
-
-    <!-- UPDATE INVENTORY ACTIVITY -->
     <string name="update_inventory_header">Add New Equipment</string>
-    <string name="item_name_value">Item Name</string>
-    <string name="serial_no_value">Serial Number</string>
-    <string name="quantity_value">Total Quantity</string>
-    <string name="available_qty_value">Available Quantity</string>
     <string name="category_value">Item Category</string>
-    <string name="add_item_button">Add New Item</string>
 
-    <!-- VIEW ALL TOOLS ACTIVITY -->
-    <string name="all_available_tools">All Equipments</string>
-    <string name="viewalltools_itemnametext">Item Name</string>
-    <string name="search_equipment_hint">Search Equipment</string>
-    <string name="search_category_hint">Search Category</string>
-
-    <!-- UPDATE INVENTORY ACTIVITY -->
+    <!-- UPDATE ITEM ACTIVITY -->
     <string name="update_item_header">Update Item Information</string>
-    <string name="item_name">Item Name</string>
     <string name="serial_number">Serial No.</string>
-    <string name="available_quantity">Available Qty</string>
-    <string name="rented_quantity">Rented Qty</string>
-    <string name="total_quantity">Total Stock Qty</string>
+    <string name="available_quantity">Available Quantity</string>
+    <string name="rented_quantity">Rented Quantity</string>
+    <string name="total_quantity">Total Stock Quantity</string>
     <string name="category_name">Category</string>
     <string name="save_item_changes">Save Changes</string>
+    <string name="quantity_dialog_header">Item Quantity</string>
+    <string name="item_quantity_hint">Quantity</string>
+    <string name="confirm_button">ENTER</string>
+    <string name="cancel_button">CANCEL</string>
 
     <!-- STUDENT ID ALERT DIALOG ACTIVITY -->
     <string name="id_dialog_header">Student ID</string>
@@ -118,44 +83,62 @@
     <string name="validate_button">VALIDATE</string>
     <string name="exit_button">EXIT</string>
 
-    <!-- RENT EQUIPMENTS ACTIVITY -->
-    <string name="individual_selection_header">Select Individually</string>
-    <string name="categorical_selection_header">Select by Category</string>
-
-    <!-- ITEM QUANTITY ALERT DIALOG ACTIVITY -->
-    <string name="quantity_dialog_header">Item Quantity</string>
-    <string name="item_quantity_hint">Quantity</string>
-    <string name="confirm_button">ENTER</string>
-    <string name="cancel_button">CANCEL</string>
-
-    <!-- VIEW CART ROW LAYOUT -->
-    <string name="view_cart_item_name">Item Name</string>
+    <!-- STUDENT CART ROW LAYOUT & CART CHANGES ALERT DIALOG -->
+    <string name="text_item_name">Item Name</string>
     <string name="view_cart_item_quantity">0</string>
     <string name="approve_cart">Approve Cart</string>
-
-    <!-- CART CHANGES ALERT DIALOG ACTIVITY -->
-    <string name="cart_item_name_header">Item Name</string>
     <string name="cart_save_button">SAVE</string>
     <string name="cart_delete_button">DELETE</string>
-    <string name="cart_cancel_button">CANCEL</string>
     <string name="clear_cart">CLEAR CART</string>
 
     <!-- STUDENT RETURNS ACTIVITY -->
-    <string name="returns_item_name_header">Item Name</string>
     <string name="returned_quantity_hint">Returned Quantity</string>
-    <string name="enter_button">Enter</string>
-    <string name="cancel_dialog_button">Cancel</string>
+    <string name="enter_button">ENTER</string>
     <string name="return_all">Return All</string>
     <string name="specific_return_button">Return</string>
-    <string name="view_rental_info">View Rental Info</string>
+    <string name="view_rental_info">View Possessions</string>
     <string name="view_info">View Info</string>
 
     <!-- MENU DROPDOWN -->
-    <string name="home">Home</string>
-    <string name="profile">Edit Profile Info</string>
-    <string name="password">Password Settings</string>
-    <string name="log_out">Log Out</string>
+    <string name="home"> Home</string>
+    <string name="profile"> Edit Profile Info</string>
+    <string name="password"> Password Settings</string>
+    <string name="log_out"> Log Out</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- ADMIN MENU -->
+    <string name="rentals_and_returns">RENTALS &amp; RETURNS</string>
+    <string name="rent_equipment">Rent Equipment</string>
+    <string name="return_equipment">Return Equipment</string>
+
+    <string name="add_and_search">ADD &amp; SEARCH</string>
+    <string name="add_search_users">Add/Search Users</string>
+    <string name="add_search_tools">Add/Search Tools</string>
+
+    <string name="profile_settings">PROFILE SETTINGS</string>
+    <string name="view_edit_profile">View/Edit My Profile</string>
+    <string name="change_my_password">Change My Password</string>
+
+    <!-- TOOLS FRAGMENT -->
+    <string name="all_equipment">ALL EQUIPMENT</string>
+    <string name="all_categories">ALL CATEGORIES</string>
+    <string name="add_new_tools">Add Equipment</string>
+    <string name="view_cart">View Cart</string>
+
+    <!-- REGISTRATION FRAGMENT -->
+    <string name="all_users">All Users</string>
+    <string name="add_student">Add Student</string>
+    <string name="add_admin">Add Admin</string>
+    <string name="search_id">Search Student ID</string>
+
+    <!-- ACTIVITY HEADERS -->
+    <string name="rented_items">Rented Items</string>
+    <string name="rent_equipment_header">Rent Equipment</string>
+    <string name="update_item_info_header">Update Item Info</string>
+
+    <!-- STUDENT INFO -->
+    <string name="full_name">Full Name</string>
+    <string name="possession_qty">Possession Qty</string>
+    <string name="email">Email</string>
+    <string name="status">Status</string>
+
 </resources>

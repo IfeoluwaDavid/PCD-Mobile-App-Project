@@ -39,7 +39,7 @@
         android:id="@+id/button"
         android:layout_width="340dp"
         android:layout_height="50dp"
-        android:text="VIEW CART"
+        android:text="@string/view_cart"
         android:textSize="16sp"
         android:textStyle="bold"
         android:textColor="@color/textColor"

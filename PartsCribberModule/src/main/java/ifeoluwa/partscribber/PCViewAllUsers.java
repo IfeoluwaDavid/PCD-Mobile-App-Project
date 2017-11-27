@@ -362,10 +362,10 @@ public class PCViewAllUsers extends Fragment
                     studentstatus = (EditText) mView.findViewById(R.id.editText4);
 
                     studentIDheader.setText(selectedID);
-                    studentfullname.setText("Full Name: " + fname + " " + lname);
-                    studentpossessionqty.setText("Possession Qty: " + possessionqty);
-                    studentemail.setText("Email: " + email);
-                    studentstatus.setText("Status: " + status);
+                    studentfullname.setText(getString(R.string.full_name) + ": " + fname + " " + lname);
+                    studentpossessionqty.setText(getString(R.string.possession_qty) + ": " + possessionqty);
+                    studentemail.setText(getString(R.string.email) + ": " + email);
+                    studentstatus.setText(getString(R.string.status) + ": " + status);
 
                     mBuilder.setCancelable(false);
                     mBuilder.setView(mView);

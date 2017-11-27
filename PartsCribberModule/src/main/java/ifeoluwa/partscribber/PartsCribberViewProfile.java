@@ -50,7 +50,7 @@ public class PartsCribberViewProfile extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.partscribber_viewprofile);
         actionBar = getSupportActionBar();
-        actionBar.setTitle(Html.fromHtml("<font color='#ffffff'>Edit Profile Info</font>"));
+        actionBar.setTitle(Html.fromHtml("<font color='#ffffff'>"+getString(R.string.edit_profile_header)+"</font>"));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 

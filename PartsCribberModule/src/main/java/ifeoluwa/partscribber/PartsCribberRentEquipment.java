@@ -62,7 +62,7 @@ implements PCViewAllToolsFragment.PCViewAllToolsFragmentInterface, PCSelectCateg
         super.onCreate(savedInstanceState);
         setContentView(R.layout.partscribber_rentequipment);
         actionBar = getSupportActionBar();
-        actionBar.setTitle(Html.fromHtml("<font color='#ffffff'>Rent Equipment</font>"));
+        actionBar.setTitle(Html.fromHtml("<font color='#ffffff'>"+getString(R.string.rented_items)+"</font>"));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
@@ -70,8 +70,8 @@ implements PCViewAllToolsFragment.PCViewAllToolsFragmentInterface, PCSelectCateg
 
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), this);
 
-        viewPagerAdapter.addFragments(new PCViewAllToolsFragment(), "All Equipment");
-        viewPagerAdapter.addFragments(new PCSelectCategoryFragment(), "All Categories");
+        viewPagerAdapter.addFragments(new PCViewAllToolsFragment(), getString(R.string.all_equipment));
+        viewPagerAdapter.addFragments(new PCSelectCategoryFragment(), getString(R.string.all_categories));
 
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
@@ -182,6 +182,7 @@ implements PCViewAllToolsFragment.PCViewAllToolsFragmentInterface, PCSelectCateg
         Intent intenta = new Intent(PartsCribberRentEquipment.this, PartsCribberStudentCart.class);
         intenta.putExtra("theID", validatedID);
         startActivity(intenta);
+        overridePendingTransition(R.anim.pull_up_from_bottom, R.anim.push_out_to_bottom);
     }
 
     @Override

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PartsCribber</string>
+
+    <!-- LOGIN ACTIVITY -->
+    <string name="login">S\'identifier</string>
+    <string name="login_username">Nom d\'utilisateur (ID)</string>
+    <string name="open_registerpage_button">REGISTRE</string>
+
+    <!-- REGISTER NEW STUDENT/ADMIN ACTIVITY -->
+    <string name="username_hint">Nom d\'utilisateur de l\'étudiant</string>
+    <string name="firstname_hint">Prénom</string>
+    <string name="lastname_hint">Nom de famille</string>
+    <string name="email_hint">Adresse e-mail</string>
+    <string name="password_hint">Mot de passe</string>
+    <string name="confirmpassword_hint">Confirmez le mot de passe</string>
+    <string name="register_singlestudent_button">INSCRIVEZ L\'ÉTUDIANT</string>
+    <string name="register_newadmin_button">INSCRIRE ADMIN</string>
+
+    <!-- ADMIN MENU ACTIVITY -->
+    <string name="adminmenuparenttext"> </string>
+    <string name="adminmenuchildtext"> </string>
+    <string name="welcomeusername"> </string>
+
+    <!-- STUDENT MENU ACTIVITY -->
+    <string name="my_possessions_button">Possessions</string>
+    <string name="my_cart_button">Mon panier</string>
+
+    <!-- VIEW/EDIT PROFILE ACTIVITY -->
+    <string name="edit_profile_header">Informations sur le profil</string>
+    <string name="edit_profile_username">Ton nom d\'utilisateur</string>
+    <string name="edit_profile_firstname">Ton prénom</string>
+    <string name="edit_profile_lastname">Votre nom de famille</string>
+    <string name="edit_profile_email">Votre Email</string>
+    <string name="user_status">Admin/Étudiant</string>
+    <string name="edit_button">EDITER LES INFORMATIONS</string>
+    <string name="save_button">SAVE INFORMATION</string>
+    <string name="logout_button">Connectez - Out</string>
+
+    <!-- CHANGE PASSWORD ACTIVITY -->
+    <string name="change_password_header">Changer le mot de passe</string>
+    <string name="current_password">Mot de passe actuel</string>
+    <string name="confirm_current_password">Confirmer le mot de passe actuel</string>
+    <string name="new_password">Nouveau mot de passe</string>
+    <string name="confirm_new_password">Confirmer le nouveau mot de passe</string>
+    <string name="save_password_button">SAUVEGARDER LES MODIFICATIONS</string>
+
+    <!-- ROW LAYOUT & SEARCHVIEW HINTS -->
+    <string name="search_equipment_hint">Équipement de recherche</string>
+    <string name="search_category_hint">Rechercher une catégorie</string>
+
+    <!-- TOOLS DATA ACTIVITY -->
+    <string name="view_holders">Afficher les titulaires</string>
+    <string name="delete_item">Effacer l\'article</string>
+    <string name="serial_no">Numéro de série</string>
+    <string name="qty_available">Quantité disponible</string>
+    <string name="qty_rented">Quantité louée</string>
+    <string name="qty_total">Quantité totale</string>
+    <string name="item_category">Catégorie</string>
+    <string name="update_this_item_data">Mettre à jour l\'information</string>
+    <string name="rent_item">Article de location</string>
+    <string name="add_item_to_cart">Ajouter au panier</string>
+    <string name="view_cart_button">Voir le panier</string>
+    <string name="update_inventory_header">Ajouter un équipement</string>
+    <string name="category_value">Catégorie d\'article</string>
+
+    <!-- UPDATE ITEM ACTIVITY -->
+    <string name="update_item_header">Mettre à jour l\'information</string>
+    <string name="serial_number">Numéro de série.</string>
+    <string name="available_quantity">quantité disponible</string>
+    <string name="rented_quantity">Quantité louée</string>
+    <string name="total_quantity">Quantité totale de stock</string>
+    <string name="category_name">Catégorie</string>
+    <string name="save_item_changes">Sauvegarder les modifications</string>
+    <string name="quantity_dialog_header">Article Quantité</string>
+    <string name="item_quantity_hint">Quantité</string>
+    <string name="confirm_button">ENTRER</string>
+    <string name="cancel_button">ANNULER</string>
+
+    <!-- STUDENT ID ALERT DIALOG ACTIVITY -->
+    <string name="id_dialog_header">Carte d\'étudiant</string>
+    <string name="enter_student_id">Carte d\'étudiant</string>
+    <string name="validate_button">VALIDER</string>
+    <string name="exit_button">SORTIE</string>
+
+    <!-- STUDENT CART ROW LAYOUT & CART CHANGES ALERT DIALOG -->
+    <string name="text_item_name">Nom de l\'article</string>
+    <string name="view_cart_item_quantity">0</string>
+    <string name="approve_cart">approuver tout</string>
+    <string name="cart_save_button">ENREGISTRER</string>
+    <string name="cart_delete_button">EFFACER</string>
+    <string name="clear_cart">VIDER LE PANIER</string>
+    <!-- STUDENT RETURNS ACTIVITY -->
+    <string name="returned_quantity_hint">Quantité retournée</string>
+    <string name="enter_button">ENTRER</string>
+    <string name="return_all">Tout retourner</string>
+    <string name="specific_return_button">Revenir</string>
+    <string name="view_rental_info">Voir Possessions</string>
+    <string name="view_info">Voir les infos</string>
+
+    <!-- MENU DROPDOWN -->
+    <string name="home">Accueil</string>
+    <string name="profile">Editer le profil</string>
+    <string name="password">Paramètres du mot</string>
+    <string name="log_out">Connectez - Out</string>
+
+    <!-- ADMIN MENU -->
+    <string name="rentals_and_returns">LOCATIONS &amp; RÉSULTATS</string>
+    <string name="rent_equipment">Louer de l\'équipement</string>
+    <string name="return_equipment">Retour équipement</string>
+
+    <string name="add_and_search">AJOUTER &amp; TROUVER</string>
+    <string name="add_search_users">Ajouter utilisateurs</string>
+    <string name="add_search_tools">Ajouter/Rechercher outils</string>
+
+    <string name="profile_settings">PARAMÈTRES DE PROFIL</string>
+    <string name="view_edit_profile">Editer le profil</string>
+    <string name="change_my_password">Changer le mot de passe</string>
+
+    <!-- TOOLS FRAGMENT -->
+    <string name="all_equipment">tout équipement</string>
+    <string name="all_categories">toutes catégories</string>
+    <string name="add_new_tools">Ajouter un équipement</string>
+    <string name="view_cart">Voir Panier</string>
+
+    <!-- REGISTRATION FRAGMENT -->
+    <string name="all_users">tous les utilisateurs</string>
+    <string name="add_student">Ajouter étudiants</string>
+    <string name="add_admin">ajouter un admin</string>
+    <string name="search_id">Identifiant de recherche</string>
+
+    <!-- ACTIVITY HEADERS -->
+    <string name="rented_items">Articles loués</string>
+    <string name="rent_equipment_header">Louer de l\'équipement</string>
+    <string name="update_item_info_header">Mettre à jour</string>
+
+    <!-- STUDENT INFO -->
+    <string name="full_name">Nom complet</string>
+    <string name="possession_qty">Possession Qté</string>
+    <string name="email">Email</string>
+    <string name="status">Statut</string>
+
+</resources>

@@ -16,7 +16,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_marginLeft="10dp"
-        android:queryHint="Search Student ID"
+        android:queryHint="@string/search_id"
         android:layout_marginRight="10dp"
         android:layout_marginTop="60dp"
         android:id="@+id/searchView" />

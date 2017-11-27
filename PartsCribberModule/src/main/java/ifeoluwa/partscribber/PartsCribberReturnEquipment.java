@@ -72,7 +72,7 @@ public class PartsCribberReturnEquipment extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.partscribber_returnequipment);
         actionBar = getSupportActionBar();
-        actionBar.setTitle(Html.fromHtml("<font color='#ffffff'>Rented Items</font>"));
+        actionBar.setTitle(Html.fromHtml("<font color='#ffffff'>"+getString(R.string.rent_equipment_header)+"</font>"));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         intent = getIntent();
@@ -473,10 +473,10 @@ public class PartsCribberReturnEquipment extends AppCompatActivity
                     studentstatus = (EditText) mView.findViewById(R.id.editText4);
 
                     studentIDheader.setText(validatedID.toUpperCase());
-                    studentfullname.setText("Full Name: " + fname + " " + lname);
-                    studentpossessionqty.setText("Possession Qty: " + possessionqty);
-                    studentemail.setText("Email: " + email);
-                    studentstatus.setText("Status: " + status);
+                    studentfullname.setText(getString(R.string.full_name) + ": " + fname + " " + lname);
+                    studentpossessionqty.setText(getString(R.string.possession_qty) + ": " + possessionqty);
+                    studentemail.setText(getString(R.string.email) + ": " + email);
+                    studentstatus.setText(getString(R.string.status) + ": " + status);
 
                     mBuilder.setCancelable(false);
                     mBuilder.setView(mView);
