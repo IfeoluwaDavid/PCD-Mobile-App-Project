@@ -72,7 +72,7 @@ public class PartsCribberStudentCart extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.partscribber_studentcart);
         actionBar = getSupportActionBar();
-        actionBar.setTitle(Html.fromHtml("<font color='#ffffff'>View Student Cart</font>"));
+        actionBar.setTitle(Html.fromHtml("<font color='#ffffff'>"+getString(R.string.view_cart)+"</font>"));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         intent = getIntent();

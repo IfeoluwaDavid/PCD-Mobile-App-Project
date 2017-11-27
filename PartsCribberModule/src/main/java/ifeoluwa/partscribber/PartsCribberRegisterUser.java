@@ -56,15 +56,17 @@ public class PartsCribberRegisterUser extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.partscribber_registeruser);
         actionBar = getSupportActionBar();
-        actionBar.setTitle(Html.fromHtml("<font color='#ffffff'>Add/Search Users</font>"));
+        actionBar.setTitle(Html.fromHtml("<font color='#ffffff'>"+getString(R.string.add_search_users)+"</font>"));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), this);
-        viewPagerAdapter.addFragments(new PCViewAllUsers(), "All Users");
-        viewPagerAdapter.addFragments(new PCRegisterStudentFragment(), "Add Student");
-        viewPagerAdapter.addFragments(new PCRegisterAdminFragment(), "Add Admin");
+
+        viewPagerAdapter.addFragments(new PCViewAllUsers(), getString(R.string.all_users));
+        viewPagerAdapter.addFragments(new PCRegisterStudentFragment(), getString(R.string.add_student));
+        viewPagerAdapter.addFragments(new PCRegisterAdminFragment(), getString(R.string.add_admin));
+
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
     }

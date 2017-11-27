@@ -56,19 +56,6 @@
         android:layout_below="@+id/save_button"
         android:layout_alignStart="@+id/save_button" />
 
-    <TextView
-        android:id="@+id/edit_profile_header"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/edit_profile_header"
-        android:textStyle="bold"
-        android:typeface="serif"
-        android:textColor="@color/supportingColor"
-        android:textSize="25sp"
-        android:layout_marginTop="39dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
-
     <EditText
         android:id="@+id/edit_profile_username"
         android:layout_width="wrap_content"
@@ -83,7 +70,6 @@
         android:background="@color/textColor"
         android:hint="@string/login_username"
         android:layout_marginTop="14dp"
-        android:layout_below="@+id/edit_profile_header"
         android:layout_alignStart="@+id/edit_profile_firstname"
         android:layout_alignEnd="@+id/edit_profile_firstname" />
 

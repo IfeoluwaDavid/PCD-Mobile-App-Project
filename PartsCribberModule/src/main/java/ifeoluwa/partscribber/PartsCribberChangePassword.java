@@ -25,7 +25,7 @@ public class PartsCribberChangePassword extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.partscribber_changepassword);
         actionBar = getSupportActionBar();
-        actionBar.setTitle(Html.fromHtml("<font color='#ffffff'>Change Password</font>"));
+        actionBar.setTitle(Html.fromHtml("<font color='#ffffff'>"+getString(R.string.change_my_password)+"</font>"));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         currentPassword = (EditText) findViewById(R.id.current_password);

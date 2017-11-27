@@ -461,11 +461,11 @@ public class PartsCribberViewToolData extends AppCompatActivity
                     et_qtyTotal = (EditText) findViewById(R.id.qty_total);
                     et_category = (EditText) findViewById(R.id.item_category);
 
-                    et_itemSerialNo.setText("Serial Number: " + serialNo);
-                    et_qtyAvailable.setText("Available Quantity: " + qtyAvailable);
-                    et_qtyRented.setText("Rented Quantity: " + qtyRented);
-                    et_qtyTotal.setText("Total Quantity: " + qtyTotal);
-                    et_category.setText("Item Category: " + itemCategory);
+                    et_itemSerialNo.setText(getString(R.string.serial_no) +": "+ serialNo);
+                    et_qtyAvailable.setText(getString(R.string.qty_available) +": "+ qtyAvailable);
+                    et_qtyRented.setText(getString(R.string.qty_rented) +": "+ qtyRented);
+                    et_qtyTotal.setText(getString(R.string.qty_total) +": "+ qtyTotal);
+                    et_category.setText(getString(R.string.item_category) +": "+itemCategory);
 
                     globalSelectedItemAvailableQuantity = qtyAvailable;
                 }
@@ -988,11 +988,11 @@ public class PartsCribberViewToolData extends AppCompatActivity
                     et_qtyTotal = (EditText) findViewById(R.id.qty_total);
                     et_category = (EditText) findViewById(R.id.item_category);
 
-                    et_itemSerialNo.setText("Serial Number: " + serialNo);
-                    et_qtyAvailable.setText("Available Quantity: " + qtyAvailable);
-                    et_qtyRented.setText("Rented Quantity: " + qtyRented);
-                    et_qtyTotal.setText("Total Quantity: " + qtyTotal);
-                    et_category.setText("Item Category: " + itemCategory);
+                    et_itemSerialNo.setText(getString(R.string.serial_no) +": "+ serialNo);
+                    et_qtyAvailable.setText(getString(R.string.qty_available) +": "+ qtyAvailable);
+                    et_qtyRented.setText(getString(R.string.qty_rented) +": "+ qtyRented);
+                    et_qtyTotal.setText(getString(R.string.qty_total) +": "+ qtyTotal);
+                    et_category.setText(getString(R.string.item_category) +": "+itemCategory);
 
                     globalSelectedItemAvailableQuantity = qtyAvailable;
 

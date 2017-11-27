@@ -69,15 +69,16 @@ implements PCViewAllToolsFragment.PCViewAllToolsFragmentInterface, PCSelectCateg
         super.onCreate(savedInstanceState);
         setContentView(R.layout.partscribber_viewequipments);
         actionBar = getSupportActionBar();
-        actionBar.setTitle(Html.fromHtml("<font color='#ffffff'>Add/Search Tools</font>"));
+        actionBar.setTitle(Html.fromHtml("<font color='#ffffff'>"+getString(R.string.add_search_tools)+"</font>"));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         viewPager = (ViewPager) findViewById(R.id.viewPager);
 
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), this);
-        viewPagerAdapter.addFragments(new PCViewAllToolsFragment(), "All Equipment");
-        viewPagerAdapter.addFragments(new PCSelectCategoryFragment(), "All Categories");
+
+        viewPagerAdapter.addFragments(new PCViewAllToolsFragment(), getString(R.string.all_equipment));
+        viewPagerAdapter.addFragments(new PCSelectCategoryFragment(), getString(R.string.all_categories));
 
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);

@@ -59,7 +59,7 @@ public class PartsCribberUpdateItem extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.partscribber_updateitem);
         actionBar = getSupportActionBar();
-        actionBar.setTitle(Html.fromHtml("<font color='#ffffff'>Update Item Info</font>"));
+        actionBar.setTitle(Html.fromHtml("<font color='#ffffff'>"+getString(R.string.update_item_info_header)+"</font>"));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         intent = getIntent();

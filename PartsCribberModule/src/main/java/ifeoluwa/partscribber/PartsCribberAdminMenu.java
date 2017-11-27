@@ -7,7 +7,10 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.ImageSpan;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,11 +24,16 @@ import java.util.List;
 
 public class PartsCribberAdminMenu extends AppCompatActivity
 {
-    HashMap<String, List<String>> Admin_Menu;
+    //HashMap<String, List<String>> Admin_Menu;
     List<String> Admin_List;
     ExpandableListView exp_list;
     AdminMenuAdapter adapter;
     ActionBar actionBar;
+
+    HashMap <String, List<String>> Admin_Menu = new HashMap <String, List<String>>();
+    List<String> users_and_tools = new ArrayList<String>();
+    List<String> rentals_and_returns = new ArrayList<String>();
+    List<String> profile_settings = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -47,7 +55,21 @@ public class PartsCribberAdminMenu extends AppCompatActivity
         }
 
         exp_list = (ExpandableListView) findViewById(R.id.exp_list);
-        Admin_Menu = AdminMenuDataProvider.getInfo();
+        //Admin_Menu = AdminMenuDataProvider.getInfo();
+
+        rentals_and_returns.add(getString(R.string.rent_equipment));
+        rentals_and_returns.add(getString(R.string.return_equipment));
+
+        users_and_tools.add(getString(R.string.add_search_users));
+        users_and_tools.add(getString(R.string.add_search_tools));
+
+        profile_settings.add(getString(R.string.view_edit_profile));
+        profile_settings.add(getString(R.string.change_my_password));
+
+        Admin_Menu.put(getString(R.string.add_and_search), users_and_tools);
+        Admin_Menu.put(getString(R.string.rentals_and_returns), rentals_and_returns);
+        Admin_Menu.put(getString(R.string.profile_settings), profile_settings);
+
         Admin_List = new ArrayList<String>(Admin_Menu.keySet());
 
         //Initialization of Array Class Object
@@ -59,32 +81,32 @@ public class PartsCribberAdminMenu extends AppCompatActivity
             @Override
             public boolean onChildClick(ExpandableListView expandableListView, View view, int groupPosition, int childPosition, long id)
             {
-                if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals("Rent Equipment"))
+                if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals(getString(R.string.rent_equipment)))
                 {
                     Intent intent = new Intent(PartsCribberAdminMenu.this, PartsCribberRentEquipment.class);
                     startActivity(intent);
                 }
-                if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals("Return Equipment"))
+                if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals(getString(R.string.return_equipment)))
                 {
                     Intent intent = new Intent(PartsCribberAdminMenu.this, PartsCribberReturnEquipment.class);
                     startActivity(intent);
                 }
-                if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals("Add/Search Users"))
+                if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals(getString(R.string.add_search_users)))
                 {
                     Intent intent = new Intent(PartsCribberAdminMenu.this, PartsCribberRegisterUser.class);
                     startActivity(intent);
                 }
-                if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals("Add/Search Tools"))
+                if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals(getString(R.string.add_search_tools)))
                 {
                     Intent intent = new Intent(PartsCribberAdminMenu.this, PartsCribberViewEquipment.class);
                     startActivity(intent);
                 }
-                if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals("View/Edit My Profile"))
+                if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals(getString(R.string.view_edit_profile)))
                 {
                     Intent intent = new Intent(PartsCribberAdminMenu.this, PartsCribberViewProfile.class);
                     startActivity(intent);
                 }
-                if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals("Change My Password"))
+                if(Admin_Menu.get(Admin_List.get(groupPosition)).get(childPosition).equals(getString(R.string.change_my_password)))
                 {
                     Intent intent = new Intent(PartsCribberAdminMenu.this, PartsCribberChangePassword.class);
                     startActivity(intent);
@@ -99,7 +121,19 @@ public class PartsCribberAdminMenu extends AppCompatActivity
     {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
+        setIconInMenu(menu, R.id.home, R.string.home, R.mipmap.homeicon);
+        setIconInMenu(menu, R.id.profile, R.string.profile, R.mipmap.profileicon);
+        setIconInMenu(menu, R.id.password, R.string.password, R.mipmap.lockicon);
+        setIconInMenu(menu, R.id.log_out, R.string.log_out, R.mipmap.logouticon);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    private void setIconInMenu(Menu menu, int menuItemId, int labelId, int iconId)
+    {
+        MenuItem item = menu.findItem(menuItemId);
+        SpannableStringBuilder builder = new SpannableStringBuilder("   " + getResources().getString(labelId));
+        builder.setSpan(new ImageSpan(this, iconId), 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        item.setTitle(builder);
     }
 
     @Override
@@ -133,6 +167,21 @@ public class PartsCribberAdminMenu extends AppCompatActivity
         }
         return true;
     }
+
+    /*public class AdminMenuDataProvider
+    {
+        //String menuone = getString(R.string.add_search_users);
+
+        public HashMap<String, List<String>> getInfo()
+        {
+
+
+
+
+            //return Admin_Menu;
+        }
+    }*/
+
 
     public void onBackPressed()
     {
