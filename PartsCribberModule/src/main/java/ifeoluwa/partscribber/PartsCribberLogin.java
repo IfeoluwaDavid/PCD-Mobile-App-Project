@@ -1,5 +1,11 @@
 package ifeoluwa.partscribber;
 
+/*
+Team Name - CPU
+Project Name - Parts Crib Database
+Member Names - Ifeoluwa David Adese, Mohand Ferawana, Tosin Ajayi
+*/
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.ActionBar;
@@ -53,7 +59,6 @@ public class PartsCribberLogin extends AppCompatActivity
         if (username.equals("") && password.equals(""))
         {
             android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
-            builder.setTitle("Empty Login Request");
             builder.setMessage("Username and Password are required.");
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
             {
@@ -84,10 +89,7 @@ public class PartsCribberLogin extends AppCompatActivity
             public void onClick(DialogInterface dialog, int which)
             {
                 dialog.dismiss();
-                //int id = android.os.Process.myPid();
-                //android.os.Process.killProcess(id);
                 finishAffinity();
-                //System.exit(0);
             }
         });
         builder.setNegativeButton("NO", new DialogInterface.OnClickListener()

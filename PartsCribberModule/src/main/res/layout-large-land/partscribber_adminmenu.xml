@@ -1,0 +1,41 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/mainBackgroundcolor">
+
+    <TextView
+        android:id="@+id/welcomeusername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:typeface="serif"
+        android:textColor="@color/textColor"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:padding="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:gravity="center"
+        android:background="@color/supportingColor"
+        android:layout_marginTop="12dp"
+        android:text="@string/welcomeusername"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true" />
+
+    <ExpandableListView
+        android:id="@+id/exp_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indicatorLeft="?android:attr/expandableListPreferredItemIndicatorLeft"
+        android:divider="@color/supportingColor2"
+        android:dividerHeight="3dp"
+        android:childDivider="@color/supportingColor2"
+        android:layout_margin="10dp"
+        android:layout_below="@+id/welcomeusername"
+        android:layout_alignParentStart="true">
+    </ExpandableListView>
+
+</RelativeLayout>

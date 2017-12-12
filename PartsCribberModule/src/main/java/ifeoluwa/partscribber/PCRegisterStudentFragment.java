@@ -1,5 +1,11 @@
 package ifeoluwa.partscribber;
 
+/*
+Team Name - CPU
+Project Name - Parts Crib Database
+Member Names - Ifeoluwa David Adese, Mohand Ferawana, Tosin Ajayi
+*/
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -33,9 +39,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class PCRegisterStudentFragment extends Fragment
 {
     EditText registered_username, registered_firstname, registered_lastname;

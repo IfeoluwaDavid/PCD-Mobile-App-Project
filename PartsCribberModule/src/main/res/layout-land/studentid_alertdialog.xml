@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mainBackgroundcolor"
+    android:orientation="vertical"
+    android:padding="5dp">
+
+    <TextView
+        android:id="@+id/id_dialog_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/id_dialog_header"
+        android:typeface="serif"
+        android:textColor="@color/supportingColor"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:id="@+id/enter_student_id"
+        android:layout_width="330dp"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:ems="10"
+        android:hint="@string/enter_student_id"
+        android:inputType="textEmailAddress"
+        android:padding="9dp"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/id_dialog_header"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/validate_button"
+        android:layout_width="147dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="@color/supportingColor"
+        android:text="@string/validate_button"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:onClick="validateBtn"
+        android:textColor="@color/mainBackgroundcolor"
+        android:layout_below="@+id/enter_student_id"
+        android:layout_alignStart="@+id/enter_student_id" />
+
+    <Button
+        android:id="@+id/exit_button"
+        android:layout_width="147dp"
+        android:layout_height="wrap_content"
+        android:background="@color/supportingColor"
+        android:text="@string/exit_button"
+        android:textColor="@color/mainBackgroundcolor"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:onClick="idExitButton"
+        android:layout_alignBaseline="@+id/validate_button"
+        android:layout_alignBottom="@+id/validate_button"
+        android:layout_alignEnd="@+id/enter_student_id" />
+</RelativeLayout>

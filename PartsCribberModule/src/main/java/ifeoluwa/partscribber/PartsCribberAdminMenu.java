@@ -1,5 +1,11 @@
 package ifeoluwa.partscribber;
 
+/*
+Team Name - CPU
+Project Name - Parts Crib Database
+Member Names - Ifeoluwa David Adese, Mohand Ferawana, Tosin Ajayi
+*/
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,7 +30,6 @@ import java.util.List;
 
 public class PartsCribberAdminMenu extends AppCompatActivity
 {
-    //HashMap<String, List<String>> Admin_Menu;
     List<String> Admin_List;
     ExpandableListView exp_list;
     AdminMenuAdapter adapter;

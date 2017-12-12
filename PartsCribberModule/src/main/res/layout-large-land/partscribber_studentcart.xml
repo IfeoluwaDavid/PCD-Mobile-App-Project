@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mainBackgroundcolor"
+    tools:context="ifeoluwa.partscribber.PartsCribberStudentCart">
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="330dp"
+        android:layout_height="55dp"
+        android:background="@color/supportingColor"
+        android:padding="10dp"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:typeface="serif"
+        android:gravity="center"
+        android:text="TextView"
+        android:textColor="@color/textColor"
+        android:layout_marginTop="10dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/listview"
+        android:layout_alignEnd="@+id/listview" />
+
+    <ListView
+        android:id="@+id/listview"
+        android:layout_width="wrap_content"
+        android:layout_height="415dp"
+        android:divider="@color/mainBackgroundcolor"
+        android:dividerHeight="3dp"
+        android:layout_margin="10dp"
+        android:layout_below="@+id/textView2"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="165dp"
+        android:layout_height="50dp"
+        android:text="@string/approve_cart"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@color/textColor"
+        android:layout_gravity="center"
+        android:onClick="approveBtn"
+        android:layout_marginBottom="8dp"
+        android:background="@color/supportingColor"
+        android:layout_below="@+id/listview"
+        android:layout_alignStart="@+id/listview" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="165dp"
+        android:layout_height="50dp"
+        android:text="@string/clear_cart"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:onClick="clearCartBtn"
+        android:layout_marginTop="10dp"
+        android:visibility="invisible"
+        android:textColor="@color/textColor"
+        android:background="@color/supportingColor"
+        android:layout_alignBaseline="@+id/button"
+        android:layout_alignBottom="@+id/button"
+        android:layout_alignStart="@+id/button"
+        android:layout_alignEnd="@+id/button2" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="165dp"
+        android:layout_height="50dp"
+        android:text="@string/clear_cart"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:onClick="clearCartBtn"
+        android:textColor="@color/textColor"
+        android:layout_gravity="center"
+        android:layout_marginBottom="8dp"
+        android:background="@color/supportingColor"
+        android:layout_below="@+id/listview"
+        android:layout_alignEnd="@+id/listview" />
+
+</RelativeLayout>

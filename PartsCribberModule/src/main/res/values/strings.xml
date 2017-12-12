@@ -141,4 +141,15 @@
     <string name="email">Email</string>
     <string name="status">Status</string>
 
+    <!-- CHANGE PASSWORD -->
+    <string name="ok">OK</string>
+    <string name="yes">YES</string>
+    <string name="no">NO</string>
+    <string name="empty_request">All fields are required.</string>
+    <string name="empty_password">Both current password fields are required. Can\'t be empty.</string>
+    <string name="unmatched_currentpassword">Current password fields are not matching.</string>
+    <string name="password_length">Your new password should be between 8 to 15 characters long, without spaces.</string>
+    <string name="unmatched_newpasswords">Your New Passwords don\'t match</string>
+    <string name="exit_confirm">Do you wish to leave your password unchanged? Unsaved changes will be lost.</string>
+
 </resources>

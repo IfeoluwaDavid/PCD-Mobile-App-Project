@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mainBackgroundcolor"
+    tools:context="ifeoluwa.partscribber.PartsCribberLogin">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="103dp"
+        android:layout_height="100dp"
+        app:srcCompat="@drawable/wrench_logo"
+        tools:layout_editor_absoluteX="36dp"
+        tools:layout_editor_absoluteY="139dp"
+        android:layout_marginTop="142dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+
+    <EditText
+        android:id="@+id/login_username"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:ems="10"
+        android:text="ifedavid"
+        android:textStyle="bold"
+        android:textColor="@color/supportingColor"
+        android:padding="9dp"
+        android:background="@color/textColor"
+        android:inputType="textPersonName"
+        android:hint="@string/login_username"
+        tools:layout_editor_absoluteX="85dp"
+        tools:layout_editor_absoluteY="143dp"
+        android:layout_below="@+id/imageView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="24dp" />
+
+    <EditText
+        android:id="@+id/login_password"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:ems="10"
+        android:hint="@string/password_hint"
+        android:text="password"
+        android:textStyle="bold"
+        android:padding="9dp"
+        android:textColor="@color/supportingColor"
+        android:inputType="textPassword"
+        android:background="@color/textColor"
+        tools:layout_editor_absoluteX="85dp"
+        tools:layout_editor_absoluteY="186dp"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/login_username"
+        android:layout_alignStart="@+id/login_username" />
+
+    <Button
+        android:id="@+id/login_button"
+        android:layout_width="213dp"
+        android:layout_height="50dp"
+        android:text="@string/login"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@color/textColor"
+        android:background="@color/supportingColor"
+        android:onClick="afterLogin"
+        tools:layout_editor_absoluteX="86dp"
+        tools:layout_editor_absoluteY="250dp"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/login_password"
+        android:layout_alignStart="@+id/login_password"
+        android:layout_alignEnd="@id/login_password"/>
+
+</RelativeLayout>
