@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mainBackgroundcolor"
+    android:orientation="vertical"
+    android:padding="5dp">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/quantity_dialog_header"
+        android:typeface="serif"
+        android:textColor="@color/supportingColor"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:id="@+id/enter_quantity"
+        android:layout_width="330dp"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:ems="10"
+        android:hint="@string/item_quantity_hint"
+        android:inputType="number"
+        android:maxLength="2"
+        android:padding="9dp"
+        android:textColor="@color/supportingColor"
+        android:textStyle="bold"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/textView"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/confirm_button"
+        android:layout_width="146dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="@color/supportingColor"
+        android:text="@string/confirm_button"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:onClick="quantityEnterBtn"
+        android:textColor="@color/textColor"
+        android:layout_below="@+id/enter_quantity"
+        android:layout_alignStart="@+id/enter_quantity" />
+
+    <Button
+        android:id="@+id/cancel_button"
+        android:layout_width="146dp"
+        android:layout_height="wrap_content"
+        android:background="@color/supportingColor"
+        android:text="@string/cancel_button"
+        android:textColor="@color/textColor"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:onClick="quantityCancelBtn"
+        android:layout_alignBaseline="@+id/confirm_button"
+        android:layout_alignBottom="@+id/confirm_button"
+        android:layout_alignEnd="@+id/enter_quantity"/>
+
+</RelativeLayout>

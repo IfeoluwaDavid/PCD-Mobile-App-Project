@@ -27,9 +27,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 
-/**
- * Created by Ifeoluwa David on 2017-10-03.
- */
+/*
+Team Name - CPU
+Project Name - Parts Crib Database
+Member Names - Ifeoluwa David Adese, Mohand Ferawana, Tosin Ajayi
+*/
 
 public class UserInfoBackgroundTasks extends AsyncTask<String, Void, String>
 {

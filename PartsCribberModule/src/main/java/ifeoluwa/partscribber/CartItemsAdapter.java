@@ -10,9 +10,11 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Ifeoluwa David on 2017-10-27.
- */
+/*
+Team Name - CPU
+Project Name - Parts Crib Database
+Member Names - Ifeoluwa David Adese, Mohand Ferawana, Tosin Ajayi
+*/
 
 public class CartItemsAdapter extends ArrayAdapter
 {

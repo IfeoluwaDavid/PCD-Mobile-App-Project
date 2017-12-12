@@ -1,5 +1,11 @@
 package ifeoluwa.partscribber;
 
+/*
+Team Name - CPU
+Project Name - Parts Crib Database
+Member Names - Ifeoluwa David Adese, Mohand Ferawana, Tosin Ajayi
+*/
+
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.ActionBar;

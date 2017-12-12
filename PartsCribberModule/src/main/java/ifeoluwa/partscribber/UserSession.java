@@ -4,9 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
-/**
- * Created by Ifeoluwa David on 2017-10-07.
- */
+/*
+Team Name - CPU
+Project Name - Parts Crib Database
+Member Names - Ifeoluwa David Adese, Mohand Ferawana, Tosin Ajayi
+*/
 
 //here for this class we are using a singleton pattern
 

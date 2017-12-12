@@ -1,5 +1,11 @@
 package ifeoluwa.partscribber;
 
+/*
+Team Name - CPU
+Project Name - Parts Crib Database
+Member Names - Ifeoluwa David Adese, Mohand Ferawana, Tosin Ajayi
+*/
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -12,7 +18,10 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -318,7 +327,19 @@ implements PCViewAllToolsFragment.PCViewAllToolsFragmentInterface, PCSelectCateg
     {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
+        setIconInMenu(menu, R.id.home, R.string.home, R.mipmap.homeicon);
+        setIconInMenu(menu, R.id.profile, R.string.profile, R.mipmap.profileicon);
+        setIconInMenu(menu, R.id.password, R.string.password, R.mipmap.lockicon);
+        setIconInMenu(menu, R.id.log_out, R.string.log_out, R.mipmap.logouticon);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    private void setIconInMenu(Menu menu, int menuItemId, int labelId, int iconId)
+    {
+        MenuItem item = menu.findItem(menuItemId);
+        SpannableStringBuilder builder = new SpannableStringBuilder("   " + getResources().getString(labelId));
+        builder.setSpan(new ImageSpan(this, iconId), 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        item.setTitle(builder);
     }
 
     @Override

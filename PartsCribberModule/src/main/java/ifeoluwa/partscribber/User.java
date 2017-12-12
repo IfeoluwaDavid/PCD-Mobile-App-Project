@@ -1,12 +1,10 @@
 package ifeoluwa.partscribber;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-/**
- * Created by Ifeoluwa David on 2017-10-07.
- */
+/*
+Team Name - CPU
+Project Name - Parts Crib Database
+Member Names - Ifeoluwa David Adese, Mohand Ferawana, Tosin Ajayi
+*/
 
 public class User
 {

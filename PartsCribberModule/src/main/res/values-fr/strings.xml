@@ -140,4 +140,15 @@
     <string name="email">Email</string>
     <string name="status">Statut</string>
 
+    <!-- CHANGE PASSWORD -->
+    <string name="ok">D\'accord</string>
+    <string name="yes">OUI</string>
+    <string name="no">NON</string>
+    <string name="empty_request">Tous les champs sont requis.</string>
+    <string name="empty_password">Les deux champs de mot de passe actuels sont obligatoires. Ne peut pas être vide.</string>
+    <string name="unmatched_currentpassword">Les champs de mot de passe actuels ne correspondent pas.</string>
+    <string name="password_length">Votre nouveau mot de passe doit comporter entre 8 et 15 caractères, sans espaces.</string>
+    <string name="unmatched_bothpasswords">Vos mots de passe ne correspondent pas</string>
+    <string name="exit_confirm">Souhaitez-vous laisser votre mot de passe inchangé? Les modifications non enregistrées seront perdues.</string>
+
 </resources>

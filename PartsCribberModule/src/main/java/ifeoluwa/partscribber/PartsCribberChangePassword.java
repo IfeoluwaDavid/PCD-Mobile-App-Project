@@ -1,5 +1,11 @@
 package ifeoluwa.partscribber;
 
+/*
+Team Name - CPU
+Project Name - Parts Crib Database
+Member Names - Ifeoluwa David Adese, Mohand Ferawana, Tosin Ajayi
+*/
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.ActionBar;
@@ -7,6 +13,9 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.ImageSpan;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -39,7 +48,19 @@ public class PartsCribberChangePassword extends AppCompatActivity
     {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
+        setIconInMenu(menu, R.id.home, R.string.home, R.mipmap.homeicon);
+        setIconInMenu(menu, R.id.profile, R.string.profile, R.mipmap.profileicon);
+        setIconInMenu(menu, R.id.password, R.string.password, R.mipmap.lockicon);
+        setIconInMenu(menu, R.id.log_out, R.string.log_out, R.mipmap.logouticon);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    private void setIconInMenu(Menu menu, int menuItemId, int labelId, int iconId)
+    {
+        MenuItem item = menu.findItem(menuItemId);
+        SpannableStringBuilder builder = new SpannableStringBuilder("   " + getResources().getString(labelId));
+        builder.setSpan(new ImageSpan(this, iconId), 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        item.setTitle(builder);
     }
 
     @Override
@@ -47,10 +68,6 @@ public class PartsCribberChangePassword extends AppCompatActivity
     {
         switch (item.getItemId())
         {
-            case android.R.id.home:
-                onBackPressed();
-                break;
-
             case R.id.home:
                 User user = UserSession.getInstance(this).getUser();
                 if (user.getUsertype().equals("Admin"))
@@ -105,9 +122,8 @@ public class PartsCribberChangePassword extends AppCompatActivity
         if (oldpassword.equals("") && confirmoldpassword.equals("") && newpassword.equals("") && confirmnewpassword.equals(""))
         {
             android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
-            builder.setTitle("Empty Change Password Request");
-            builder.setMessage("All fields are required.");
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+            builder.setMessage(getString(R.string.empty_request));
+            builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener()
             {
                 public void onClick(DialogInterface dialog, int which)
                 {
@@ -122,9 +138,8 @@ public class PartsCribberChangePassword extends AppCompatActivity
             if(oldpassword.equals("") || confirmoldpassword.equals(""))
             {
                 android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
-                builder.setTitle("Hold on?");
-                builder.setMessage("Both current password fields are required. Can't be empty.");
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                builder.setMessage(getString(R.string.unmatched_currentpassword));
+                builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener()
                 {
                     public void onClick(DialogInterface dialog, int which)
                     {
@@ -139,9 +154,8 @@ public class PartsCribberChangePassword extends AppCompatActivity
                 if (!oldpassword.equals(confirmoldpassword))
                 {
                     android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
-                    builder.setTitle("Hmmm. Wait?");
-                    builder.setMessage("Current password fields are not matching.");
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                    builder.setMessage(getString(R.string.unmatched_currentpassword));
+                    builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener()
                     {
                         public void onClick(DialogInterface dialog, int which)
                         {
@@ -156,9 +170,8 @@ public class PartsCribberChangePassword extends AppCompatActivity
                     if (newpassword.equals("") || !passwordValidation(newpassword))
                     {
                         android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
-                        builder.setTitle("Just to be safe");
-                        builder.setMessage("Your new password should be between 8 to 15 characters long, without spaces.");
-                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                        builder.setMessage(getString(R.string.password_length));
+                        builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener()
                         {
                             public void onClick(DialogInterface dialog, int which)
                             {
@@ -173,9 +186,8 @@ public class PartsCribberChangePassword extends AppCompatActivity
                         if (!confirmnewpassword.equals(newpassword))
                         {
                             android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
-                            builder.setTitle("Something went wrong");
-                            builder.setMessage("Your Passwords don't match");
-                            builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                            builder.setMessage(getString(R.string.unmatched_newpasswords));
+                            builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener()
                             {
                                 public void onClick(DialogInterface dialog, int which)
                                 {
@@ -202,9 +214,9 @@ public class PartsCribberChangePassword extends AppCompatActivity
     public void redirect(final Intent newscreen)
     {
         android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
-        builder.setMessage("Do you wish to leave your password unchanged? Unsaved changes will be lost.");
+        builder.setMessage(getString(R.string.exit_confirm));
 
-        builder.setPositiveButton("YES", new DialogInterface.OnClickListener()
+        builder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener()
         {
             public void onClick(DialogInterface dialog, int which)
             {
@@ -212,7 +224,7 @@ public class PartsCribberChangePassword extends AppCompatActivity
                 startActivity(newscreen);
             }
         });
-        builder.setNegativeButton("NO", new DialogInterface.OnClickListener()
+        builder.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener()
         {
             @Override
             public void onClick(DialogInterface dialog, int which)
@@ -262,7 +274,7 @@ public class PartsCribberChangePassword extends AppCompatActivity
         }
     }
 
-    public void onBackPressed()
+    /*public void onBackPressed()
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Do you wish to leave your password unchanged?");
@@ -284,5 +296,5 @@ public class PartsCribberChangePassword extends AppCompatActivity
         });
         AlertDialog alert = builder.create();
         alert.show();
-    }
+    }*/
 }
