@@ -12,9 +12,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -65,6 +69,11 @@ public class PartsCribberViewToolData extends AppCompatActivity
     EditText et_itemSerialNo, et_qtyAvailable, et_qtyRented, et_qtyTotal, et_category, studentID, itemQuantity;
     Button viewCart, updateItem, addToCart, viewHolders, deleteItem;
 
+    Toolbar toolbar;
+    NavigationView navigationView;
+    DrawerLayout drawerLayout;
+    ActionBarDrawerToggle actionBarDrawerToggle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -86,6 +95,79 @@ public class PartsCribberViewToolData extends AppCompatActivity
         viewHolders = (Button) findViewById(R.id.view_holders);
         deleteItem = (Button) findViewById(R.id.delete_item);
         updateItem = (Button) findViewById(R.id.update_this_item_data);
+
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+
+        navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        navigationView.getMenu().getItem(0).setChecked(true);
+
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener()
+        {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem item)
+            {
+                Intent intent;
+
+                switch (item.getItemId())
+                {
+                    case R.id.home:
+                        finishAffinity();
+                        User user = UserSession.getInstance(PartsCribberViewToolData.this).getUser();
+                        if (user.getUsertype().equals("Admin"))
+                        {
+                            intent = new Intent(PartsCribberViewToolData.this, PartsCribberAdminMenu.class);
+                            startActivity(intent);
+                        }
+                        else if(user.getUsertype().equals("Student"))
+                        {
+                            intent = new Intent(PartsCribberViewToolData.this, PartsCribberStudentMenu.class);
+                            startActivity(intent);
+                        }
+                        item.setChecked(true);
+                        drawerLayout.closeDrawers();
+                        break;
+
+                    case R.id.viewStudentCart:
+                        intent = new Intent(PartsCribberViewToolData.this, PartsCribberStudentCart.class);
+                        startActivity(intent);
+                        item.setChecked(true);
+                        drawerLayout.closeDrawers();
+                        break;
+
+                    case R.id.viewStudentPossessions:
+                        intent = new Intent(PartsCribberViewToolData.this, PartsCribberReturnEquipment.class);
+                        startActivity(intent);
+                        item.setChecked(true);
+                        drawerLayout.closeDrawers();
+                        break;
+
+                    case R.id.profilesettings:
+                        intent = new Intent(PartsCribberViewToolData.this, PartsCribberViewProfile.class);
+                        startActivity(intent);
+                        item.setChecked(true);
+                        drawerLayout.closeDrawers();
+                        break;
+
+                    case R.id.changepassword:
+                        intent = new Intent(PartsCribberViewToolData.this, PartsCribberChangePassword.class);
+                        startActivity(intent);
+                        item.setChecked(true);
+                        drawerLayout.closeDrawers();
+                        break;
+
+                    case R.id.logout:
+                        finishAffinity();
+                        item.setChecked(true);
+                        drawerLayout.closeDrawers();
+                        UserSession.getInstance(getApplicationContext()).logout();
+                        Intent login = new Intent(PartsCribberViewToolData.this, PartsCribberLogin.class);
+                        startActivity(login);
+                }
+                return false;
+            }
+        });
 
         if(!TextUtils.isEmpty(validatedID))
         {
@@ -124,10 +206,8 @@ public class PartsCribberViewToolData extends AppCompatActivity
     {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
-        setIconInMenu(menu, R.id.home, R.string.home, R.mipmap.homeicon);
-        setIconInMenu(menu, R.id.profile, R.string.profile, R.mipmap.profileicon);
-        setIconInMenu(menu, R.id.password, R.string.password, R.mipmap.lockicon);
-        setIconInMenu(menu, R.id.log_out, R.string.log_out, R.mipmap.logouticon);
+        setIconInMenu(menu, R.id.about, R.string.about, R.mipmap.about);
+        setIconInMenu(menu, R.id.help, R.string.help, R.mipmap.help);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -140,51 +220,30 @@ public class PartsCribberViewToolData extends AppCompatActivity
     }
 
     @Override
+    protected void onPostCreate(Bundle savedInstanceState)
+    {
+        super.onPostCreate(savedInstanceState);
+        actionBarDrawerToggle.syncState();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
+        if(actionBarDrawerToggle.onOptionsItemSelected(item))
+        {
+            return true;
+        }
         switch (item.getItemId())
         {
             case android.R.id.home:
                 finish();
                 break;
 
-            case R.id.home:
-                User user = UserSession.getInstance(this).getUser();
-                if (user.getUsertype().equals("Admin"))
-                {
-                    Intent adminhome = new Intent(this, PartsCribberAdminMenu.class);
-                    adminhome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(adminhome);
-                    break;
-                }
-                else if(user.getUsertype().equals("Student"))
-                {
-                    Intent studenthome = new Intent(this, PartsCribberStudentMenu.class);
-                    studenthome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(studenthome);
-                    break;
-                }
-                else
-                {
-                    //Do not respond.
-                    break;
-                }
-
-            case R.id.profile:
-                Intent profileActivity = new Intent(this, PartsCribberViewProfile.class);
-                startActivity(profileActivity);
+            case R.id.about:
                 break;
 
-            case R.id.password:
-                Intent passwordActivity = new Intent(this, PartsCribberChangePassword.class);
-                startActivity(passwordActivity);
+            case R.id.help:
                 break;
-
-            case R.id.log_out:
-                finish();
-                UserSession.getInstance(getApplicationContext()).logout();
-                Intent login = new Intent(this, PartsCribberLogin.class);
-                startActivity(login);
 
             default:
                 return super.onOptionsItemSelected(item);

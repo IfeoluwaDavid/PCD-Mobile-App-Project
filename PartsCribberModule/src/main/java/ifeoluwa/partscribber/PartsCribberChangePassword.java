@@ -8,10 +8,14 @@ Member Names - Ifeoluwa David Adese, Mohand Ferawana, Tosin Ajayi
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -21,12 +25,18 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class PartsCribberChangePassword extends AppCompatActivity
 {
     EditText currentPassword, confirmCurrentPassword, newPassword, confirmNewPassword;
     String oldpassword, confirmoldpassword, newpassword, confirmnewpassword;
     ActionBar actionBar;
+
+    Toolbar toolbar;
+    NavigationView navigationView;
+    DrawerLayout drawerLayout;
+    ActionBarDrawerToggle actionBarDrawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -41,6 +51,88 @@ public class PartsCribberChangePassword extends AppCompatActivity
         confirmCurrentPassword = (EditText) findViewById(R.id.confirm_current_password);
         newPassword = (EditText) findViewById(R.id.new_password);
         confirmNewPassword = (EditText) findViewById(R.id.confirm_new_password);
+
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+
+        navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        navigationView.getMenu().getItem(0).setChecked(true);
+
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener()
+        {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem item)
+            {
+                Intent intent;
+
+                switch (item.getItemId())
+                {
+                    case R.id.home:
+                        finishAffinity();
+                        User user = UserSession.getInstance(PartsCribberChangePassword.this).getUser();
+                        if (user.getUsertype().equals("Admin"))
+                        {
+                            intent = new Intent(PartsCribberChangePassword.this, PartsCribberAdminMenu.class);
+                            startActivity(intent);
+                        }
+                        else if(user.getUsertype().equals("Student"))
+                        {
+                            intent = new Intent(PartsCribberChangePassword.this, PartsCribberStudentMenu.class);
+                            startActivity(intent);
+                        }
+                        item.setChecked(true);
+                        drawerLayout.closeDrawers();
+                        break;
+
+                    case R.id.viewStudentCart:
+                        intent = new Intent(PartsCribberChangePassword.this, PartsCribberStudentCart.class);
+                        startActivity(intent);
+                        item.setChecked(true);
+                        drawerLayout.closeDrawers();
+                        break;
+
+                    case R.id.viewStudentPossessions:
+                        intent = new Intent(PartsCribberChangePassword.this, PartsCribberReturnEquipment.class);
+                        startActivity(intent);
+                        item.setChecked(true);
+                        drawerLayout.closeDrawers();
+                        break;
+
+                    case R.id.profilesettings:
+                        intent = new Intent(PartsCribberChangePassword.this, PartsCribberViewProfile.class);
+                        startActivity(intent);
+                        item.setChecked(true);
+                        drawerLayout.closeDrawers();
+                        break;
+
+                    case R.id.changepassword:
+                        //Do nothing here
+                        Toast.makeText(PartsCribberChangePassword.this, "Currently viewing Password Settings", Toast.LENGTH_SHORT).show();
+                        item.setChecked(true);
+                        drawerLayout.closeDrawers();
+                        break;
+
+                    case R.id.logout:
+                        finishAffinity();
+                        item.setChecked(true);
+                        drawerLayout.closeDrawers();
+                        UserSession.getInstance(getApplicationContext()).logout();
+                        Intent login = new Intent(PartsCribberChangePassword.this, PartsCribberLogin.class);
+                        startActivity(login);
+                        break;
+                }
+                return false;
+            }
+        });
+
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState)
+    {
+        super.onPostCreate(savedInstanceState);
+        actionBarDrawerToggle.syncState();
     }
 
     @Override
@@ -48,10 +140,8 @@ public class PartsCribberChangePassword extends AppCompatActivity
     {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
-        setIconInMenu(menu, R.id.home, R.string.home, R.mipmap.homeicon);
-        setIconInMenu(menu, R.id.profile, R.string.profile, R.mipmap.profileicon);
-        setIconInMenu(menu, R.id.password, R.string.password, R.mipmap.lockicon);
-        setIconInMenu(menu, R.id.log_out, R.string.log_out, R.mipmap.logouticon);
+        setIconInMenu(menu, R.id.about, R.string.about, R.mipmap.about);
+        setIconInMenu(menu, R.id.help, R.string.help, R.mipmap.help);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -66,45 +156,21 @@ public class PartsCribberChangePassword extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
+        if(actionBarDrawerToggle.onOptionsItemSelected(item))
+        {
+            return true;
+        }
         switch (item.getItemId())
         {
-            case R.id.home:
-                User user = UserSession.getInstance(this).getUser();
-                if (user.getUsertype().equals("Admin"))
-                {
-                    Intent adminhome = new Intent(this, PartsCribberAdminMenu.class);
-                    adminhome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    redirect(adminhome);
-                    break;
-                }
-                else if(user.getUsertype().equals("Student"))
-                {
-                    Intent studenthome = new Intent(this, PartsCribberStudentMenu.class);
-                    studenthome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    redirect(studenthome);
-                    break;
-                }
-                else
-                {
-                    //Do not respond.
-                    break;
-                }
-
-            case R.id.profile:
-                Intent profileActivity = new Intent(this, PartsCribberViewProfile.class);
-                redirect(profileActivity);
+            case android.R.id.home:
+                onBackPressed();
                 break;
 
-            case R.id.password:
-                //Do Nothing Here
+            case R.id.about:
                 break;
 
-            case R.id.log_out:
-                finish();
-                UserSession.getInstance(getApplicationContext()).logout();
-                Intent login = new Intent(this, PartsCribberLogin.class);
-                login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(login);
+            case R.id.help:
+                break;
 
             default:
                 return super.onOptionsItemSelected(item);
@@ -274,12 +340,13 @@ public class PartsCribberChangePassword extends AppCompatActivity
         }
     }
 
-    /*public void onBackPressed()
+    public void onBackPressed()
     {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Do you wish to leave your password unchanged?");
-
-        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
+        builder.setTitle("Confirm");
+        builder.setMessage("Are you sure you want to exit this rental process?");
+        builder.setPositiveButton("YES", new DialogInterface.OnClickListener()
+        {
             public void onClick(DialogInterface dialog, int which)
             {
                 dialog.dismiss();
@@ -294,7 +361,7 @@ public class PartsCribberChangePassword extends AppCompatActivity
                 dialog.dismiss();
             }
         });
-        AlertDialog alert = builder.create();
+        android.support.v7.app.AlertDialog alert = builder.create();
         alert.show();
-    }*/
+    }
 }

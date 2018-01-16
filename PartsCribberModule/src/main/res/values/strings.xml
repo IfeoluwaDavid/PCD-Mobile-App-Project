@@ -151,5 +151,27 @@
     <string name="password_length">Your new password should be between 8 to 15 characters long, without spaces.</string>
     <string name="unmatched_newpasswords">Your New Passwords don\'t match</string>
     <string name="exit_confirm">Do you wish to leave your password unchanged? Unsaved changes will be lost.</string>
+    <string name="exit">Exit</string>
+
+    <string name="Admin">Admin</string>
+    <string name="Student">Student</string>
+    <string name="username">Username</string>
+    <string name="connectionError">Connection Error.</string>
+    <string name="retry">Retry</string>
+    <string name="cancel">Cancel</string>
+    <string name="viewstudentcart">Student Cart</string>
+    <string name="viewstudentpossession">Student Possession</string>
+    <string name="viewstudentcartheader">View Student Cart</string>
+
+    <!-- ALL URLS -->
+    <string name="pleasewait">Please wait....</string>
+    <string name="studentholds">http://partscribdatabase.tech/androidconnect/studentholds.php</string>
+    <string name="fetchStudentProfile">http://partscribdatabase.tech/androidconnect/fetchStudentProfile.php</string>
+
+    <string name="drawer_open">Drawer Open</string>
+    <string name="drawer_close">Drawer Close</string>
+
+    <string name="about">About</string>
+    <string name="help">Help</string>
 
 </resources>

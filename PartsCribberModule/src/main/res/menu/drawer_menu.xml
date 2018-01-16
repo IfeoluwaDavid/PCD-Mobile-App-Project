@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/home"
+            android:title="@string/home"
+            android:icon="@mipmap/homeicon"/>
+
+        <item
+            android:id="@+id/viewStudentCart"
+            android:title="@string/viewstudentcart"
+            android:icon="@mipmap/shoppingcart"/>
+
+        <item
+            android:id="@+id/viewStudentPossessions"
+            android:title="@string/viewstudentpossession"
+            android:icon="@mipmap/checkedbox"/>
+
+    </group>
+
+    <item android:title="@string/profile">
+
+        <menu>
+
+            <item
+                android:id="@+id/profilesettings"
+                android:title="@string/profile"
+                android:icon="@mipmap/profileicon"/>
+
+            <item
+                android:id="@+id/changepassword"
+                android:title="@string/change_password_header"
+                android:icon="@mipmap/lockicon"/>
+
+            <item
+                android:id="@+id/logout"
+                android:title="@string/log_out"
+                android:icon="@mipmap/logouticon"/>
+        </menu>
+    </item>
+
+</menu>

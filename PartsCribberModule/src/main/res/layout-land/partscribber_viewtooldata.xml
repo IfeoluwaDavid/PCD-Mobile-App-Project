@@ -1,171 +1,203 @@
-<RelativeLayout
+<android.support.v4.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/rl"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp"
-    android:background="@color/mainBackgroundcolor"
+    android:id="@+id/drawer_layout"
     tools:context="ifeoluwa.partscribber.PartsCribberViewToolData">
 
-    <EditText
-        android:id="@+id/serial_no"
-        android:layout_width="330dp"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:background="#ffffff"
-        android:focusable="false"
-        android:clickable="false"
-        android:textStyle="bold"
-        android:textColor="@color/supportingColor"
-        android:padding="9dp"
-        android:inputType="textPersonName"
-        android:text="@string/serial_no"
-        android:layout_marginTop="10dp"
-        android:layout_centerHorizontal="true" />
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/rl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp"
+        android:background="@color/mainBackgroundcolor">
 
-    <EditText
-        android:id="@+id/qty_available"
-        android:layout_width="330dp"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:background="#ffffff"
-        android:focusable="false"
-        android:clickable="false"
-        android:textStyle="bold"
-        android:textColor="@color/supportingColor"
-        android:padding="9dp"
-        android:layout_marginTop="5dp"
-        android:inputType="textPersonName"
-        android:text="@string/qty_available"
-        android:layout_below="@+id/serial_no"
-        android:layout_alignStart="@+id/serial_no" />
+        <EditText
+            android:id="@+id/serial_no"
+            android:layout_width="330dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:background="#ffffff"
+            android:focusable="false"
+            android:clickable="false"
+            android:textStyle="bold"
+            android:textColor="@color/supportingColor"
+            android:padding="9dp"
+            android:inputType="textPersonName"
+            android:text="@string/serial_no"
+            android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true" />
 
-    <EditText
-        android:id="@+id/qty_rented"
-        android:layout_width="330dp"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:background="#ffffff"
-        android:focusable="false"
-        android:clickable="false"
-        android:textStyle="bold"
-        android:textColor="@color/supportingColor"
-        android:padding="9dp"
-        android:layout_marginTop="5dp"
-        android:inputType="textPersonName"
-        android:text="@string/qty_rented"
-        android:layout_below="@+id/qty_available"
-        android:layout_alignStart="@+id/qty_available" />
+        <EditText
+            android:id="@+id/qty_available"
+            android:layout_width="330dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:background="#ffffff"
+            android:focusable="false"
+            android:clickable="false"
+            android:textStyle="bold"
+            android:textColor="@color/supportingColor"
+            android:padding="9dp"
+            android:layout_marginTop="5dp"
+            android:inputType="textPersonName"
+            android:text="@string/qty_available"
+            android:layout_below="@+id/serial_no"
+            android:layout_alignStart="@+id/serial_no" />
 
-    <EditText
-        android:id="@+id/qty_total"
-        android:layout_width="330dp"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:background="#ffffff"
-        android:focusable="false"
-        android:clickable="false"
-        android:textStyle="bold"
-        android:textColor="@color/supportingColor"
-        android:padding="9dp"
-        android:layout_marginTop="5dp"
-        android:inputType="textPersonName"
-        android:text="@string/qty_total"
-        android:layout_below="@+id/qty_rented"
-        android:layout_alignStart="@+id/qty_rented" />
+        <EditText
+            android:id="@+id/qty_rented"
+            android:layout_width="330dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:background="#ffffff"
+            android:focusable="false"
+            android:clickable="false"
+            android:textStyle="bold"
+            android:textColor="@color/supportingColor"
+            android:padding="9dp"
+            android:layout_marginTop="5dp"
+            android:inputType="textPersonName"
+            android:text="@string/qty_rented"
+            android:layout_below="@+id/qty_available"
+            android:layout_alignStart="@+id/qty_available" />
 
-    <EditText
-        android:id="@+id/item_category"
-        android:layout_width="330dp"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:background="#ffffff"
-        android:focusable="false"
-        android:clickable="false"
-        android:textStyle="bold"
-        android:textColor="@color/supportingColor"
-        android:padding="9dp"
-        android:inputType="textPersonName"
-        android:layout_marginTop="5dp"
-        android:text="@string/item_category"
-        android:layout_below="@+id/qty_total"
-        android:layout_alignStart="@+id/qty_total" />
+        <EditText
+            android:id="@+id/qty_total"
+            android:layout_width="330dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:background="#ffffff"
+            android:focusable="false"
+            android:clickable="false"
+            android:textStyle="bold"
+            android:textColor="@color/supportingColor"
+            android:padding="9dp"
+            android:layout_marginTop="5dp"
+            android:inputType="textPersonName"
+            android:text="@string/qty_total"
+            android:layout_below="@+id/qty_rented"
+            android:layout_alignStart="@+id/qty_rented" />
 
-    <Button
-        android:id="@+id/update_this_item_data"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/update_this_item_data"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:textColor="@color/textColor"
-        android:background="@color/supportingColor"
-        android:onClick="updateItem"
-        android:layout_alignBaseline="@+id/view_cart_button"
-        android:layout_alignBottom="@+id/view_cart_button"
-        android:layout_alignStart="@+id/view_cart_button"
-        android:layout_alignEnd="@+id/view_cart_button" />
+        <EditText
+            android:id="@+id/item_category"
+            android:layout_width="330dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:background="#ffffff"
+            android:focusable="false"
+            android:clickable="false"
+            android:textStyle="bold"
+            android:textColor="@color/supportingColor"
+            android:padding="9dp"
+            android:inputType="textPersonName"
+            android:layout_marginTop="5dp"
+            android:text="@string/item_category"
+            android:layout_below="@+id/qty_total"
+            android:layout_alignStart="@+id/qty_total" />
 
-    <Button
-        android:id="@+id/add_item_to_cart"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/add_item_to_cart"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:textColor="@color/textColor"
-        android:background="@color/supportingColor"
-        android:onClick="addtoCartANDrentItem"
-        android:layout_marginTop="7dp"
-        android:layout_below="@+id/item_category"
-        android:layout_alignStart="@+id/item_category"
-        android:layout_alignEnd="@+id/item_category" />
+        <Button
+            android:id="@+id/update_this_item_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/update_this_item_data"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/textColor"
+            android:background="@color/supportingColor"
+            android:onClick="updateItem"
+            android:layout_alignBaseline="@+id/view_cart_button"
+            android:layout_alignBottom="@+id/view_cart_button"
+            android:layout_alignStart="@+id/view_cart_button"
+            android:layout_alignEnd="@+id/view_cart_button" />
 
-    <Button
-        android:id="@+id/view_cart_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/view_cart_button"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:textColor="@color/textColor"
-        android:background="@color/supportingColor"
-        android:onClick="viewCart"
-        android:visibility="invisible"
-        android:layout_marginTop="5dp"
-        android:layout_below="@+id/add_item_to_cart"
-        android:layout_alignStart="@+id/add_item_to_cart"
-        android:layout_alignEnd="@+id/add_item_to_cart" />
+        <Button
+            android:id="@+id/add_item_to_cart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add_item_to_cart"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/textColor"
+            android:background="@color/supportingColor"
+            android:onClick="addtoCartANDrentItem"
+            android:layout_marginTop="7dp"
+            android:layout_below="@+id/item_category"
+            android:layout_alignStart="@+id/item_category"
+            android:layout_alignEnd="@+id/item_category" />
 
-    <Button
-        android:id="@+id/view_holders"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/view_holders"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:textColor="@color/textColor"
-        android:background="@color/supportingColor"
-        android:onClick="viewHolders"
-        android:layout_marginTop="5dp"
-        android:layout_below="@+id/view_cart_button"
-        android:layout_alignStart="@+id/view_cart_button"
-        android:layout_alignEnd="@+id/view_cart_button" />
+        <Button
+            android:id="@+id/view_cart_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/view_cart_button"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/textColor"
+            android:background="@color/supportingColor"
+            android:onClick="viewCart"
+            android:visibility="invisible"
+            android:layout_marginTop="5dp"
+            android:layout_below="@+id/add_item_to_cart"
+            android:layout_alignStart="@+id/add_item_to_cart"
+            android:layout_alignEnd="@+id/add_item_to_cart" />
 
-    <Button
-        android:id="@+id/delete_item"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/delete_item"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:layout_marginTop="5dp"
-        android:textColor="@color/textColor"
-        android:background="@color/supportingColor"
-        android:onClick="deleteItem"
-        android:layout_below="@+id/view_holders"
-        android:layout_alignStart="@+id/view_holders"
-        android:layout_alignEnd="@+id/view_holders" />
+        <Button
+            android:id="@+id/view_holders"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/view_holders"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/textColor"
+            android:background="@color/supportingColor"
+            android:onClick="viewHolders"
+            android:layout_marginTop="5dp"
+            android:layout_below="@+id/view_cart_button"
+            android:layout_alignStart="@+id/view_cart_button"
+            android:layout_alignEnd="@+id/view_cart_button" />
 
-</RelativeLayout>
+        <Button
+            android:id="@+id/delete_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/delete_item"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/textColor"
+            android:background="@color/supportingColor"
+            android:onClick="deleteItem"
+            android:layout_below="@+id/view_holders"
+            android:layout_alignStart="@+id/view_holders"
+            android:layout_alignEnd="@+id/view_holders" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/mainContainer">
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <android.support.design.widget.NavigationView
+        android:layout_width="match_parent"
+        android:layout_height="620dp"
+        android:id="@+id/navigation_view"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="false"
+        app:menu="@menu/drawer_menu">
+    </android.support.design.widget.NavigationView>
+
+</android.support.v4.widget.DrawerLayout>
