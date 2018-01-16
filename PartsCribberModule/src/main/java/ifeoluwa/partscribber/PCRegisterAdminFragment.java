@@ -432,7 +432,7 @@ public class PCRegisterAdminFragment extends Fragment
             }
         }
     }
-    public boolean adminUsernameValidation(String x)
+    public static boolean adminUsernameValidation(String x)
     {
         char[] ch = x.toCharArray();
         int letter = 0;
@@ -471,7 +471,7 @@ public class PCRegisterAdminFragment extends Fragment
         }
     }
 
-    public boolean passwordValidation(String x)
+    public static boolean passwordValidation(String x)
     {
         char[] ch = x.toCharArray();
         int letter = 0;
@@ -509,7 +509,7 @@ public class PCRegisterAdminFragment extends Fragment
         }
     }
 
-    public boolean namesValidation(String x)
+    public static boolean namesValidation(String x)
     {
         char[] ch = x.toCharArray();
         int letter = 0;

@@ -227,7 +227,7 @@ public class PCRegisterStudentFragment extends Fragment
         return finder;
     }
 
-    public boolean studentUserNameValidation(String x)
+    public static boolean studentUserNameValidation(String x)
     {
         char[] ch = x.toCharArray();
         int letter = 0;
@@ -268,7 +268,7 @@ public class PCRegisterStudentFragment extends Fragment
         }
     }
 
-    public boolean passwordValidation(String x)
+    public static boolean passwordValidation(String x)
     {
         char[] ch = x.toCharArray();
         int letter = 0;
@@ -306,7 +306,7 @@ public class PCRegisterStudentFragment extends Fragment
         }
     }
 
-    public boolean namesValidation(String x)
+    public static boolean namesValidation(String x)
     {
         char[] ch = x.toCharArray();
         int letter = 0;

@@ -54,7 +54,6 @@ public class PartsCribberUpdateItem extends AppCompatActivity
     String itemID, newItemName, newSerialNo, newQtyTotal, newCategory, newAvailableQty;
     String previousItemName, previousSerialNo, previousTotalQty, previousCategory, previousAvailableQty;
     String jsonstring;
-    String selectedItem;
     ArrayAdapter<String> adapter;
     String[] categoryArray;
     JSONObject jsonObject;
@@ -93,10 +92,8 @@ public class PartsCribberUpdateItem extends AppCompatActivity
     {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
-        setIconInMenu(menu, R.id.home, R.string.home, R.mipmap.homeicon);
-        setIconInMenu(menu, R.id.profile, R.string.profile, R.mipmap.profileicon);
-        setIconInMenu(menu, R.id.password, R.string.password, R.mipmap.lockicon);
-        setIconInMenu(menu, R.id.log_out, R.string.log_out, R.mipmap.logouticon);
+        setIconInMenu(menu, R.id.about, R.string.about, R.mipmap.about);
+        setIconInMenu(menu, R.id.help, R.string.help, R.mipmap.help);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -117,44 +114,11 @@ public class PartsCribberUpdateItem extends AppCompatActivity
                 onBackPressed();
                 break;
 
-            case R.id.home:
-                User user = UserSession.getInstance(this).getUser();
-                if (user.getUsertype().equals("Admin"))
-                {
-                    Intent adminhome = new Intent(this, PartsCribberAdminMenu.class);
-                    adminhome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    redirect(adminhome);
-                    break;
-                }
-                else if(user.getUsertype().equals("Student"))
-                {
-                    Intent studenthome = new Intent(this, PartsCribberStudentMenu.class);
-                    studenthome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    redirect(studenthome);
-                    break;
-                }
-                else
-                {
-                    //Do not respond.
-                    break;
-                }
-
-            case R.id.profile:
-                Intent profileActivity = new Intent(this, PartsCribberViewProfile.class);
-                redirect(profileActivity);
+            case R.id.about:
                 break;
 
-            case R.id.password:
-                Intent passwordActivity = new Intent(this, PartsCribberChangePassword.class);
-                redirect(passwordActivity);
+            case R.id.help:
                 break;
-
-            case R.id.log_out:
-                finish();
-                UserSession.getInstance(getApplicationContext()).logout();
-                Intent login = new Intent(this, PartsCribberLogin.class);
-                login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(login);
 
             default:
                 return super.onOptionsItemSelected(item);

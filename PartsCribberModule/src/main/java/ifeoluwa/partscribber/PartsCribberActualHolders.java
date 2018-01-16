@@ -64,13 +64,16 @@ public class PartsCribberActualHolders extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.partscribber_actualholders);
 
+        //Receive selected item from previous activity
         intent = getIntent();
         selectedItem = intent.getStringExtra("selectedItem");
 
+        //Action Bar Configuration
         actionBar = getSupportActionBar();
         actionBar.setTitle(Html.fromHtml("<font color='#ffffff'>"+selectedItem+"</font>"));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        //Fetch list of students who still have the selected item in possession.
         new ItemInfoBackgroundTasks(this).execute();
     }
 
@@ -94,9 +97,9 @@ public class PartsCribberActualHolders extends AppCompatActivity
         {
             builder = new AlertDialog.Builder(activity);
             View dialogView = LayoutInflater.from(this.ctx).inflate(R.layout.progress_dialog, null);
-            ((TextView)dialogView.findViewById(R.id.tv_progress_dialog)).setText("Please wait...");
+            ((TextView)dialogView.findViewById(R.id.tv_progress_dialog)).setText(getString(R.string.pleasewait));
             loginDialog = builder.setView(dialogView).setCancelable(false).show();
-            json_url = "http://partscribdatabase.tech/androidconnect/studentholds.php";
+            json_url = getString(R.string.studentholds);
         }
 
         @Override
@@ -104,6 +107,7 @@ public class PartsCribberActualHolders extends AppCompatActivity
         {
             try
             {
+                //Create Network Connection Request
                 URL url = new URL(json_url);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                 httpURLConnection.setRequestMethod("POST");
@@ -111,9 +115,7 @@ public class PartsCribberActualHolders extends AppCompatActivity
                 httpURLConnection.setDoInput(true);
                 OutputStream os = httpURLConnection.getOutputStream();
                 BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
-
                 String data = URLEncoder.encode("item_name", "UTF-8") + "=" + URLEncoder.encode(selectedItem, "UTF-8");
-
                 bufferedWriter.write(data);
                 bufferedWriter.flush();
                 bufferedWriter.close();
@@ -151,12 +153,12 @@ public class PartsCribberActualHolders extends AppCompatActivity
         protected void onPostExecute(String result)
         {
             loginDialog.dismiss();
-            if(TextUtils.isEmpty(result))
+            if(TextUtils.isEmpty(result)) //If JSON data returned is null i.e. Connection timed-out.
             {
                 android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
-                builder.setMessage("Connection Error.");
+                builder.setMessage(getString(R.string.connectionError));
                 builder.setCancelable(false);
-                builder.setPositiveButton("Retry", new DialogInterface.OnClickListener()
+                builder.setPositiveButton(getString(R.string.retry), new DialogInterface.OnClickListener()
                 {
                     public void onClick(DialogInterface dialog, int which)
                     {
@@ -164,7 +166,7 @@ public class PartsCribberActualHolders extends AppCompatActivity
                         new ItemInfoBackgroundTasks(ctx).execute();
                     }
                 });
-                builder.setNegativeButton("Exit", new DialogInterface.OnClickListener()
+                builder.setNegativeButton(getString(R.string.exit), new DialogInterface.OnClickListener()
                 {
                     public void onClick(DialogInterface dialog, int which)
                     {
@@ -177,7 +179,6 @@ public class PartsCribberActualHolders extends AppCompatActivity
             }
             else
             {
-
                 jsonstring = result;
                 ArrayList<String> usernameList = new ArrayList<String>();
                 ArrayList<String> quantityHeldList = new ArrayList<String>();
@@ -267,9 +268,9 @@ public class PartsCribberActualHolders extends AppCompatActivity
         {
             builder = new AlertDialog.Builder(activity);
             View dialogView = LayoutInflater.from(this.ctx).inflate(R.layout.progress_dialog, null);
-            ((TextView) dialogView.findViewById(R.id.tv_progress_dialog)).setText("Please wait...");
+            ((TextView) dialogView.findViewById(R.id.tv_progress_dialog)).setText(getString(R.string.pleasewait));
             loginDialog = builder.setView(dialogView).setCancelable(false).show();
-            json_url = "http://partscribdatabase.tech/androidconnect/fetchStudentProfile.php";
+            json_url = getString(R.string.fetchStudentProfile);
         }
 
         @Override
@@ -285,7 +286,7 @@ public class PartsCribberActualHolders extends AppCompatActivity
                 OutputStream os = httpURLConnection.getOutputStream();
                 BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
 
-                String data = URLEncoder.encode("username", "UTF-8") + "=" + URLEncoder.encode(selectedID, "UTF-8");
+                String data = URLEncoder.encode(getString(R.string.username), "UTF-8") + "=" + URLEncoder.encode(selectedID, "UTF-8");
 
                 bufferedWriter.write(data);
                 bufferedWriter.flush();
@@ -326,9 +327,9 @@ public class PartsCribberActualHolders extends AppCompatActivity
             if(TextUtils.isEmpty(result))
             {
                 android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ctx);
-                builder.setMessage("Connection Error.");
+                builder.setMessage(getString(R.string.connectionError));
                 builder.setCancelable(false);
-                builder.setPositiveButton("Retry", new DialogInterface.OnClickListener()
+                builder.setPositiveButton(getString(R.string.retry), new DialogInterface.OnClickListener()
                 {
                     public void onClick(DialogInterface dialog, int which)
                     {
@@ -440,10 +441,8 @@ public class PartsCribberActualHolders extends AppCompatActivity
     {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
-        setIconInMenu(menu, R.id.home, R.string.home, R.mipmap.homeicon);
-        setIconInMenu(menu, R.id.profile, R.string.profile, R.mipmap.profileicon);
-        setIconInMenu(menu, R.id.password, R.string.password, R.mipmap.lockicon);
-        setIconInMenu(menu, R.id.log_out, R.string.log_out, R.mipmap.logouticon);
+        setIconInMenu(menu, R.id.about, R.string.about, R.mipmap.about);
+        setIconInMenu(menu, R.id.help, R.string.help, R.mipmap.help);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -464,44 +463,11 @@ public class PartsCribberActualHolders extends AppCompatActivity
                 finish();
                 break;
 
-            case R.id.home:
-                User user = UserSession.getInstance(this).getUser();
-                if (user.getUsertype().equals("Admin"))
-                {
-                    Intent adminhome = new Intent(this, PartsCribberAdminMenu.class);
-                    adminhome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(adminhome);
-                    break;
-                }
-                else if(user.getUsertype().equals("Student"))
-                {
-                    Intent studenthome = new Intent(this, PartsCribberStudentMenu.class);
-                    studenthome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(studenthome);
-                    break;
-                }
-                else
-                {
-                    //Do not respond.
-                    break;
-                }
-
-            case R.id.profile:
-                Intent profileActivity = new Intent(this, PartsCribberViewProfile.class);
-                startActivity(profileActivity);
+            case R.id.about:
                 break;
 
-            case R.id.password:
-                Intent passwordActivity = new Intent(this, PartsCribberChangePassword.class);
-                startActivity(passwordActivity);
+            case R.id.help:
                 break;
-
-            case R.id.log_out:
-                finish();
-                UserSession.getInstance(getApplicationContext()).logout();
-                Intent login = new Intent(this, PartsCribberLogin.class);
-                login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(login);
 
             default:
                 return super.onOptionsItemSelected(item);

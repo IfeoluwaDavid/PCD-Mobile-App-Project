@@ -3,26 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/home"
-        android:title="@string/home"
+        android:id="@+id/about"
+        android:title="@string/about"
         app:showAsAction="never">
     </item>
 
     <item
-        android:id="@+id/profile"
-        android:title="@string/profile"
-        app:showAsAction="never">
-    </item>
-
-    <item
-        android:id="@+id/password"
-        android:title="@string/password"
-        app:showAsAction="never">
-    </item>
-
-    <item
-        android:id="@+id/log_out"
-        android:title="@string/log_out"
+        android:id="@+id/help"
+        android:title="@string/help"
         app:showAsAction="never">
     </item>
 
