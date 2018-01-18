@@ -155,12 +155,13 @@
 
     <string name="Admin">Admin</string>
     <string name="Student">Student</string>
-    <string name="username">Username</string>
+    <string name="username">username</string>
     <string name="connectionError">Connection Error.</string>
     <string name="retry">Retry</string>
     <string name="cancel">Cancel</string>
-    <string name="viewstudentcart">Student Cart</string>
-    <string name="viewstudentpossession">Student Possession</string>
+
+    <string name="viewstudentcart">View Student Cart</string>
+    <string name="viewstudentpossession">View Student Rentals</string>
     <string name="viewstudentcartheader">View Student Cart</string>
 
     <!-- ALL URLS -->

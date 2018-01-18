@@ -8,6 +8,7 @@ Member Names - Ifeoluwa David Adese, Mohand Ferawana, Tosin Ajayi
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -167,9 +168,23 @@ public class PartsCribberChangePassword extends AppCompatActivity
                 break;
 
             case R.id.about:
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.partscribdatabase.tech"));
+                startActivity(browserIntent);
                 break;
 
             case R.id.help:
+                android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
+                builder.setMessage("Mail: Prototypelab@humber.ca");
+                builder.setCancelable(false);
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        dialog.dismiss();
+                    }
+                });
+                android.support.v7.app.AlertDialog alert = builder.create();
+                alert.show();
                 break;
 
             default:
@@ -344,7 +359,7 @@ public class PartsCribberChangePassword extends AppCompatActivity
     {
         android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
         builder.setTitle("Confirm");
-        builder.setMessage("Are you sure you want to exit this rental process?");
+        builder.setMessage("Are you sure you want to leave your password unchanged?");
         builder.setPositiveButton("YES", new DialogInterface.OnClickListener()
         {
             public void onClick(DialogInterface dialog, int which)

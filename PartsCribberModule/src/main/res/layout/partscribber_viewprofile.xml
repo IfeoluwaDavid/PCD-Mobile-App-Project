@@ -18,7 +18,7 @@
 
     <Button
         android:id="@+id/edit_button"
-        android:layout_width="330dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/edit_button"
         tools:layout_editor_absoluteX="148dp"
@@ -30,11 +30,12 @@
         android:textColor="@color/textColor"
         android:background="@color/supportingColor"
         android:layout_below="@+id/user_status"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignEnd="@+id/user_status"
+        android:layout_alignStart="@+id/user_status" />
 
     <Button
         android:id="@+id/save_button"
-        android:layout_width="330dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/save_button"
         tools:layout_editor_absoluteX="148dp"
@@ -46,11 +47,12 @@
         android:textColor="@color/textColor"
         android:background="@color/supportingColor"
         android:layout_below="@+id/edit_button"
-        android:layout_alignStart="@+id/edit_button" />
+        android:layout_alignStart="@+id/edit_button"
+        android:layout_alignEnd="@+id/edit_button" />
 
     <Button
         android:id="@+id/logout_button"
-        android:layout_width="330dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/logout_button"
         tools:layout_editor_absoluteX="148dp"
@@ -62,12 +64,15 @@
         android:textColor="@color/textColor"
         android:background="@color/supportingColor"
         android:layout_below="@+id/save_button"
-        android:layout_alignStart="@+id/save_button" />
+        android:layout_alignStart="@+id/save_button"
+        android:layout_alignEnd="@+id/save_button" />
 
     <EditText
         android:id="@+id/edit_profile_username"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:ems="10"
         android:focusable="false"
         android:clickable="false"
@@ -77,13 +82,14 @@
         android:padding="9dp"
         android:background="@color/textColor"
         android:hint="@string/login_username"
-        android:layout_marginTop="14dp"
-        android:layout_alignStart="@+id/edit_profile_firstname"
-        android:layout_alignEnd="@+id/edit_profile_firstname" />
+        android:layout_marginTop="15dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true" />
 
     <EditText
         android:id="@+id/edit_profile_firstname"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="40dp"
         android:ems="10"
         android:focusable="false"
@@ -96,12 +102,12 @@
         android:hint="@string/edit_profile_firstname"
         android:background="@color/textColor"
         android:layout_below="@+id/edit_profile_username"
-        android:layout_alignEnd="@+id/edit_profile_lastname"
-        android:layout_alignStart="@+id/edit_profile_lastname" />
+        android:layout_alignStart="@+id/edit_profile_lastname"
+        android:layout_alignEnd="@+id/edit_profile_username" />
 
     <EditText
         android:id="@+id/edit_profile_lastname"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="40dp"
         android:ems="10"
         android:focusable="false"
@@ -116,12 +122,12 @@
         tools:layout_editor_absoluteX="85dp"
         tools:layout_editor_absoluteY="186dp"
         android:layout_below="@+id/edit_profile_firstname"
-        android:layout_alignEnd="@+id/edit_profile_email"
-        android:layout_alignStart="@+id/edit_profile_email" />
+        android:layout_alignStart="@+id/edit_profile_email"
+        android:layout_alignEnd="@+id/edit_profile_username" />
 
     <EditText
         android:id="@+id/edit_profile_email"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="40dp"
         android:ems="10"
         android:focusable="false"
@@ -135,12 +141,12 @@
         android:background="@color/textColor"
         android:hint="@string/edit_profile_email"
         android:layout_below="@+id/edit_profile_lastname"
-        android:layout_alignStart="@+id/edit_button"
-        android:layout_alignEnd="@+id/edit_button" />
+        android:layout_alignEnd="@+id/edit_profile_username"
+        android:layout_alignStart="@+id/edit_profile_username" />
 
     <EditText
         android:id="@+id/user_status"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="40dp"
         android:ems="10"
         android:focusable="false"
@@ -155,22 +161,9 @@
         tools:layout_editor_absoluteY="186dp"
         android:layout_below="@+id/edit_profile_email"
         android:layout_alignStart="@+id/edit_profile_email"
-        android:layout_alignEnd="@+id/edit_button" />
+        android:layout_alignEnd="@+id/edit_profile_email" />
 
 </RelativeLayout>
-
-    <LinearLayout
-        android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        android:orientation="vertical">
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/mainContainer">
-        </FrameLayout>
-
-    </LinearLayout>
 
     <android.support.design.widget.NavigationView
         android:layout_width="match_parent"

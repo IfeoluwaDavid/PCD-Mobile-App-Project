@@ -24,12 +24,12 @@
         <ListView
             android:id="@+id/listview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/txtsearch"
             android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
             android:divider="@color/mainBackgroundcolor"
             android:dividerHeight="3dp" />
 

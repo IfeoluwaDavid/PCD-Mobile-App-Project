@@ -11,6 +11,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -249,9 +250,9 @@ public class PartsCribberActualHolders extends AppCompatActivity
     {
         Context ctx;
         String json_url, JSON_STRING;
-        AlertDialog.Builder builder, mBuilder;
+        android.support.v7.app.AlertDialog.Builder builder, mBuilder;
         private Activity activity;
-        private android.app.AlertDialog loginDialog, dialog;
+        private android.support.v7.app.AlertDialog loginDialog, dialog;
         View mView;
         TextView studentIDheader;
         String fname, lname, possessionqty, email, status;
@@ -266,7 +267,7 @@ public class PartsCribberActualHolders extends AppCompatActivity
         @Override
         protected void onPreExecute()
         {
-            builder = new AlertDialog.Builder(activity);
+            builder = new android.support.v7.app.AlertDialog.Builder(activity);
             View dialogView = LayoutInflater.from(this.ctx).inflate(R.layout.progress_dialog, null);
             ((TextView) dialogView.findViewById(R.id.tv_progress_dialog)).setText(getString(R.string.pleasewait));
             loginDialog = builder.setView(dialogView).setCancelable(false).show();
@@ -362,7 +363,7 @@ public class PartsCribberActualHolders extends AppCompatActivity
                     email = JO.getString("email");
                     status = JO.getString("status");
 
-                    mBuilder = new AlertDialog.Builder(activity);
+                    mBuilder = new android.support.v7.app.AlertDialog.Builder(activity);
 
                     LayoutInflater inflater = LayoutInflater.from(ctx);
                     mView = inflater.inflate(R.layout.studentinfo_alertdialog, null);
@@ -374,10 +375,10 @@ public class PartsCribberActualHolders extends AppCompatActivity
                     studentstatus = (EditText) mView.findViewById(R.id.editText4);
 
                     studentIDheader.setText(selectedID);
-                    studentfullname.setText("Full Name: " + fname + " " + lname);
-                    studentpossessionqty.setText("Possession Qty: " + possessionqty);
-                    studentemail.setText("Email: " + email);
-                    studentstatus.setText("Status: " + status);
+                    studentfullname.setText(getString(R.string.full_name) + ": " + fname + " " + lname);
+                    studentpossessionqty.setText(getString(R.string.possession_qty) + ": " + possessionqty);
+                    studentemail.setText(getString(R.string.email) + ": " + email);
+                    studentstatus.setText(getString(R.string.status) + ": " + status);
 
                     mBuilder.setCancelable(false);
                     mBuilder.setView(mView);
@@ -464,9 +465,23 @@ public class PartsCribberActualHolders extends AppCompatActivity
                 break;
 
             case R.id.about:
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.partscribdatabase.tech"));
+                startActivity(browserIntent);
                 break;
 
             case R.id.help:
+                android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
+                builder.setMessage("Mail: Prototypelab@humber.ca");
+                builder.setCancelable(false);
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        dialog.dismiss();
+                    }
+                });
+                android.support.v7.app.AlertDialog alert = builder.create();
+                alert.show();
                 break;
 
             default:
