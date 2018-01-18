@@ -13,12 +13,11 @@
         android:id="@+id/rl"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="10dp"
         android:background="@color/mainBackgroundcolor">
 
         <EditText
             android:id="@+id/serial_no"
-            android:layout_width="330dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
             android:background="#ffffff"
@@ -30,11 +29,15 @@
             android:inputType="textPersonName"
             android:text="@string/serial_no"
             android:layout_marginTop="10dp"
-            android:layout_centerHorizontal="true" />
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true" />
 
         <EditText
             android:id="@+id/qty_available"
-            android:layout_width="330dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             android:background="#ffffff"
@@ -47,11 +50,12 @@
             android:inputType="textPersonName"
             android:text="@string/qty_available"
             android:layout_below="@+id/serial_no"
-            android:layout_alignStart="@+id/serial_no" />
+            android:layout_alignStart="@+id/serial_no"
+            android:layout_alignEnd="@+id/serial_no" />
 
         <EditText
             android:id="@+id/qty_rented"
-            android:layout_width="330dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             android:background="#ffffff"
@@ -64,11 +68,12 @@
             android:inputType="textPersonName"
             android:text="@string/qty_rented"
             android:layout_below="@+id/qty_available"
-            android:layout_alignStart="@+id/qty_available" />
+            android:layout_alignStart="@+id/qty_available"
+            android:layout_alignEnd="@+id/qty_available" />
 
         <EditText
             android:id="@+id/qty_total"
-            android:layout_width="330dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             android:background="#ffffff"
@@ -81,11 +86,12 @@
             android:inputType="textPersonName"
             android:text="@string/qty_total"
             android:layout_below="@+id/qty_rented"
-            android:layout_alignStart="@+id/qty_rented" />
+            android:layout_alignStart="@+id/qty_rented"
+            android:layout_alignEnd="@+id/qty_rented" />
 
         <EditText
             android:id="@+id/item_category"
-            android:layout_width="330dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             android:background="#ffffff"
@@ -98,7 +104,8 @@
             android:layout_marginTop="5dp"
             android:text="@string/item_category"
             android:layout_below="@+id/qty_total"
-            android:layout_alignStart="@+id/qty_total" />
+            android:layout_alignStart="@+id/qty_total"
+            android:layout_alignEnd="@+id/qty_total" />
 
         <Button
             android:id="@+id/update_this_item_data"
@@ -177,19 +184,6 @@
             android:layout_alignEnd="@+id/view_holders" />
 
     </RelativeLayout>
-
-    <LinearLayout
-        android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        android:orientation="vertical">
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/mainContainer">
-        </FrameLayout>
-
-    </LinearLayout>
 
     <android.support.design.widget.NavigationView
         android:layout_width="match_parent"

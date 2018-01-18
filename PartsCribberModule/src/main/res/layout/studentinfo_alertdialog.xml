@@ -10,7 +10,7 @@
 
     <EditText
         android:id="@+id/editText"
-        android:layout_width="330dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="#ffffff"
         android:clickable="false"
@@ -20,9 +20,10 @@
         android:padding="9dp"
         android:textColor="@color/supportingColor"
         android:textStyle="bold"
-        android:layout_marginTop="7dp"
+        android:layout_marginTop="10dp"
         android:layout_below="@+id/textView3"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true" />
 
     <EditText
         android:id="@+id/editText2"

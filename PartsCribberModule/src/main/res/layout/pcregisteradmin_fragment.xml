@@ -62,7 +62,7 @@
 
         <EditText
             android:id="@+id/newadmin_lastname"
-            android:layout_width="165dp"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:background="#E1F5FE"
             android:ems="10"
@@ -70,14 +70,14 @@
             android:inputType="textPersonName"
             android:padding="9dp"
             android:textColor="#000000"
+            android:layout_marginLeft="5dp"
             android:textStyle="bold"
-            android:layout_alignBaseline="@+id/newadmin_firstname"
-            android:layout_alignBottom="@+id/newadmin_firstname"
+            android:layout_below="@+id/newadmin_username"
             android:layout_alignEnd="@+id/newadmin_username" />
 
         <EditText
             android:id="@+id/newadmin_firstname"
-            android:layout_width="160dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#E1F5FE"
             android:ems="10"
@@ -87,14 +87,16 @@
             android:textColor="#000000"
             android:textStyle="bold"
             android:layout_below="@+id/newadmin_username"
-            android:layout_alignStart="@+id/newadmin_username" />
+            android:layout_alignStart="@+id/newadmin_username"
+            android:layout_toStartOf="@+id/newadmin_lastname" />
 
         <EditText
             android:id="@+id/newadmin_username"
-            android:layout_width="330dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="60dp"
+            android:layout_marginLeft="10dp"
             android:background="#E1F5FE"
             android:ems="10"
             android:layout_marginBottom="5dp"
